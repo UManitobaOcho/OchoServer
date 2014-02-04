@@ -5,6 +5,22 @@
 	Modified by: Junjie Huang
 */
 
+/**
+*	Custom styling for test server data
+*/
+.user_details{
+	display: none;
+}
+
+a.logout{
+	display: none;
+	position: absolute;
+	right: 0px;
+	color: #fff;
+	padding: 15px;
+	background-color: #222;
+}
+
 /* Space out content a bit */
 body {
   padding-top: 80px;
