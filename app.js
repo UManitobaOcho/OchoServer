@@ -32,6 +32,33 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 
+
+/**
+*	Testing out server functionality
+*/
+var dbUrl = "tcp://umplishk:toronto@localhost/test";
+
+function disconnectAll(client) {
+	console.log('Closing client connection');
+	client.end();
+}
+
+function getStudent(onDone) {
+	var ret;
+	
+}
+
+app.get('/student', function(req, res){
+	pg.connect(dbUrl, function(err, client) {
+		client.query("SELECT * FROM STUDENTS", function(err, result) {
+			console.log("Row count: %d", result.rows.length);
+			
+			res.json(result.rows[0]);
+			disconnectAll(client);
+		});
+	});
+});
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
