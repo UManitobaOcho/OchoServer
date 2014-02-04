@@ -36,7 +36,7 @@ app.get('/users', user.list);
 /**
 *	Testing out server functionality
 */
-var dbUrl = "tcp://umplishk:toronto@localhost/test";
+var dbUrl = "tcp://ocho:ocho@localhost/OchoDb";
 
 function disconnectAll(client) {
 	console.log('Closing client connection');
