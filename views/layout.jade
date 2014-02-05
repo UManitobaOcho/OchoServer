@@ -6,10 +6,10 @@ html
 		meta(name='viewport', content='width=device-width, initial-scale=1')
 
 		title= title
-		
-		link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
-		link(rel='stylesheet', href='/stylesheets/jumbotron-narrow.css')
-		
+
+		link(rel='stylesheet', href='/public/stylesheets/bootstrap.min.css')
+		link(rel='stylesheet', href='/public/stylesheets/jumbotron-narrow.css')
+
 		| <!--[if lt IE 9]> 
 		| <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		| <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -17,6 +17,7 @@ html
 	body
 		block index_content
 
-		script(src="/javascripts/jquery.js")
-		script(src="/javascripts/bootstrap.min.js")
-
+		script(src="/node_modules/bootstrap-browser/dist/js/bootstrap.min.js")
+		script(src="//code.jquery.com/jquery-1.10.2.min.js")
+		script(src="/node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js")
+		

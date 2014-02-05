@@ -10,7 +10,9 @@ block index_content
 						| <span class="icon-bar"></span>
 						| <span class="icon-bar"></span>
 						| <span class="icon-bar"></span> 
+
 					a.navbar-brand(href="") Y2K
+
 				.collapse.navbar-collapse
 					ul.nav.navbar-nav.navbar-right
 						| <li class="active"><a href="#">Home</a></li> 
@@ -22,12 +24,14 @@ block index_content
 			p.lead Please choose your role
 			p 
 				<a id="student" class="btn btn-lg btn-success" href="#" role="button" onclick="getStudent()">Student</a>
-				<a class="btn btn-lg btn-success" href="#" role="button" onclick="logIn()">Professor</a>
-			.user_details
-				h3 User Details
-				text Username: <text class="username"></text>
+				<a class="btn btn-lg btn-success" href="#" role="button" onclick="getProf()">Professor</a>
+				
+				.user_details
+					h3 User Details
+					text Username: <text class="username"></text>
+
 
 		.footer
 			p University of Manitoba Group Ocho
 			
-	script(src="/javascripts/student.js")
+	script(src="/public/js/login.js")
