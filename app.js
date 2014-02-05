@@ -73,6 +73,10 @@ io.sockets.on('connection', function(socket) {
 			});
 		});		
 	});
+	
+	socket.on('testios', function(data) {
+		socket.emit('test', { test: 'test' });
+	});
 });
 
 function disconnectAll(client) {
