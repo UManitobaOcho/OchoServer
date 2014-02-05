@@ -8,6 +8,7 @@
   "dependencies": {
     "express": "latest",
     "jade": "latest",
-    "pg": "latest"
+    "pg": "latest",
+    "socket.io": "latest"
   }
 }
