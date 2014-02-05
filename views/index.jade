@@ -6,17 +6,17 @@ block index_content
 			.container
 				.navbar-header
 					button(type="button", class="navbar-toggle", data-toggle="collapse", data-target=".navbar-collapse")
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span> 
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span> 
 
 					a.navbar-brand(href="") Y2K
 
 				div.collapse.navbar-collapse
-							ul.nav.navbar-nav.navbar-right
-								<li class="active"><a href="#">Home</a></li> 
-								<li><a href="#about">About</a></li>
+					ul.nav.navbar-nav.navbar-right
+						<li class="active"><a href="#">Home</a></li> 
+						<li><a href="#about">About</a></li>
 
 	.jumbotron
 		a.logout(href="#" onclick="logout()") Logout
@@ -26,10 +26,11 @@ block index_content
 			<a id="student" class="btn btn-lg btn-success" href="#" role="button" onclick="getStudent()">Student</a>
 			<a class="btn btn-lg btn-success" href="#" role="button" onclick="logIn()">Professor</a>
 			
-			.user_details
-				h3 User Details
-				text Username: <text class="username"></text>
-
+		.user_details
+			h3 User Details
+			text Username: <text class="username"></text>
 
 	.footer
-		p © University of Manitoba Group Ocho
+		p University of Manitoba Group Ocho
+
+	script(src="/javascripts/student.js")
