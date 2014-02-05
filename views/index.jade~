@@ -33,4 +33,4 @@ block index_content
 	.footer
 		p University of Manitoba Group Ocho
 
-	script(src="/javascripts/student.js")
+script(src="/javascripts/student.js")
