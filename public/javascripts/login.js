@@ -1,8 +1,13 @@
 var hostUrl = 'http://ec2-54-201-63-66.us-west-2.compute.amazonaws.com:3000';
 var socket = io.connect(hostUrl);
 
+$(function() {
+	$("#professor-btn").click( function(){ getProf() });
+	$("#student-btn").click( function(){ getStudent() });
+});
 
 function getStudent() {		
+	console.log("Getting Student");
 	socket.emit('getStudent', {username: 'umplishk'});
 	socket.on('foundStudent', function(student) {
 		logIn(student);
@@ -10,6 +15,7 @@ function getStudent() {
 };
 
 function getProf() {
+	console.log("Getting Professor");
 	socket.emit('getProf', {username: 'cszapp'});
 	socket.on('foundProf', function(prof) {
 		logIn(prof);
