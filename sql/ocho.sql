@@ -1,6 +1,3 @@
-drop table students;
-drop table professors;
-
 create table STUDENTS(
 	student_id 	BIGINT UNIQUE,
 	username 	VARCHAR(25) NOT NULL,
@@ -15,9 +12,10 @@ alter table STUDENTS add primary key (student_id);
 
 create table PROFESSORS(
 	prof_id 	BIGINT UNIQUE,
-	prof_name 	VARCHAR(50),
-	email 		VARCHAR(50),
-	password	VARCHAR(50),
+	username	VARCHAR(25) NOT NULL,
+	prof_name 	VARCHAR(50) NOT NULL,
+	email 		VARCHAR(50) NOT NULL,
+	password	VARCHAR(50) NOT NULL,
 	office_hours	VARCHAR(500),
 	settings_id	BIGINT,
 	is_TA		BOOLEAN
@@ -37,6 +35,7 @@ insert into STUDENTS values(
 
 insert into PROFESSORS values(
 	1,
+	'cszapp',
 	'Michael Zapp',
 	'zapp@cs.umanitoba.ca',
 	'password',

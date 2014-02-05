@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -22,7 +21,8 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+// If we don't add /public to the path then we can access our stored node_modules
+app.use(express.static(path.join(__dirname, '')));
 
 // development only
 if ('development' == app.get('env')) {
@@ -32,33 +32,50 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-
 /**
-*	Testing out server functionality
+*	Set up server
 */
 var dbUrl = "tcp://ocho:ocho@localhost/OchoDb";
+
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+
+server.listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});
+
+io.sockets.on('connection', function(socket) {
+	
+	var dbUrl = "tcp://ocho:ocho@localhost/OchoDb";
+	
+	
+	/**
+	*	Database retrievals
+	*/
+	socket.on('getStudent', function(func) {
+		pg.connect(dbUrl, function(err, client) {
+			client.query("SELECT * FROM STUDENTS", function(err, result) {
+				console.log("Row count: %d", result.rows.length);
+				
+				socket.emit('foundStudent', result.rows[0]);
+				disconnectAll(client);
+			});
+		});		
+	});
+	
+	socket.on('getProf', function(func) {
+		pg.connect(dbUrl, function(err, client) {
+			client.query("SELECT * FROM PROFESSORS", function(err, result) {
+				console.log("Row count: %d", result.rows.length);
+				
+				socket.emit('foundProf', result.rows[0]);
+				disconnectAll(client);
+			});
+		});		
+	});
+});
 
 function disconnectAll(client) {
 	console.log('Closing client connection');
 	client.end();
 }
-
-function getStudent(onDone) {
-	var ret;
-	
-}
-
-app.get('/student', function(req, res){
-	pg.connect(dbUrl, function(err, client) {
-		client.query("SELECT * FROM STUDENTS", function(err, result) {
-			console.log("Row count: %d", result.rows.length);
-			
-			res.json(result.rows[0]);
-			disconnectAll(client);
-		});
-	});
-});
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
