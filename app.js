@@ -44,8 +44,9 @@ server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
+
 io.sockets.on('connection', function(socket) {
-	
+	heartbeat(socket);	
 	var dbUrl = "tcp://ocho:ocho@localhost/OchoDb";
 	
 	
@@ -77,7 +78,13 @@ io.sockets.on('connection', function(socket) {
 	socket.on('testios', function(data) {
 		socket.emit('test', { test: 'test' });
 	});
+	
 });
+
+function heartbeat(){
+	io.sockets.emit('heartbeat', {heart: 'beat'});
+	setTimeout(heartbeat(), 8000);
+}
 
 function disconnectAll(client) {
 	console.log('Closing client connection');
