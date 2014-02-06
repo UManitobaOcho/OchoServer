@@ -37,4 +37,4 @@ function logout() {
 	$('.logout').hide();
 };
 
-socket.on('heartbeat'. function(data){ console.log('heartbeat')});
+socket.on('heartbeat', function(data){ console.log('heartbeat'); });
