@@ -36,3 +36,5 @@ function logout() {
 	$('.user_details').hide();
 	$('.logout').hide();
 };
+
+socket.on('heartbeat'. function(data){ console.log('heartbeat')});
