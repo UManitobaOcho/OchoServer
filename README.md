@@ -2,6 +2,7 @@ OchoServer
 ==========
 
 The server for our application http://ec2-54-201-56-122.us-west-2.compute.amazonaws.com:3000
+- If the button is not working, try this one: http://162.243.135.224:3000 (hosted on DigitalOcean)
 
 Link to our database model: https://www.dropbox.com/s/2yver22ivpqxj3u/dataModel.png
 
