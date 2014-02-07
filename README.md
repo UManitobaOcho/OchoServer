@@ -2,10 +2,6 @@ OchoServer
 ==========
 
 The server for our application http://ec2-54-201-56-122.us-west-2.compute.amazonaws.com:3000
-  '-----------------------------------------------------------------------------------------------------'
-  ' Server Debuging --- maynot available, check http://home.cc.umanitoba.ca/~umhuan96/test for UI view  '
-  ' Or check it later...                                                                                '
-  '-----------------------------------------------------------------------------------------------------'
 
 Link to our database model: https://www.dropbox.com/s/2yver22ivpqxj3u/dataModel.png
 
