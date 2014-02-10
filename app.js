@@ -72,7 +72,7 @@ io.set('authorization', function (handshakeData, accept) {
     }
 
     accept(null, true);
-}
+});
 
 io.sockets.on('connection', function(socket) {
     db.url = "postgres://ocho:ocho@localhost/OchoDb";
