@@ -1,4 +1,5 @@
-var hostUrl = 'http://ec2-54-201-56-122.us-west-2.compute.amazonaws.com:80/';
+//var hostUrl = 'http://ec2-54-201-56-122.us-west-2.compute.amazonaws.com:3000/';
+var hostUrl = "http://localhost:8080";
 var socket = io.connect(hostUrl);
 
 $(function() {
@@ -6,7 +7,7 @@ $(function() {
 	$("#student-btn").click( function(){ getStudent() });
 });
 
-function getStudent() {		
+function getStudent() {
 	console.log("Getting Student");
 	socket.emit('getStudent', {username: 'umplishk'});
 	socket.on('foundStudent', function(student) {
@@ -25,7 +26,7 @@ function getProf() {
 
 function logIn(user) {
 	$('.username').text(user.username);
-	
+
 	$('.jumbotron p').hide();
 	$('.user_details').show();
 	$('.logout').show();
@@ -36,4 +37,3 @@ function logout() {
 	$('.user_details').hide();
 	$('.logout').hide();
 };
-
