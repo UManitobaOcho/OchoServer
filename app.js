@@ -15,7 +15,6 @@ var app = express();
 
 
 app.configure( function() {
-    // Use port 80
     app.set('port', process.env.PORT || 8080);
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'jade');
@@ -29,7 +28,7 @@ app.configure( function() {
     app.use(express.session({secret: 'secret', key: 'express.sid'}));
     // If we don't add /public to the path then we can access our stored node_modules
     app.use(express.static(path.join(__dirname, '')));
-})
+});
 
 
 // development only
@@ -45,10 +44,6 @@ app.get('/users', user.list);
  */
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
-
-// Session Socket io
-//var SessionSockets = require('session.socket.io')
-//  , sessionSockets = new SessionSockets(io, sessionStore, cookieParser);
 
 server.listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
@@ -75,8 +70,8 @@ io.set('authorization', function (handshakeData, accept) {
     accept(null, true);
 });
 
-io.on('connection', function(err, socket, session) {
-    var dbUrl = "tcp://ocho:ocho@localhost/OchoDb";
+io.sockets.on('connection', function(socket) {
+    var dbUrl = "postgres://ocho:ocho@localhost/OchoDb";
 
     /**
      *	Database retrievals
