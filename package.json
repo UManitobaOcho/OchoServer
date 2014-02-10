@@ -9,12 +9,8 @@
     "express": "latest",
     "jade": "latest",
     "pg": "latest",
-<<<<<<< HEAD
     "socket.io": "latest",
     "session": "latest",
     "connect": "latest"
-=======
-    "socket.io": "latest"
->>>>>>> master
   }
 }

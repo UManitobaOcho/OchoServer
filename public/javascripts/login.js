@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 //var hostUrl = 'http://ec2-54-201-56-122.us-west-2.compute.amazonaws.com:8080/';
 var hostUrl = "http://localhost:8080";
-=======
-var hostUrl = 'http://ec2-54-201-56-122.us-west-2.compute.amazonaws.com:3000/';
->>>>>>> master
+
 var socket = io.connect(hostUrl);
 
 $(function() {
