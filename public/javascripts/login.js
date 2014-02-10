@@ -1,4 +1,4 @@
-var hostUrl = 'http://ec2-54-201-56-122.us-west-2.compute.amazonaws.com:80/';
+var hostUrl = 'http://ec2-54-201-56-122.us-west-2.compute.amazonaws.com:3000/';
 var socket = io.connect(hostUrl);
 
 $(function() {
