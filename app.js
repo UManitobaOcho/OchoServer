@@ -11,6 +11,13 @@ var pg = require('pg');
 var cookie = require("cookie");
 var connect = require("connect");
 
+/*
+ * Other JS files
+ */
+
+var db = require('./db');
+
+/* The server */
 var app = express();
 
 
@@ -29,7 +36,6 @@ app.configure( function() {
     // If we don't add /public to the path then we can access our stored node_modules
     app.use(express.static(path.join(__dirname, '')));
 });
-
 
 // development only
 if ('development' == app.get('env')) {
@@ -63,7 +69,6 @@ io.set('authorization', function (handshakeData, accept) {
         }
 
     } else {
-        console.error("NO");
         return accept('No cookie transmitted.', false);
     }
 
@@ -71,51 +76,14 @@ io.set('authorization', function (handshakeData, accept) {
 });
 
 io.sockets.on('connection', function(socket) {
-    var dbUrl = "postgres://ocho:ocho@localhost/OchoDb";
+    db.url = "postgres://ocho:ocho@localhost/OchoDb";
 
-    /**
-     *	Database retrievals
-     */
     socket.on('getStudent', function(func) {
-	pg.connect(dbUrl, function(err, client, done) {
-	    if (err) {
-		return console.error('error fetching client from pool', err);
-	    }
-
-	    client.query("SELECT * FROM STUDENTS", function(err, result) {
-		// release the client back to the pool
-		done();
-
-		if (err) {
-		    return console.error('error running query', err);
-		}
-
-		console.log("Row count: %d", result.rows.length);
-
-		socket.emit('foundStudent', result.rows[0]);
-	    });
-	});
+        db.getStudent(socket);
     });
 
-    socket.on('getProf', function(func) {
-	pg.connect(dbUrl, function(err, client, done) {
-	    if (err) {
-		return console.error('error fetching client from pool', err);
-	    }
-
-	    client.query("SELECT * FROM PROFESSORS", function(err, result) {
-		// release the client back to the pool
-		done();
-
-		if (err) {
-		    return console.error('error running query', err);
-		}
-
-		console.log("Row count: %d", result.rows.length);
-
-		socket.emit('foundProf', result.rows[0]);
-	    });
-	});
+    socket.on('getProf', function(data) {
+        db.getProf(socket);
     });
 
     socket.on('testios', function(data) {
