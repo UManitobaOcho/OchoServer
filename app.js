@@ -35,8 +35,6 @@ app.get('/users', user.list);
 /**
 *	Set up server
 */
-var dbUrl = "tcp://ocho:ocho@localhost/OchoDb";
-
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
@@ -48,29 +46,48 @@ server.listen(app.get('port'), function(){
 
 io.sockets.on('connection', function(socket) {
 	var dbUrl = "tcp://ocho:ocho@localhost/OchoDb";
-	
-	
+
 	/**
 	*	Database retrievals
 	*/
 	socket.on('getStudent', function(func) {
-		pg.connect(dbUrl, function(err, client) {
+		pg.connect(dbUrl, function(err, client, done) {
+			if (err) {
+				return console.error('error fetching client from pool', err);
+			}
+
 			client.query("SELECT * FROM STUDENTS", function(err, result) {
+				// release the client back to the pool				
+				done();
+
+				if (err) {
+					return console.error('error running query', err);
+				}
+
 				console.log("Row count: %d", result.rows.length);
 				
 				socket.emit('foundStudent', result.rows[0]);
-				disconnectAll(client);
 			});
 		});		
 	});
 	
 	socket.on('getProf', function(func) {
-		pg.connect(dbUrl, function(err, client) {
+		pg.connect(dbUrl, function(err, client, done) {
+			if (err) {
+				return console.error('error fetching client from pool', err);
+			}
+
 			client.query("SELECT * FROM PROFESSORS", function(err, result) {
+				// release the client back to the pool
+				done();
+
+				if (err) {
+					return console.error('error running query', err);
+				}
+
 				console.log("Row count: %d", result.rows.length);
 				
 				socket.emit('foundProf', result.rows[0]);
-				disconnectAll(client);
 			});
 		});		
 	});
@@ -79,16 +96,13 @@ io.sockets.on('connection', function(socket) {
 		socket.emit('test', { test: 'test' });
 	});
 
-	setInterval(function() {socket.emit('heartbeat', {heart: 'beat'}); }, 5000);
-	
+	socket.on('error', function() {
+		console.log('SOCKET ERROR');
+		socket.destroy();
+	});
+
+	socket.on('close', function() {
+		console.log('SOCKET CLOSED');
+	});
 });
 
-function heartbeat(){
-	io.sockets.emit('heartbeat', {heart: 'beat'});
-//	setTimeout(heartbeat(), 10000);
-}
-
-function disconnectAll(client) {
-	console.log('Closing client connection');
-	client.end();
-}

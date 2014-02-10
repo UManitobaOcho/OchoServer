@@ -9,6 +9,6 @@
     "express": "latest",
     "jade": "latest",
     "pg": "latest",
-    "socket.io": "latest"
+    "socket.io": "0.8.7"
   }
 }
