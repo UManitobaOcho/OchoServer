@@ -36,15 +36,17 @@ app.get('/users', user.list);
 *	Set up server
 */
 var server = http.createServer(app);
-var io = require('socket.io').listen(server);
+//var io = require('socket.io').listen(server);
+
+// Session Socket io
+var SessionSockets = require('session.socket.io')
+  , sessionSockets = new SessionSockets(io, sessionStore, cookieParser);
 
 server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-//heartbeat();
-
-io.sockets.on('connection', function(socket) {
+sessionSockets.on('connection', function(err, socket, session) {
 	var dbUrl = "tcp://ocho:ocho@localhost/OchoDb";
 
 	/**
