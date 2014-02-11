@@ -35,7 +35,7 @@ app.configure( function() {
     app.use(express.session({secret: 'secret', key: 'express.sid'}));
     // If we don't add /public to the path then we can access our stored node_modules
     app.use(express.static(path.join(__dirname, '')));
-})
+});
 
 // development only
 if ('development' == app.get('env')) {
@@ -76,7 +76,7 @@ io.set('authorization', function (handshakeData, accept) {
 });
 
 io.sockets.on('connection', function(socket) {
-    db.url = "tcp://ocho:ocho@localhost/OchoDb";
+    db.url = "postgres://ocho:ocho@localhost/OchoDb";
 
     socket.on('getStudent', function(func) {
         db.getStudent(socket);

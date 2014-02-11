@@ -13,5 +13,6 @@
     "connect" : "latest",
     "cookie" : "latest",
     'bootstrap-browser' : "latest"
+    "socket.io": "latest"
   }
 }
