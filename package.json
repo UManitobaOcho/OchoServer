@@ -9,6 +9,9 @@
     "express": "latest",
     "jade": "latest",
     "pg": "latest",
-    "session.socket.io": "latest"
+    "session.socket.io": "latest",
+    "connect" : "latest",
+    "cookie" : "latest",
+    'bootstrap-browser' : "latest"
   }
 }
