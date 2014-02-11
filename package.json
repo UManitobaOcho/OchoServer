@@ -12,7 +12,7 @@
     "session.socket.io": "latest",
     "connect" : "latest",
     "cookie" : "latest",
-    'bootstrap-browser' : "latest"
+    'bootstrap-browser' : "latest",
     "socket.io": "latest"
   }
 }
