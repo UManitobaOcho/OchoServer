@@ -155,3 +155,10 @@ insert into COURSES values(
 	1,
 	'TR 11:30 am - 12:45 pm'
 );
+
+insert into ENROLLED values(
+	1,
+	1,
+	1,
+	80
+);

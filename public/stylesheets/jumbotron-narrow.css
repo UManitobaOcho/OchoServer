@@ -2,7 +2,6 @@
 	jumbotron-narrow.css
 	
 	Original Source: http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css
-	Modified by: Junjie Huang
 */
 
 /**
@@ -10,6 +9,14 @@
 */
 .user_details{
 	display: none;
+}
+
+.button_groups{
+  display: none;
+}
+
+.courses_list{
+  display:none;
 }
 
 a.logout{
