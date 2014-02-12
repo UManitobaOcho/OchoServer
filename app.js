@@ -86,15 +86,39 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('testios', function(data) {
-	socket.emit('test', { test: 'test' });
+	   socket.emit('test', { test: 'test' });
     });
 
     socket.on('error', function() {
-	console.log('SOCKET ERROR');
-	socket.destroy();
+	   console.log('SOCKET ERROR');
+	   socket.destroy();
     });
 
     socket.on('close', function() {
-	console.log('SOCKET CLOSED');
+	   console.log('SOCKET CLOSED');
+    });
+
+    // TEST CODE 
+    socket.on('getCourses', function() {
+        
+        pg.connect(db.url, function(err, client, done) {
+            if (err) {
+                return console.error('error fetching client from pool', err);
+            }
+
+            client.query("SELECT C.course_number, C.course_section, C.course_name, P.name, C.class_times FROM STUDENTS S, PROFESSORS P, COURSES C, Enrolled E WHERE S.student_id = E.student_id AND E.course_id = C.course_id AND C.prof_id = P.prof_id AND S.student_id = 1" , function(err, result) {
+                done();  // release the client back to the pool
+
+                if (err) {
+                    return console.error('error running query', err);
+                }
+
+                socket.emit('foundCourses', result);
+            });
+        });
+
     });
 });
+
+
+
