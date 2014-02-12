@@ -113,7 +113,7 @@ io.sockets.on('connection', function(socket) {
                     return console.error('error running query', err);
                 }
 
-                socket.emit('foundCourses', result);
+                socket.emit('foundCourses', result.rows[0]);
             });
         });
 

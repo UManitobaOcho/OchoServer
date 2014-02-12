@@ -52,11 +52,11 @@ function logout() {
 };
 
 function display_contents(courses) {
-	//$('.CourseNumber').text(courses.rows[0]);
-	//$('.CourseSection').text(courses.rows[1]);
-	//$('.CourseName').text(courses.rows[2]);
-	//$('.ProfessorName').text(courses.rows[3]);
-	//$('.ClassTime').text(courses.rows[4]);
+	$('.course_number').text(courses.course_number);
+	$('.course_section').text(courses.course_section);
+	$('.course_name').text(courses.course_name);
+	$('.prof_name').text(courses.name);
+	$('.class_time').text(courses.class_times);
 
 	$('.courses_list').show();
 };
