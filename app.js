@@ -75,7 +75,6 @@ io.set('authorization', function (handshakeData, accept) {
 });
 
 io.sockets.on('connection', function(socket) {
-    db.url = "postgres://ocho:ocho@localhost/OchoDb";
 
     socket.on('getStudent', function(func) {
         db.getStudent(socket);
@@ -83,6 +82,10 @@ io.sockets.on('connection', function(socket) {
 
     socket.on('getProf', function(data) {
         db.getProf(socket);
+    });
+
+    socket.on('getCourses', function() {
+        db.getCourses(socket);
     });
 
     socket.on('testios', function(data) {
@@ -96,27 +99,6 @@ io.sockets.on('connection', function(socket) {
 
     socket.on('close', function() {
 	   console.log('SOCKET CLOSED');
-    });
-
-    // TEST CODE 
-    socket.on('getCourses', function() {
-        
-        pg.connect(db.url, function(err, client, done) {
-            if (err) {
-                return console.error('error fetching client from pool', err);
-            }
-
-            client.query("SELECT C.course_number, C.course_section, C.course_name, P.name, C.class_times FROM STUDENTS S, PROFESSORS P, COURSES C, Enrolled E WHERE S.student_id = E.student_id AND E.course_id = C.course_id AND C.prof_id = P.prof_id AND S.student_id = 1" , function(err, result) {
-                done();  // release the client back to the pool
-
-                if (err) {
-                    return console.error('error running query', err);
-                }
-
-                socket.emit('foundCourses', result.rows[0]);
-            });
-        });
-
     });
 });
 
