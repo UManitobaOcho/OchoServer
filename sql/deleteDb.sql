@@ -1,3 +1,14 @@
+drop sequence SETTINGS_SEQ;
+drop sequence COURSE_SEQ;
+drop sequence STUDENT_SEQ;
+drop sequence PROF_SEQ;
+drop sequence ENROLLED_SEQ;
+drop sequence FORUM_SEQ;
+drop sequence TOPIC_SEQ;
+drop sequence NOTES_SEQ;
+drop sequence ASSIGNMENT_SEQ;
+drop sequence TEST_SEQ;
+
 drop table completed_tests;
 drop table tests;
 drop table submitted_assignments;

@@ -1,4 +1,19 @@
 /**
+*	Create sequences
+*/
+create sequence SETTINGS_SEQ;
+create sequence COURSE_SEQ;
+create sequence STUDENT_SEQ;
+create sequence PROF_SEQ;
+create sequence ENROLLED_SEQ;
+create sequence FORUM_SEQ;
+create sequence TOPIC_SEQ;
+create sequence NOTES_SEQ;
+create sequence ASSIGNMENT_SEQ;
+create sequence TEST_SEQ;
+
+
+/**
 *	Create tables
 */
 create table SAVED_SETTINGS(
@@ -117,17 +132,17 @@ create table COMPLETED_TESTS(
 *	Insert initial data
 */
 insert into SAVED_SETTINGS values(
-	1,
+	nextval('SETTINGS_SEQ'),
 	FALSE
 );
 
 insert into SAVED_SETTINGS values(
-	2,
+	nextval('SETTINGS_SEQ'),
 	TRUE
 );
 
 insert into STUDENTS values(
-	1,
+	nextval('STUDENT_SEQ'),
 	'umplishk',
 	'Alexander',
 	'Plishka',
@@ -137,7 +152,7 @@ insert into STUDENTS values(
 );
 
 insert into PROFESSORS values(
-	1,
+	nextval('PROF_SEQ'),
 	'cszapp',
 	'Michael Zapp',
 	'zapp@cs.umanitoba.ca',
@@ -148,7 +163,7 @@ insert into PROFESSORS values(
 );
 
 insert into COURSES values(
-	1,
+	nextval('COURSE_SEQ'),
 	'COMP 4350',
 	'A01',
 	'Software Engineering 2',
@@ -157,8 +172,26 @@ insert into COURSES values(
 );
 
 insert into ENROLLED values(
-	1,
+	nextval('ENROLLED_SEQ'),
 	1,
 	1,
 	80
 );
+
+/**
+*	Create Stored Procedures
+*/
+CREATE OR REPLACE FUNCTION addcourse()
+  RETURNS integer AS $val$
+begin
+	insert into COURSES values(
+		nextval('COURSE_SEQ'),
+		'COMP 4380',
+		'A01',
+		'Database Implementations',
+		1,
+		'TR 11:30 am - 12:45 pm'
+	);
+	return 0;
+end;
+$val$ language plpgsql;
