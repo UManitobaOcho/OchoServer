@@ -1,0 +1,22 @@
+extends index
+
+block jumbotron
+	a.logout(href="#" onclick="logout()") Logout
+	h1 Welcome to Y2K!
+	p.lead Please choose your role
+	p 
+		<a id="student-btn" class="btn btn-lg btn-success" href="#" role="button">Student</a>
+		<a id="professor-btn" class="btn btn-lg btn-success" href="#" role="button">Professor</a>
+		
+		.user_details
+			h3 User Details
+			text Username: <text class="username"></text>
+
+		.button_groups
+			<a id="courses-btn" class="btn btn-lg btn-success" href="#" role="button">List Courses</a>
+			<a id="add_course-btn" class="btn btn-lg btn-success" href="AddCourse" role="button">Add Course</a>
+
+		.courses_list
+			h3 Your Courses
+			include templates/course
+	

@@ -17,29 +17,9 @@ block index_content
 					ul.nav.navbar-nav.navbar-right
 						| <li class="active"><a href="#">Home</a></li> 
 						| <li><a href="#about">About</a></li>
-
-		.jumbotron
-			a.logout(href="#" onclick="logout()") Logout
-			h1 Welcome to Y2K!
-			p.lead Please choose your role
-			p 
-				<a id="student-btn" class="btn btn-lg btn-success" href="#" role="button">Student</a>
-				<a id="professor-btn" class="btn btn-lg btn-success" href="#" role="button">Professor</a>
-				
-				.user_details
-					h3 User Details
-					text Username: <text class="username"></text>
-
-				.button_groups
-					<a id="courses-btn" class="btn btn-lg btn-success" href="#" role="button">List Courses</a>
-
-				.courses_list
-					h3 Your Courses
-					text CourseNumber: <text class="course_number"></text><br />
-					text CourseSection: <text class="course_section"></text><br />
-					text CourseName: <text class="course_name"></text><br />
-					text ProfessorName: <text class="prof_name"></text><br />
-					text ClassTime: <text class="class_time"></text><br />
 		
-		.footer
-			p University of Manitoba - Group Ocho
+		.jumbotron
+			block jumbotron
+		
+		include includes/footer
+		

@@ -28,6 +28,14 @@ a.logout{
 	background-color: #222;
 }
 
+div.courses_list text{
+	display: block;
+}
+
+div.courses_list text text{
+	display: inline-block;
+}
+
 /* Space out content a bit */
 body {
   padding-top: 50px;
