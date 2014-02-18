@@ -1,10 +1,12 @@
+var pg = require('pg');
+
 exports.getStudent = function(socket) {
     pg.connect("postgres://ocho:ocho@localhost/OchoDb", function(err, client, done) {
     
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-
+		
         client.query("SELECT * FROM STUDENTS", function(err, result) {
             done();  // release the client back to the pool
 

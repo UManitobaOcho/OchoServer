@@ -1,0 +1,70 @@
+.txtInput {
+	margin-bottom: 10px;
+	text-align: left;
+}
+
+.jumbotron label {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.jumbotron .inputLabel  {
+	text-align: right;
+	width: 200px;
+}
+
+.submit {
+	text-align: right;
+}
+
+.submitBtn {
+	margin: 5px;
+}
+
+i[class^="icon-"], i[class*=" icon-"] {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin-top: 1px;
+	line-height: 14px;
+	vertical-align: text-top;
+	background-image: url("../images/glyphicons-halflings.png");
+	background-repeat: no-repeat;
+}
+
+.add-on {
+	margin-left: -1px;
+	display: inline-block;
+	width: auto;
+	min-width: 16px;
+	padding: 4px 5px;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 20px;
+	text-align: center;
+	text-shadow: 0 1px 0 #fff;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	white-space: nowrap;
+}
+
+.jumbotron input {
+	padding: 4px 6px;
+	border: 1px solid #ccc;
+}
+
+.icon-time {
+	background-position: -48px -24px;
+}
+
+.icon-chevron-up {
+	background-position: -288px -120px;
+}
+
+.icon-chevron-down {
+	background-position: -313px -119px;
+}
+
+
+
+

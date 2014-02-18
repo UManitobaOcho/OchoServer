@@ -1,6 +1,39 @@
 extends index
 
 block jumbotron
+	link(rel='stylesheet', href='/public/stylesheets/addCourse.css')
+
 	a.logout(href="#" onclick="logout()") Logout
 	h1 Add a Course
-			
+	
+	.txtInput
+		label.inputLabel  Course Name: 
+		input#courseName(type="text")
+	.txtInput
+		label.inputLabel  Course ID: 
+		input#courseId(type="text")
+	.txtInput
+		label.inputLabel Section: 
+		input#section(type="text")
+	
+	h3 Class Times
+	input#monday.daysRadio(type="radio" value="M")
+	label M
+	input#tuesday.daysRadio(type="radio" value="T")
+	label T
+	input#wednesday.daysRadio(type="radio" value="W")
+	label W
+	input#thursday.daysRadio(type="radio" value="TH")
+	label TH
+	input#friday.daysRadio(type="radio" value="F")
+	label F
+	
+	.input-append.bootstrap-timepicker
+		input#timepicker1.input-small(type="text")
+		span.add-on: i.icon-time
+	
+	.submit
+		input.submitBtn(type="submit" name="Submit")
+	
+	script(src="/public/javascripts/course.js")
+	
