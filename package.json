@@ -12,6 +12,7 @@
     "connect": "latest",
     "cookie": "latest",
     "bootstrap-browser": "latest",
+    "jolira-bootstrap-datepicker": "latest",
     "grunt-cli": "latest",
     "socket.io": "latest"
   }
