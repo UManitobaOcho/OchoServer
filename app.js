@@ -7,6 +7,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var addCourse = require('./routes/addCourse');
 var addAssignment = require('./routes/addAssignment');
+var about = require('./routes/about');
 var http = require('http');
 var path = require('path');
 var pg = require('pg');
@@ -48,6 +49,7 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/AddCourse', addCourse.addCourse);
 app.get('/AddAssignment', addAssignment.addAssignment);
+app.get('/about', about.about);
 
 /**
  *	Set up server

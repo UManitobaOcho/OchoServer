@@ -9,6 +9,8 @@ $(document).ready(function () {
 	//$('#datetimepicker1').datetimepicker();
 });
 
+$('.datepicker').datepicker();
+
 $(function() {
 	$('#assignment').change(function(){
 		var input,file;

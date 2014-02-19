@@ -1,6 +1,8 @@
 extends index
 
 block jumbotron
+	link(rel='stylesheet', href='/node_modules/bootstrap-datepicker/less/datepicker3.less')
+	
 	a.logout(href="#" onclick="logout()") Logout
 	
 	h1 Add Assignment
@@ -26,9 +28,13 @@ block jumbotron
 		div.well
 			div.form-group
 				div.input-group.date(id="datetimepicker1")
-					input(type="text" class="form-control")
-					span.input-group-addon
-						span(class="glyphicon glyphicon-calendar")
+ 					input(type="text" class="form-control")
+ 					span.input-group-addon
+ 						span(class="glyphicon glyphicon-calendar")
+
+
+	input.datepicker(type="text")
+
 	
 	a.btn.btn-lg.btn-success Create Assignment
 	
