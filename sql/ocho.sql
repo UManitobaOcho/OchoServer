@@ -103,7 +103,8 @@ create table ASSIGNMENTS(
 	assignment_id 	BIGINT UNIQUE primary key,
 	course_id 		BIGINT references COURSES(course_id),
 	due_date 		DATE NOT NULL,
-	viewable_date 	DATE NOT NULL
+	viewable_date 	DATE NOT NULL,
+	assignment_name	VARCHAR(200) NOT NULL
 );
 
 create table SUBMITTED_ASSIGNMENTS(

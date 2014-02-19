@@ -6,6 +6,7 @@ var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
 var addCourse = require('./routes/addCourse');
+var addAssignment = require('./routes/addAssignment');
 var http = require('http');
 var path = require('path');
 var pg = require('pg');
@@ -46,6 +47,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/AddCourse', addCourse.addCourse);
+app.get('/AddAssignment', addAssignment.addAssignment);
 
 /**
  *	Set up server
@@ -88,6 +90,10 @@ io.sockets.on('connection', function(socket) {
 
     socket.on('getCourses', function() {
         db.getCourses(socket);
+    });
+
+    socket.on('getProfCourses', function(data) {
+	db.getProfCourses(socket,data);
     });
 
     socket.on('testios', function(data) {

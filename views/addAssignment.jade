@@ -1,0 +1,35 @@
+extends index
+
+block jumbotron
+	a.logout(href="#" onclick="logout()") Logout
+	
+	h1 Add Assignment
+
+	div.assignment-title
+		h3 Assignment Name
+		input#assignment-title(type="text" value="Assignment 1" name="assignment-title" class="form-control")
+
+	div.select-class
+		h3 Select Course
+		select.selectpicker(id="class-picker")
+
+	div.file-upload
+		input#assignment(type="file" name="assignment" style="visibility:hidden;")
+		div.input-append
+			h3 Select File
+			input#assignmentbox(type="text" name="assignmentbox" class="form-control" readonly)
+			a.btn.btn-success(id="browse-btn") Browse
+		p#errorbox(style="color:red;")
+	
+	div.start-date
+		h3 Start Date
+		div.well
+			div.form-group
+				div.input-group.date(id="datetimepicker1")
+					input(type="text" class="form-control")
+					span.input-group-addon
+						span(class="glyphicon glyphicon-calendar")
+	
+	a.btn.btn-lg.btn-success Create Assignment
+	
+	script(src="/public/javascripts/add-assignment.js")
