@@ -1,7 +1,9 @@
-//var hostUrl = 'http://ec2-54-201-56-122.us-west-2.compute.amazonaws.com:8080/';
-var hostUrl = "http://localhost:8080";
+var hostUrl = 'http://ec2-54-201-63-66.us-west-2.compute.amazonaws.com:8080/';
+// var hostUrl = "http://localhost:8080";
 
 var socket = io.connect(hostUrl);
+
+var isRoot = (location.pathname == "/");
 
 $(function() {
 	$("#professor-btn").click( function(){ getProf() });
@@ -44,11 +46,15 @@ function logIn(user) {
 };
 
 function logout() {
-	$('.jumbotron p').show();
-	$('.user_details').hide();
-	$('.button_groups').hide();
-	$('.courses_list').hide();
-	$('.logout').hide();
+	if(isRoot) {
+		$('.jumbotron p').show();
+		$('.user_details').hide();
+		$('.button_groups').hide();
+		$('.courses_list').hide();
+		$('.logout').hide();		
+	} else {
+		document.location.href = "/";
+	}
 };
 
 function display_contents(courses) {
