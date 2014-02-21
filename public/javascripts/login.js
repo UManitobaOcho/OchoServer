@@ -1,5 +1,4 @@
-var hostUrl = 'http://ec2-54-201-63-66.us-west-2.compute.amazonaws.com:8080/';
-// var hostUrl = "http://localhost:8080";
+var hostUrl = window.location.host;
 
 var socket = io.connect(hostUrl);
 
