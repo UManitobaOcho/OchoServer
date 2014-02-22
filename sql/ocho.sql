@@ -169,7 +169,7 @@ insert into COURSES values(
 	'A01',
 	'Software Engineering 2',
 	1,
-	'TR 11:30 am - 12:45 pm'
+	'TR 11:30 AM - 12:45 PM'
 );
 
 insert into ENROLLED values(
@@ -182,17 +182,38 @@ insert into ENROLLED values(
 /**
 *	Create Stored Procedures
 */
-CREATE OR REPLACE FUNCTION addcourse()
-  RETURNS integer AS $val$
+CREATE OR REPLACE FUNCTION addCourse(cNum VARCHAR, sect VARCHAR, cName VARCHAR, cTimes VARCHAR)
+	RETURNS integer AS $val$
 begin
 	insert into COURSES values(
 		nextval('COURSE_SEQ'),
-		'COMP 4380',
-		'A01',
-		'Database Implementations',
+		cId,
+		sect,
+		cName,
 		1,
-		'TR 11:30 am - 12:45 pm'
+		cTimes
 	);
 	return 0;
 end;
 $val$ language plpgsql;
+
+CREATE OR REPLACE FUNCTION updateCourse(cId BIGINT, cNum VARCHAR, sect VARCHAR, cName VARCHAR, cTimes VARCHAR)
+	RETURNS BOOLEAN as $updated$
+begin
+	update COURSES
+	set course_number = cNum,
+		course_section = sect,
+		course_name = cName,
+		class_times = cTimes
+	where course_id = cId;
+	return true;
+end;
+$updated$ language plpgsql;
+
+CREATE OR REPLACE FUNCTION deleteCourse(cId BIGINT)
+	RETURNS BOOLEAN as $deleted$
+begin
+	delete from COURSES where course_id = cId;
+	return true;
+end;
+$deleted$ language plpgsql;
