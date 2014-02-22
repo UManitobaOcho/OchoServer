@@ -1,5 +1,4 @@
 var hostUrl = window.location.host;
-
 var socket = io.connect(hostUrl);
 
 var isRoot = (location.pathname == "/");
@@ -54,6 +53,8 @@ function logout() {
 	} else {
 		document.location.href = "/";
 	}
+	
+	socket.emit('logout');
 };
 
 function display_contents(courses) {

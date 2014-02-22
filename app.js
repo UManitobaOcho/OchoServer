@@ -80,7 +80,7 @@ io.set('authorization', function (handshakeData, accept) {
     accept(null, true);
 });
 
-io.sockets.on('connection', function(socket) {
+io.sockets.on('connection', function(socket) {	
 
     socket.on('getStudent', function(func) {
         db.getStudent(socket);
@@ -95,20 +95,25 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('getProfCourses', function(data) {
-	db.getProfCourses(socket,data);
+		db.getProfCourses(socket,data);
     });
+	
+	socket.on('logout', function() {
+		socket.handshake.userId = null;
+		socket.handshake.isProf = null;
+	});
 
     socket.on('testios', function(data) {
-	   socket.emit('test', { test: 'test' });
+		socket.emit('test', { test: 'test' });
     });
 
     socket.on('error', function() {
-	   console.log('SOCKET ERROR');
-	   socket.destroy();
+		console.log('SOCKET ERROR');
+		socket.destroy();
     });
 
     socket.on('close', function() {
-	   console.log('SOCKET CLOSED');
+		console.log('SOCKET CLOSED');
     });
 });
 
