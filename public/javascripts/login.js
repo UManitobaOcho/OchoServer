@@ -1,3 +1,4 @@
+//var hostUrl = "http://localhost:8080"; 
 var hostUrl = window.location.host;
 var socket = io.connect(hostUrl);
 
@@ -58,11 +59,25 @@ function logout() {
 };
 
 function display_contents(courses) {
-	$('.course_number').text(courses.course_number);
-	$('.course_section').text(courses.course_section);
-	$('.course_name').text(courses.course_name);
-	$('.prof_name').text(courses.name);
-	$('.class_time').text(courses.class_times);
-
+	// $('.course_number').text(courses.course_number);
+	// $('.course_section').text(courses.course_section);
+	// $('.course_name').text(courses.course_name);
+	// $('.prof_name').text(courses.name);
+	// $('.class_time').text(courses.class_times);
+    $('.courses_list').html("<br />");
+    table = "<table class='table table-hover text-left'>";
+    _table = "</table>"
+    tr = "<tr>";
+    _tr = "</tr>";
+    td = "<td>";
+    _td = "</td>";
+    $('.courses_list').append(
+        table + tr + td + courses.course_number + _td +
+                     td + courses.course_name   + _td +
+                     td + courses.course_section+ _td +
+                     td + courses.name          + _td +
+                     td + courses.class_times   + _td +
+        _tr + _table
+    );
 	$('.courses_list').show();
 };

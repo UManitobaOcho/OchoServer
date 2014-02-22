@@ -18,6 +18,7 @@ var connect = require("connect");
  * Other JS files
  */
 
+//var db = require('./testdb');
 var db = require('./db');
 
 /* The server */
