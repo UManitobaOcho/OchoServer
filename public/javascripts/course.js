@@ -20,8 +20,7 @@ function addCourse() {
 	if( validateCourseFields() ) {		
 		var classTimes = getClassTimes();
 		
-		if(classTimes != undefined) {
-		
+		if(classTimes != undefined) {			
 			socket.emit('addCourse',   {courseName: $('input#courseName')[0].value,
 										courseNum: $('input#courseNum')[0].value,
 										section: $('input#section')[0].value,
@@ -59,7 +58,7 @@ function validateCourseFields() {
 function getClassTimes() {
 	if($('input#onlineCourse').is(':checked')) {
 	
-		return {classTimes: 'online'};
+		return 'online';
 	} else if( validateTimes() ){	
 		
 		return classTimeToString();
@@ -109,7 +108,6 @@ function classTimeToString() {
 	
 	result += (" " + $('input#startTime')[0].value + " - " + $('input#endTime')[0].value);
 
-	alert(result);
 	return result;
 };
     

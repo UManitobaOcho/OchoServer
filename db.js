@@ -46,13 +46,13 @@ exports.getProf = function(socket) {
 
 exports.addCourse = function(socket, course) {
 	pg.connect(pgHost, function(err, client, done) {
-        console.log(course);
+        
         if (err) {
             return console.error('error fetching client from pool', err);
         }
 		
 		//need to setup query variables as strings if they are to be used as VARCHARS in the DB
-		var queryVars = "'" + course.courseId + "', '" + course.section + "', '" + course.courseName + "', '" + course.times.classTimes + "'";
+		var queryVars = "'" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', '" + course.times + "'";
 		
         client.query( ("SELECT * FROM addCourse(" + queryVars + ");") , function(err, result) {
             done();  // release the client back to the pool
