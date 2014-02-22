@@ -10,27 +10,37 @@ block jumbotron
 		label.inputLabel  Course Name: 
 		input#courseName(type="text")
 	.txtInput
-		label.inputLabel  Course ID: 
-		input#courseId(type="text")
+		label.inputLabel  Course Number: 
+		input#courseNum(type="text")
 	.txtInput
 		label.inputLabel Section: 
 		input#section(type="text")
 	
+	input#onlineCourse.onlineCheckbox(type="checkbox" value="Online")
+	label Online/Distance Education Course
+	
 	h3 Class Times
-	input#monday.daysRadio(type="radio" value="M")
+	input#monday.daysCheckbox(type="checkbox" value="M")
 	label M
-	input#tuesday.daysRadio(type="radio" value="T")
+	input#tuesday.daysCheckbox(type="checkbox" value="T")
 	label T
-	input#wednesday.daysRadio(type="radio" value="W")
+	input#wednesday.daysCheckbox(type="checkbox" value="W")
 	label W
-	input#thursday.daysRadio(type="radio" value="TH")
+	input#thursday.daysCheckbox(type="checkbox" value="TH")
 	label TH
-	input#friday.daysRadio(type="radio" value="F")
+	input#friday.daysCheckbox(type="checkbox" value="F")
 	label F
 	
-	.input-append.bootstrap-timepicker
-		input#timepicker1.input-small(type="text")
-		span.add-on: i.icon-time
+	.startTime
+		label Start Time:
+		.input-append.bootstrap-timepicker
+			input#startTime.input-small(type="text")
+			span.add-on: i.icon-time
+	.endTime
+		label End Time:
+		.input-append.bootstrap-timepicker
+			input#endTime.input-small(type="text")
+			span.add-on: i.icon-time
 	
 	.submit
 		input.submitBtn(type="submit" name="Submit")

@@ -13,6 +13,10 @@
 	width: 200px;
 }
 
+a.logout {
+	display: block;
+}
+
 .submit {
 	text-align: right;
 }
