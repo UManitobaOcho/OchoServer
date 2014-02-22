@@ -99,6 +99,10 @@ io.sockets.on('connection', function(socket) {
 			// console.log('Error: not a professor, adding a course is unauthorized.');
 		// }
 	});
+	
+	socket.on('deleteCourse', function(courseId) {
+		db.deleteCourse(socket, courseId);
+	});
 
     socket.on('getCourses', function() {
         db.getCourses(socket);

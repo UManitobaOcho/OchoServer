@@ -51,7 +51,9 @@ exports.addCourse = function(socket, course) {
             return console.error('error fetching client from pool', err);
         }
 		
+		//need to setup query variables as strings if they are to be used as VARCHARS in the DB
 		var queryVars = "'" + course.courseId + "', '" + course.section + "', '" + course.courseName + "', '" + course.times.classTimes + "'";
+		
         client.query( ("SELECT * FROM addCourse(" + queryVars + ");") , function(err, result) {
             done();  // release the client back to the pool
 
@@ -64,6 +66,25 @@ exports.addCourse = function(socket, course) {
     });
 };
 
+exports.deleteCourse = function(socket, courseId) {
+	pg.connect(pgHost, function(err, client, done) {
+		
+		if (err) {
+			return console.error('error fetching client from pool', err);
+		}
+		
+		client.query( ("SELECT * FROM deleteCourse(" + courseId.courseId + ")") , function(err, result) {
+			done();
+			
+			if (err) {
+				return console.error('error running query', err);
+			}
+			
+			socket.emit('courseDeleted');
+		});
+	});
+};
+
 exports.getCourses = function(socket) {
     pg.connect(pgHost, function(err, client, done) {
         
@@ -71,7 +92,7 @@ exports.getCourses = function(socket) {
             return console.error('error fetching client from pool', err);
         }
 		
-		client.query("SELECT C.course_number, C.course_section, C.course_name, P.name, C.class_times FROM PROFESSORS P, COURSES C WHERE C.prof_id = P.prof_id" , function(err, result) {
+		client.query("SELECT C.course_id, C.course_number, C.course_section, C.course_name, P.name, C.class_times FROM PROFESSORS P, COURSES C WHERE C.prof_id = P.prof_id" , function(err, result) {
         // client.query("SELECT C.course_number, C.course_section, C.course_name, P.name, C.class_times FROM STUDENTS S, PROFESSORS P, COURSES C, Enrolled E WHERE S.student_id = E.student_id AND E.course_id = C.course_id AND C.prof_id = P.prof_id AND S.student_id = 1" , function(err, result) {
             done();  // release the client back to the pool
 

@@ -36,6 +36,10 @@ div.courses_list text text{
 	display: inline-block;
 }
 
+div.courses_list td.courseId {
+	display: none;
+}
+
 /* Space out content a bit */
 body {
   padding-top: 50px;

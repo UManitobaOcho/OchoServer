@@ -72,17 +72,19 @@ function display_contents(courses) {
 	tr = "<tr>";
 	_tr = "</tr>";
 	td = "<td>";
+	tdIdDisplayNone = "<td class='courseId'>";
 	_td = "</td>";
 	btnGroup = "<div class='btn-group'>";
 	_btnGroup = "</div>";
-	editBtn = "<button type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-pencil' /> </button>";
-	deleteBtn = "<button type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-trash' /> </button>";
+	editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-pencil' /> </button>";
+	deleteBtn = "<button id='deleteBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-trash' /> </button>";
 	editBtnGroup = btnGroup + editBtn + deleteBtn + _btnGroup;
 	
 	//add rows to table
 	for(var i = 0; i < courses.rowCount; i++) {
 		$('.courses_list').append(
-			table + tr + td + courses.rows[i].course_number + _td +
+			table + tr + tdIdDisplayNone + courses.rows[i].course_id + _td +
+						 td + courses.rows[i].course_number + _td +
 						 td + courses.rows[i].course_name   + _td +
 						 td + courses.rows[i].course_section+ _td +
 						 td + courses.rows[i].name          + _td +
@@ -91,5 +93,28 @@ function display_contents(courses) {
 			_tr + _table
 		);
 	}
+	
+	addTableBtnFuncs();
 	$('.courses_list').show();
+};
+
+function addTableBtnFuncs() {
+	$('td #editBtn').click(function () { document.location.href = "/AddCourse" });
+	$('td #deleteBtn').click(function () { 
+	
+		//get courseId from td.courseId of the tr object that contains the current delete button
+		var tr = $(this).parent().parent().parent();
+		// var courseId = $("td.courseId", $(this).parent().parent().parent()).text();
+		
+		deleteCourse(tr); 
+	});
+};
+
+function deleteCourse(tr) {
+	var cId = $("td.courseId", tr).text();
+	
+	socket.emit('deleteCourse', {courseId: cId});
+	socket.on('courseDeleted', function() {
+		removeCourse(tr.remove());
+	});
 };
