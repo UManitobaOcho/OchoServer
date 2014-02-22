@@ -64,20 +64,32 @@ function display_contents(courses) {
 	// $('.course_name').text(courses.course_name);
 	// $('.prof_name').text(courses.name);
 	// $('.class_time').text(courses.class_times);
-    $('.courses_list').html("<br />");
-    table = "<table class='table table-hover text-left'>";
-    _table = "</table>"
-    tr = "<tr>";
-    _tr = "</tr>";
-    td = "<td>";
-    _td = "</td>";
-    $('.courses_list').append(
-        table + tr + td + courses.course_number + _td +
-                     td + courses.course_name   + _td +
-                     td + courses.course_section+ _td +
-                     td + courses.name          + _td +
-                     td + courses.class_times   + _td +
-        _tr + _table
-    );
+	
+	//define table stuff
+	$('.courses_list').html("<br />");
+	table = "<table class='table table-hover text-left'>";
+	_table = "</table>";
+	tr = "<tr>";
+	_tr = "</tr>";
+	td = "<td>";
+	_td = "</td>";
+	btnGroup = "<div class='btn-group'>";
+	_btnGroup = "</div>";
+	editBtn = "<button type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-pencil' /> </button>";
+	deleteBtn = "<button type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-trash' /> </button>";
+	editBtnGroup = btnGroup + editBtn + deleteBtn + _btnGroup;
+	
+	//add rows to table
+	for(var i = 0; i < courses.rowCount; i++) {
+		$('.courses_list').append(
+			table + tr + td + courses.rows[i].course_number + _td +
+						 td + courses.rows[i].course_name   + _td +
+						 td + courses.rows[i].course_section+ _td +
+						 td + courses.rows[i].name          + _td +
+						 td + courses.rows[i].class_times   + _td +
+						 td + editBtnGroup + _td +
+			_tr + _table
+		);
+	}
 	$('.courses_list').show();
 };

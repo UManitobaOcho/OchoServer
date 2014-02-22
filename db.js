@@ -70,15 +70,16 @@ exports.getCourses = function(socket) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-
-        client.query("SELECT C.course_number, C.course_section, C.course_name, P.name, C.class_times FROM STUDENTS S, PROFESSORS P, COURSES C, Enrolled E WHERE S.student_id = E.student_id AND E.course_id = C.course_id AND C.prof_id = P.prof_id AND S.student_id = 1" , function(err, result) {
+		
+		client.query("SELECT C.course_number, C.course_section, C.course_name, P.name, C.class_times FROM PROFESSORS P, COURSES C WHERE C.prof_id = P.prof_id" , function(err, result) {
+        // client.query("SELECT C.course_number, C.course_section, C.course_name, P.name, C.class_times FROM STUDENTS S, PROFESSORS P, COURSES C, Enrolled E WHERE S.student_id = E.student_id AND E.course_id = C.course_id AND C.prof_id = P.prof_id AND S.student_id = 1" , function(err, result) {
             done();  // release the client back to the pool
 
             if (err) {
                 return console.error('error running query', err);
             }
 
-            socket.emit('foundCourses', result.rows[0]);
+            socket.emit('foundCourses', result);
         });
     });
 };
