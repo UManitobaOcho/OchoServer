@@ -81,7 +81,7 @@ io.set('authorization', function (handshakeData, accept) {
     accept(null, true);
 });
 
-io.sockets.on('connection', function(socket) {	
+io.sockets.on('connection', function(socket) {
 
     socket.on('getStudent', function(func) {
         db.getStudent(socket);
@@ -90,6 +90,15 @@ io.sockets.on('connection', function(socket) {
     socket.on('getProf', function(data) {
         db.getProf(socket);
     });
+	
+	socket.on('addCourse', function(course) {
+		console.log(socket.handshake.isProf);
+		// if(socket.handshake.isProf == true) {
+			db.addCourse(socket, course);
+		// } else {
+			// console.log('Error: not a professor, adding a course is unauthorized.');
+		// }
+	});
 
     socket.on('getCourses', function() {
         db.getCourses(socket);

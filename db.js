@@ -1,7 +1,8 @@
 var pg = require('pg');
+var pgHost = "postgres://ocho:ocho@localhost/OchoDb";
 
 exports.getStudent = function(socket) {
-    pg.connect("postgres://ocho:ocho@localhost/OchoDb", function(err, client, done) {
+    pg.connect(pgHost, function(err, client, done) {
     
         if (err) {
             return console.error('error fetching client from pool', err);
@@ -21,7 +22,7 @@ exports.getStudent = function(socket) {
 
 
 exports.getProf = function(socket) {
-    pg.connect("postgres://ocho:ocho@localhost/OchoDb", function(err, client, done) {
+    pg.connect(pgHost, function(err, client, done) {
 		
         if (err) {
             return console.error('error fetching client from pool', err);
@@ -43,8 +44,28 @@ exports.getProf = function(socket) {
     });
 };
 
+exports.addCourse = function(socket, course) {
+	pg.connect(pgHost, function(err, client, done) {
+        console.log(course);
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+		
+		var queryVars = "'" + course.courseId + "', '" + course.section + "', '" + course.courseName + "', '" + course.times.classTimes + "'";
+        client.query( ("SELECT * FROM addCourse(" + queryVars + ");") , function(err, result) {
+            done();  // release the client back to the pool
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+
+            socket.emit('courseAdded', result.rows[0].courseId);
+        });
+    });
+};
+
 exports.getCourses = function(socket) {
-    pg.connect("postgres://ocho:ocho@localhost/OchoDb", function(err, client, done) {
+    pg.connect(pgHost, function(err, client, done) {
         
         if (err) {
             return console.error('error fetching client from pool', err);
@@ -63,7 +84,7 @@ exports.getCourses = function(socket) {
 };
 
 exports.getProfCourses = function(socket,data) {
-    pg.connect("postgres://ocho:ocho@localhost/OchoDb", function(err, client, done) {
+    pg.connect(pgHost, function(err, client, done) {
 
         if (err) {
             return console.error('error fetching client from pool', err);
