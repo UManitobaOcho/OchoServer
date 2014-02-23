@@ -66,6 +66,47 @@ exports.addCourse = function(socket, course) {
     });
 };
 
+exports.getCourseInfo = function(socket, courseId) {
+	pg.connect(pgHost, function(err, client, done) {
+        
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+		
+        client.query( ("SELECT * FROM COURSES WHERE course_id = " + courseId.courseId + ";") , function(err, result) {
+            done();  // release the client back to the pool
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+
+            socket.emit('returnCourseInfo', result.rows[0]);
+        });
+    });
+};
+
+exports.updateCourse = function(socket, course) {
+	pg.connect(pgHost, function(err, client, done) {
+        
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+		
+		//need to setup query variables as strings if they are to be used as VARCHARS in the DB
+		var queryVars = "'" + course.courseId + "', '" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', '" + course.times + "'";
+		
+        client.query( ("SELECT * FROM updateCourse(" + queryVars + ");") , function(err, result) {
+            done();  // release the client back to the pool
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+
+            socket.emit('courseUpdated', result);
+        });
+    });
+};
+
 exports.deleteCourse = function(socket, courseId) {
 	pg.connect(pgHost, function(err, client, done) {
 		

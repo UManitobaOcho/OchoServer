@@ -20,15 +20,15 @@ block jumbotron
 	label Online/Distance Education Course
 	
 	h3 Class Times
-	input#monday.daysCheckbox(type="checkbox" value="M")
+	input#M.daysCheckbox(type="checkbox" value="M")
 	label M
-	input#tuesday.daysCheckbox(type="checkbox" value="T")
+	input#T.daysCheckbox(type="checkbox" value="T")
 	label T
-	input#wednesday.daysCheckbox(type="checkbox" value="W")
+	input#W.daysCheckbox(type="checkbox" value="W")
 	label W
-	input#thursday.daysCheckbox(type="checkbox" value="R")
+	input#R.daysCheckbox(type="checkbox" value="R")
 	label R
-	input#friday.daysCheckbox(type="checkbox" value="F")
+	input#F.daysCheckbox(type="checkbox" value="F")
 	label F
 	
 	.startTime
@@ -45,5 +45,6 @@ block jumbotron
 	.submit
 		input.submitBtn(type="submit" name="Submit")
 	
+	script(src="/node_modules/jquery-watermark/jquery.watermark.min.js")
 	script(src="/public/javascripts/course.js")
 	

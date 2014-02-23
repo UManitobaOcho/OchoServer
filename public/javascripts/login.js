@@ -99,18 +99,16 @@ function display_contents(courses) {
 };
 
 function addTableBtnFuncs() {
-	$('td #editBtn').click(function () { document.location.href = "/AddCourse" });
+	$('td #editBtn').click(function () { document.location.href = "/UpdateCourse" });
 	$('td #deleteBtn').click(function () { 
 	
-		//get courseId from td.courseId of the tr object that contains the current delete button
-		var tr = $(this).parent().parent().parent();
-		// var courseId = $("td.courseId", $(this).parent().parent().parent()).text();
-		
+		var tr = $(this).parent().parent().parent();		
 		deleteCourse(tr); 
 	});
 };
 
 function deleteCourse(tr) {
+	//get courseId from td.courseId of the tr object that contains the current delete button
 	var cId = $("td.courseId", tr).text();
 	
 	socket.emit('deleteCourse', {courseId: cId});

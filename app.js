@@ -49,6 +49,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/AddCourse', addCourse.addCourse);
+app.get('/UpdateCourse', addCourse.addCourse);
 app.get('/AddAssignment', addAssignment.addAssignment);
 app.get('/about', about.about);
 
@@ -98,6 +99,14 @@ io.sockets.on('connection', function(socket) {
 		// } else {
 			// console.log('Error: not a professor, adding a course is unauthorized.');
 		// }
+	});
+	
+	socket.on('getCourseInfo', function(cId) {
+		db.getCourseInfo(socket, cId);
+	});
+	
+	socket.on('updateCourse', function(course) {
+		db.updateCourse(socket, course);
 	});
 	
 	socket.on('deleteCourse', function(courseId) {
