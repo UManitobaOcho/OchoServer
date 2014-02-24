@@ -113,6 +113,6 @@ function deleteCourse(tr) {
 	
 	socket.emit('deleteCourse', {courseId: cId});
 	socket.on('courseDeleted', function() {
-		removeCourse(tr.remove());
+		tr.remove();
 	});
 };
