@@ -99,12 +99,21 @@ function display_contents(courses) {
 };
 
 function addTableBtnFuncs() {
-	$('td #editBtn').click(function () { document.location.href = "/UpdateCourse" });
+	$('td #editBtn').click(function () { 
+		goToUpdatePage( $(this).parent().parent().parent() ); 
+	});
 	$('td #deleteBtn').click(function () { 
 	
 		var tr = $(this).parent().parent().parent();		
 		deleteCourse(tr); 
 	});
+};
+
+function goToUpdatePage(tr) {
+	var cId = $("td.courseId", tr).text();
+	socket.emit("setSessionVariable", {varName: 'courseId', varValue: cId});
+	
+	document.location.href = "/UpdateCourse";
 };
 
 function deleteCourse(tr) {

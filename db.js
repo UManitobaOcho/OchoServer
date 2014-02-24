@@ -21,7 +21,7 @@ exports.getStudent = function(socket) {
 };
 
 
-exports.getProf = function(socket) {
+exports.getProf = function(socket, session) {
     pg.connect(pgHost, function(err, client, done) {
 		
         if (err) {
@@ -36,15 +36,18 @@ exports.getProf = function(socket) {
             }
 			
 			//set into session
-			socket.handshake.userId = result.rows[0].prof_id;
-			socket.handshake.isProf = true;
+			session.reload(function() {
+				session.userId = result.rows[0].prof_id;
+				session.isProf = true;
+				session.touch().save();
+			});
 			
             socket.emit('foundProf', result.rows[0]);
         });
     });
 };
 
-exports.addCourse = function(socket, course) {
+exports.addCourse = function(socket, course, session) {
 	pg.connect(pgHost, function(err, client, done) {
         
         if (err) {
@@ -52,7 +55,7 @@ exports.addCourse = function(socket, course) {
         }
 		
 		//need to setup query variables as strings if they are to be used as VARCHARS in the DB
-		var queryVars = "'" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', '" + course.times + "'";
+		var queryVars = "'" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', " + session.userId + ", '" + course.times + "'";
 		
         client.query( ("SELECT * FROM addCourse(" + queryVars + ");") , function(err, result) {
             done();  // release the client back to the pool
@@ -68,12 +71,12 @@ exports.addCourse = function(socket, course) {
 
 exports.getCourseInfo = function(socket, courseId) {
 	pg.connect(pgHost, function(err, client, done) {
-        
+        console.log(courseId);
         if (err) {
             return console.error('error fetching client from pool', err);
         }
 		
-        client.query( ("SELECT * FROM COURSES WHERE course_id = " + courseId.courseId + ";") , function(err, result) {
+        client.query( ("SELECT * FROM COURSES WHERE course_id = " + courseId + ";") , function(err, result) {
             done();  // release the client back to the pool
 
             if (err) {
@@ -85,7 +88,7 @@ exports.getCourseInfo = function(socket, courseId) {
     });
 };
 
-exports.updateCourse = function(socket, course) {
+exports.updateCourse = function(socket, courseId, course) {
 	pg.connect(pgHost, function(err, client, done) {
         
         if (err) {
@@ -93,7 +96,7 @@ exports.updateCourse = function(socket, course) {
         }
 		
 		//need to setup query variables as strings if they are to be used as VARCHARS in the DB
-		var queryVars = "'" + course.courseId + "', '" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', '" + course.times + "'";
+		var queryVars = "'" + courseId + "', '" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', '" + course.times + "'";
 		
         client.query( ("SELECT * FROM updateCourse(" + queryVars + ");") , function(err, result) {
             done();  // release the client back to the pool

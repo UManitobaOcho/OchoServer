@@ -19,8 +19,8 @@ $(document).ready(function () {
 });
 
 function setupUpdatePage() {
-	//TODO: replace updateCourse variable with session variable when sessions working
-	socket.emit('getCourseInfo', {courseId: 1});
+
+	socket.emit('getCourseInfo');
 	socket.on('returnCourseInfo', function(course) {
 		setCourseInfo(course);
 		setWatermarks(course);
@@ -33,7 +33,7 @@ function setupUpdatePage() {
 	});
 		
 	$('.submitBtn').click( function() {
-		updateCourse(1) 
+		updateCourse() 
 	});
 };
 
@@ -91,13 +91,12 @@ function addCourse() {
 	}
 };
 
-function updateCourse(cId) {
+function updateCourse() {
 	if( validateCourseFields() ) {		
 		var classTimes = getClassTimes();
 		
 		if(classTimes != undefined) {			
-			socket.emit('updateCourse',   {courseId: cId,
-										courseName: $('input#courseName')[0].value,
+			socket.emit('updateCourse',   {courseName: $('input#courseName')[0].value,
 										courseNum: $('input#courseNum')[0].value,
 										section: $('input#section')[0].value,
 										times: classTimes}
