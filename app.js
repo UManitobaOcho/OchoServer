@@ -7,6 +7,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var addCourse = require('./routes/addCourse');
 var addAssignment = require('./routes/addAssignment');
+var addStudent = require('./routes/addStudent');
 var about = require('./routes/about');
 var http = require('http');
 var path = require('path');
@@ -52,6 +53,7 @@ app.get('/AddCourse', addCourse.addCourse);
 app.get('/UpdateCourse', addCourse.addCourse);
 app.get('/AddAssignment', addAssignment.addAssignment);
 app.get('/about', about.about);
+app.get('/AddStudent', addStudent.addStudent);
 
 /**
  *	Set up server
