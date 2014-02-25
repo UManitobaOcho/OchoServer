@@ -1,0 +1,20 @@
+extends index
+
+block jumbotron
+	a.logout(href="#" onclick="logout()") Logout
+	
+	h2 Add Student to course
+
+	div.select-class
+		h3 Select Course
+		select.selectpicker(id="class-picker")
+
+	div.select-student
+		h3 Select one to many student
+		select.selectpicker(id = "student-picker" multiple = "multiple" )
+
+		<select name="drop1" id="Select1" size="4" multiple="multiple">
+
+	a.btn.btn-lg.btn-success Add Student(s)
+	
+	script(src="/public/javascripts/student-course.js")
