@@ -3,6 +3,10 @@
 	text-align: left;
 }
 
+.txtInput input {
+	margin-right: 10px;
+}
+
 .jumbotron label {
 	margin-left: 5px;
 	margin-right: 5px;
@@ -23,6 +27,14 @@ a.logout {
 
 .submitBtn {
 	margin: 5px;
+}
+
+.alert {
+	display: none;
+}
+
+.alert-show {
+	display: inline-block;
 }
 
 i[class^="icon-"], i[class*=" icon-"] {

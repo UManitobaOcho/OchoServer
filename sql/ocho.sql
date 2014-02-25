@@ -182,15 +182,15 @@ insert into ENROLLED values(
 /**
 *	Create Stored Procedures
 */
-CREATE OR REPLACE FUNCTION addCourse(cNum VARCHAR, sect VARCHAR, cName VARCHAR, cTimes VARCHAR)
+CREATE OR REPLACE FUNCTION addCourse(cNum VARCHAR, sect VARCHAR, cName VARCHAR, pId BIGINT, cTimes VARCHAR)
 	RETURNS integer AS $val$
 begin
 	insert into COURSES values(
 		nextval('COURSE_SEQ'),
-		cId,
+		cNum,
 		sect,
 		cName,
-		1,
+		pId,
 		cTimes
 	);
 	return 0;

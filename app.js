@@ -14,6 +14,8 @@ var path = require('path');
 var pg = require('pg');
 var cookie = require("cookie");
 var connect = require("connect");
+var MemoryStore = express.session.MemoryStore;
+var sessionStore = new MemoryStore();
 
 /*
  * Other JS files
@@ -37,7 +39,7 @@ app.configure( function() {
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.cookieParser());
-    app.use(express.session({secret: 'secret', key: 'express.sid'}));
+    app.use(express.session({store: sessionStore, secret: 'secret', key: 'express.sid'}));
     // If we don't add /public to the path then we can access our stored node_modules
     app.use(express.static(path.join(__dirname, '')));
 });
@@ -65,50 +67,71 @@ server.listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
 });
 
+var Session = require('connect').middleware.session.Session;
 io.set('authorization', function (handshakeData, accept) {
 
     if (handshakeData.headers.cookie) {
 
         handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
-
         handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie['express.sid'], 'secret');
 
         if (handshakeData.cookie['express.sid'] == handshakeData.sessionID) {
             return accept('Cookie is invalid.', false);
         }
+		
+		handshakeData.sessionStore = sessionStore;
+		sessionStore.load(handshakeData.sessionID, function(err, session) {
+			if(err || !session) {
+				return accept('Error 1', false);
+			} else {
+				handshakeData.session = new Session(handshakeData, session);
+				return accept(null, true);
+			}
+		});
 
     } else {
         return accept('No cookie transmitted.', false);
     }
 
-    accept(null, true);
+    // accept(null, true);
 });
 
 io.sockets.on('connection', function(socket) {
-
+	var session = socket.handshake.session;
+	
+	/**
+	*	The function below allows us to set any variable into session by emitting 'setSessionVariable' 
+	*	with a JSON object containing a variable name and value stored as strings
+	*/
+	socket.on('setSessionVariable', function(variable) {
+		session.reload(function() {
+			eval('session.' + variable.varName + ' = ' + variable.varValue);
+			session.touch().save();
+		});
+	});
+	
     socket.on('getStudent', function(func) {
         db.getStudent(socket);
     });
 
     socket.on('getProf', function(data) {
-        db.getProf(socket);
+        db.getProf(socket, session);
     });
 	
 	socket.on('addCourse', function(course) {
-		console.log(socket.handshake.isProf);
-		// if(socket.handshake.isProf == true) {
-			db.addCourse(socket, course);
-		// } else {
-			// console.log('Error: not a professor, adding a course is unauthorized.');
-		// }
+		if(session.isProf == true) {
+			db.addCourse(socket, course, session);
+		} else {
+			console.log('Error: not a professor, adding a course is unauthorized.');
+		}
 	});
 	
-	socket.on('getCourseInfo', function(cId) {
-		db.getCourseInfo(socket, cId);
+	socket.on('getCourseInfo', function() {
+		db.getCourseInfo(socket, session.courseId);		
 	});
 	
 	socket.on('updateCourse', function(course) {
-		db.updateCourse(socket, course);
+		db.updateCourse(socket, session.courseId, course);
 	});
 	
 	socket.on('deleteCourse', function(courseId) {
@@ -124,8 +147,11 @@ io.sockets.on('connection', function(socket) {
     });
 	
 	socket.on('logout', function() {
-		socket.handshake.userId = null;
-		socket.handshake.isProf = null;
+		session.reload(function() {
+			session.userId = null;
+			session.isProf = null;
+			session.touch().save();
+		});
 	});
 
     socket.on('testios', function(data) {
