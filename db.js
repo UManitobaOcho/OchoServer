@@ -169,3 +169,24 @@ exports.getProfCourses = function(socket,data) {
         });
     });
 };
+
+exports.profAddAssignment = function(socket,data) {
+    pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+               // console.log(data + "");
+               // var querystring = "SELECT C.course_number FROM COURSES C, PROFESSORS P WHERE C.prof_id = P.prof_id AND P.username = \'" + data.username + "\'";
+
+       // client.query(querystring, function(err, result) {
+         //   done();  // release the client back to the pool
+
+           // if (err) {
+             //   return console.error('error running query', err);
+           // }
+
+            socket.emit('Assignemnt Added', result);
+        });
+    });
+};

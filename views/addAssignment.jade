@@ -5,33 +5,41 @@ block jumbotron
 	
 	h1 Add Assignment
 
-	div.assignment-title
+	div.assignment-title.well
 		h3 Assignment Name
-		input#assignment-title(type="text" value="Assignment 1" name="assignment-title" class="form-control")
+		input#assignment-title(type="text" value="Assignment 1" name="assignment-title")
+		p#assignment-title-error(style="color:red;")
 
-	div.select-class
+	div.select-class.well
 		h3 Select Course
 		select.selectpicker(id="class-picker")
 
-	div.file-upload
+	div.file-upload.well
 		input#assignment(type="file" name="assignment" style="visibility:hidden;")
 		div.input-append
 			h3 Select File
-			input#assignmentbox(type="text" name="assignmentbox" class="form-control" readonly)
-			a.btn.btn-success(id="browse-btn") Browse
+			input#assignmentbox(type="text" name="assignmentbox" readonly)
+			a.btn.btn-small(id="browse-btn") Browse
 		p#errorbox(style="color:red;")
 	
-	div.start-date
-		h3 Start Date
-		div.well
-			div.form-group
-				div.input-group.date(id="datetimepicker1")
-					input(type="text" class="form-control")
-					span.input-group-addon
-						span(class="glyphicon glyphicon-calendar")
+	div.startTime.well
+		h3 Release Date:
+		div#releaseDate.input-append.bootstrap-datepicker
+			input(type="text") 
+			span.add-on
+				i.glyphicon.glyphicon-calendar
+		p#startTime-error(style="color:red;")
 
-	input.datepicker(type="text")
-	
-	a.btn.btn-lg.btn-success Create Assignment
-	
+	div.endTime.well
+		h3 Due Date:
+		div#dueDate.input-append.bootstrap-datepicker
+			input(type="text")
+			span.add-on
+				i.glyphicon.glyphicon-calendar
+		p#endTime-error(style="color:red;")
+
+	div.submitButton.well
+		a#submitBtn.btn.btn-lg.btn-success.cl Create Assignment
+		p#submit-error(style="color:red;")
+
 	script(src="/public/javascripts/add-assignment.js")

@@ -6,10 +6,14 @@ window.onload = function(){
 };
 
 $(document).ready(function () {
-	//$('#datetimepicker1').datetimepicker();
-});
+        $('#releaseDate').datepicker();
+        $('#dueDate').datepicker();
 
-$('.datepicker').datepicker();
+	$('#submitBtn').click( function() {
+		addAssignment()
+	});
+
+});
 
 $(function() {
 	$('#assignment').change(function(){
@@ -44,9 +48,10 @@ function getProfCourses(){
 	socket.emit('getProfCourses', {username: 'cszapp'});
 	socket.on('foundProfCourses', function(courses){
 		var selector = document.getElementById("class-picker");
-		var option = document.createElement("option");
+		var option;
 
 		for(var i=0; i<courses.rows.length; i++){
+			option = document.createElement("option");
 			console.log(courses.rows[i].course_number);
 			option.text = courses.rows[i].course_number;
 			selector.add(option);
@@ -54,4 +59,29 @@ function getProfCourses(){
 		
 		console.log("Set Prof Courses");
 	});
+}
+
+function addAssignment(){
+	console.log("Verifing Assignment");
+	var verified = verifyAssignmentFields();
+
+	if(verified == 1) {
+		console.log("Submitting Assignment");
+		//socket.emit('profAddAssignment' {course: $})
+	} else {
+
+	}
+}
+
+function verifyAssignmentFields(){
+	var assignmentboxlen = $('#assignmentbox')[0].value.length;
+
+	if($('#assignment-title')[0].value.length <= 1) {
+		document.getElementById("assignment-title-error").innerHTML = "*Name To Short";
+	}
+	if(assignmentboxlen <= 3) {
+		document.getElementById("errorbox").innerHTML = "*Name To Short";
+	}
+
+	return 1;
 }
