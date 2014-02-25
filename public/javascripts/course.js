@@ -10,7 +10,10 @@ $(document).ready(function () {
 	$('#endTime').timepicker();
 	
 	if(window.location.pathname == addPath) {
-		$('.submitBtn').click( function() { 
+		$('.submitBtn').click( function() {
+			//ensure all alerts are hidden
+			$('.alert').removeClass('alert-show');
+			
 			addCourse()
 		});
 	} else if(window.location.pathname == updatePath) {
@@ -33,7 +36,10 @@ function setupUpdatePage() {
 	});
 		
 	$('.submitBtn').click( function() {
-		updateCourse() 
+		//ensure all alerts are hidden
+		$('.alert').removeClass('alert-show');
+		
+		updateCourse();
 	});
 };
 
@@ -115,16 +121,24 @@ function validateCourseFields() {
 	var valid = true;
 	
 	if($('input#courseName')[0].value.length <= 1) {
-		alert('not okay');
+	
+		//adds class, and sets innerText without erasing innerHtml
+		$('#courseNameError').addClass('alert-show').get(0).firstChild.nodeValue = 'Must be atleast 2 characters long';
 		valid = false;
 	}
-	if($('input#courseNum')[0].value.length != 9) {
-		alert('not okay');
+	
+	var regex = /^\w{4} \d{4}$/m;
+	if(!regex.test($('input#courseNum')[0].value)) {
+	
 		valid = false;
+		$('#courseNumError').addClass('alert-show').get(0).firstChild.nodeValue = 'Must be of format: EXAM 0000';
 	}
-	if($('input#section')[0].value.length != 3) {
-		alert('not okay');
+	
+	regex = /^\w\d{2}$/m;
+	if(!regex.test($('input#section')[0].value)) {
+	
 		valid = false;
+		$('#sectionError').addClass('alert-show').get(0).firstChild.nodeValue = 'Must be of format: A00';
 	}
 	
 	return valid;
@@ -133,7 +147,7 @@ function validateCourseFields() {
 function getClassTimes() {
 	if($('input#onlineCourse').is(':checked')) {
 	
-		return 'online';
+		return 'Online';
 	} else if( validateTimes() ){	
 		
 		return classTimeToString();
@@ -149,24 +163,26 @@ function validateTimes() {
 	var regex = /^\d{1,}:\d{2} \s?(AM|PM|am|pm)?$/m;
 	
 	if(!regex.test($('input#startTime')[0].value)) {
-		alert('not okay');
+		$('#classTimesError').addClass('alert-show').get(0).firstChild.nodeValue = 'Time values are required';
 		valid = false;
 	}
 	
 	if(!regex.test($('input#endTime')[0].value)) {
-		alert('not okay');
+		$('#classTimesError').addClass('alert-show').get(0).firstChild.nodeValue = 'Time values are required';
 		valid = false;
 	}
 	
 	//start and end time cannot be the same
 	if( ($('input#startTime')[0].value).localeCompare( $('input#endTime')[0].value ) == 0 ) {
-		alert('not okay');
+	
+		$('#classTimesError').addClass('alert-show').get(0).firstChild.nodeValue = 'Start and End times cannot be the same';
 		valid = false;
 	}
 
 	//check if atleast one day is selected
 	if($('input.daysCheckbox:checked').length <= 0) {
-		alert('not okay');
+		
+		$('#classTimesError').addClass('alert-show').get(0).firstChild.nodeValue = 'There must be atleast one day chosen/or Online Course option must be selected';
 		valid = false;
 	}
 	

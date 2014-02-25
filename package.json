@@ -16,5 +16,8 @@
     "bootstrap-datetimepicker": "latest",
     "grunt-cli": "latest",
     "socket.io": "latest"
+  },
+  "devDependencies": {
+    "should": "~3.1.2"
   }
 }

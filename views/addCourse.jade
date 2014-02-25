@@ -9,12 +9,18 @@ block jumbotron
 	.txtInput
 		label.inputLabel  Course Name: 
 		input#courseName(type="text")
+		.alert.alert-danger.alert-dismissable#courseNameError Error
+			button.close(type="button" data-dismiss="alert" aria-hidden="true") &times;
 	.txtInput
 		label.inputLabel  Course Number: 
 		input#courseNum(type="text")
+		.alert.alert-danger.alert-dismissable#courseNumError Error
+			button.close(type="button" data-dismiss="alert" aria-hidden="true") &times;
 	.txtInput
 		label.inputLabel Section: 
 		input#section(type="text")
+		.alert.alert-danger.alert-dismissable#sectionError Error
+			button.close(type="button" data-dismiss="alert" aria-hidden="true") &times;
 	
 	input#onlineCourse.onlineCheckbox(type="checkbox" value="Online")
 	label Online/Distance Education Course
@@ -41,6 +47,9 @@ block jumbotron
 		.input-append.bootstrap-timepicker
 			input#endTime.input-small(type="text")
 			span.add-on: i.icon-time
+			
+		.alert.alert-danger.alert-dismissable#classTimesError Error
+			button.close(type="button" data-dismiss="alert" aria-hidden="true") &times;
 	
 	.submit
 		input.submitBtn(type="submit" name="Submit")
