@@ -169,3 +169,36 @@ exports.getProfCourses = function(socket,data) {
         });
     });
 };
+
+exports.profAddAssignment = function(socket,data) {
+    pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        
+	console.log(data.course);
+	var querystring1 = "SELECT C.course_id FROM COURSES C WHERE C.course_number = \'" + data.course + "\'";
+	
+	client.query(querystring1, function(err, result){
+		done();
+		
+		if(err){
+			return console.error('error running first query', err);
+		}
+		
+		console.log(result.rows[0].course_id);
+		
+		var queryVars = (result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignTitle + "\', \'" + data.file + "\'";
+		client.query( ("SELECT * FROM addAssignment(" + queryVars + ");") , function(err, result) {
+			done();
+
+			if(err){
+				return console.error('error running second query', err);
+			}
+
+			socket.emit('AssignmentSubmitted', result.rows[0]);
+		});
+	});
+    });
+};
