@@ -69,9 +69,9 @@ server.listen(app.get('port'), function(){
 
 var Session = require('connect').middleware.session.Session;
 io.set('authorization', function (handshakeData, accept) {
-
+	
     if (handshakeData.headers.cookie) {
-
+		
         handshakeData.cookie = cookie.parse(handshakeData.headers.cookie);
         handshakeData.sessionID = connect.utils.parseSignedCookie(handshakeData.cookie['express.sid'], 'secret');
 
@@ -81,7 +81,8 @@ io.set('authorization', function (handshakeData, accept) {
 		
 		handshakeData.sessionStore = sessionStore;
 		sessionStore.load(handshakeData.sessionID, function(err, session) {
-			if(err || !session) {
+			//if handshakeData.sessionID == false then we are doing a test and passed cookie with a sid that ends up as false
+			if((err || !session) && handshakeData.sessionID != false) {				
 				return accept('Error 1', false);
 			} else {
 				handshakeData.session = new Session(handshakeData, session);
@@ -151,14 +152,14 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('profAddAssignment', function(data) {
-	db.profAddAssignment(socket,data);
+		db.profAddAssignment(socket,data);
     });
 	
 	socket.on('logout', function() {
 		session.reload(function() {
 			session.userId = null;
 			session.isProf = null;
-			session.touch().save();
+			session.save();
 		});
 	});
 

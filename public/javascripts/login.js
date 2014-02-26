@@ -15,6 +15,9 @@ function getStudent() {
 	console.log("Getting Student");
 	socket.emit('getStudent', {username: 'umplishk'});
 	socket.on('foundStudent', function(student) {
+		$('#add_course-btn').hide();
+		$('#add_assignment-btn').hide();
+		$('#add_student-btn').hide();
 		logIn(student);
 	});
 };
@@ -24,6 +27,9 @@ function getProf() {
 	socket.emit('getProf', {username: 'cszapp'});
 	socket.on('foundProf', function(prof) {
 		logIn(prof);
+                $('#add_course-btn').show();
+                $('#add_assignment-btn').show();
+                $('#add_student-btn').show();
 	});
 };
 

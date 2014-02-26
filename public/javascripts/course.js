@@ -28,7 +28,7 @@ function setupUpdatePage() {
 		setCourseInfo(course);
 		setWatermarks(course);
 		
-		if(course.class_times == "online") {
+		if(course.class_times == "Online") {
 			$('#onlineCourse').prop('checked', true);
 		} else {
 			setClassTimes(course.class_times);			
