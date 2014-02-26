@@ -8,6 +8,9 @@ window.onload = function() {
 	$('#submitBtn').click( function() {
 		addAssignment()
 	});
+	$('#selectCourse').click(function() {
+		getStudNotInCourse();
+	});
 
 };
 
@@ -54,6 +57,24 @@ function getProfCourses(){
 		}
 		
 		console.log("Set Prof Courses");
+	});
+}
+
+function getStudNotInCourse(){
+	console.log("Getting students not in this course");
+	var e = document.getElementById("class-picker");
+	var strClass = e.options[e.selectedIndex].text;
+	socket.emit('getStudNotInCourse', {course: strClass});
+	socket.on('foundStudNotInCourse', function(student) {
+		
+		var selector = document.getElementById("student-picker");
+		selector.innerHTML= "";
+		for(var i=0; i<student.rows.length; i++){
+			option = document.createElement("option");
+			console.log(student.rows[i].username);
+			option.text = "Username: " + student.rows[i].username + "  First Name: " + student.rows[i].first_name + "  Last Name: " + student.rows[i].last_name;
+			selector.add(option);
+		}
 	});
 }
 

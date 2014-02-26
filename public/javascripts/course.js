@@ -22,7 +22,8 @@ $(document).ready(function () {
 });
 
 function setupUpdatePage() {
-
+	$('#jumboTitle').text('Update Course');
+	
 	socket.emit('getCourseInfo');
 	socket.on('returnCourseInfo', function(course) {
 		setCourseInfo(course);
