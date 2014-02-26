@@ -93,15 +93,82 @@ function addAssignment(){
 function verifyAssignmentFields(){
 	var assignmentboxlen = $('#assignmentbox')[0].value.length;
 	var returnVal = 1;
+	var d = new Date();
+	var dueDate = ($('#dueDate').val().split('/'));
+	var releaseDate = ($('#releaseDate').val().split('/'));
+
+	// clear errors
+	$('#assignment-title--error').html(' ');
+	$('#endTime-error').html(' ');
+	$('#startTime-error').html(' ');
+	$('#errorbox').html(' ');
 	
 	if($('#assignment-title')[0].value.length <= 1) {
-		document.getElementById("assignment-title-error").innerHTML = "*Name To Short";
+		$("#assignment-title-error").html('*Name To Short');
 		returnVal = 0;
 	}
 	if(assignmentboxlen <= 3) {
-		document.getElementById("errorbox").innerHTML = "*Name To Short";
+		$("#errorbox").html('*Name To Short');
 		returnVal = 0;
 	}
 	
+	if(!(/[0-1][0-9]\/[0-3][0-9]\/[2-3][0-9][0-9][0-9]/.test($('#releaseDate')[0].value))) {
+		$('#startTime-error').html('*Release Date is not valid');
+		returnVal = 0;
+	}
+
+        if(!(/[0-1][0-9]\/[0-3][0-9]\/[2-3][0-9][0-9][0-9]/.test($('#dueDate')[0].value))) {
+                $('#endTime-error').html('*Due Date is not valid');
+                returnVal = 0;
+        }
+
+	if(parseInt(dueDate[2]) < parseInt(releaseDate[2])) {
+		$('#endTime-error').html('*Due date must be after the release date');
+		returnVal = 0;
+	}else if(parseInt(dueDate[2]) == parseInt(releaseDate[2])) {
+		if(parseInt(dueDate[0]) < parseInt(releaseDate[0])) {
+			$('#endTime-error').html('*Due date must be after the release date');
+                	returnVal = 0;
+		}else if(parseInt(dueDate[0]) == parseInt(releaseDate[0])) {
+			if(parseInt(dueDate[1]) < parseInt(releaseDate[1])) {
+				$('#endTime-error').html('*Due date must be after the release date');
+                		returnVal = 0;
+			}
+		} 
+	}
+
+        if(parseInt(dueDate[2]) < d.getFullYear()) {
+                $('#endTime-error').html('*Due date must be after todays date');
+                returnVal = 0;
+        }else if(parseInt(dueDate[2]) == d.getFullYear()) {
+                if(parseInt(dueDate[0]) < (d.getMonth()+1)) {
+                        $('#endTime-error').html('*Due date must be after todays date');
+                        returnVal = 0;
+                }else if(parseInt(dueDate[0]) == (d.getMonth()+1)) {
+                        if(parseInt(dueDate[1]) < d.getDate()) {
+                                $('#endTime-error').html('*Due date must be after todays date');
+                                returnVal = 0;
+                        }
+                }
+        }
+	
+        if(parseInt(releaseDate[2]) < d.getFullYear()) {
+                $('#startTime-error').html('*Release date must be after the todays date');
+                returnVal = 0;
+        }else if(parseInt(releaseDate[2]) == d.getFullYear()) {
+                if(parseInt(releaseDate[0]) < (d.getMonth()+1)) {
+                        $('#startTime-error').html('*Release date must be after todays date');
+                        returnVal = 0;
+                }else if(parseInt(releaseDate[0]) == (d.getMonth()+1)) {
+                        if(parseInt(releaseDate[1]) < d.getDate()) {
+                                $('#startTime-error').html('*Release date must be after todays date');
+                                returnVal = 0;
+                        }
+                }
+        }
+
+
+
+
 	return returnVal;
 }
