@@ -150,6 +150,24 @@ insert into STUDENTS values(
 	'umplishk@myumanitoba.ca',
 	'password',
 	1
+),
+(
+	nextval('STUDENT_SEQ'),
+	'umbhumbe',
+	'Jasdeep',
+	'Bhumber',
+	'umbhumbe@myumanitoba.ca',
+	'password',
+	1
+),
+(
+	nextval('STUDENT_SEQ'),
+	'umbluresf',
+	'Blurender',
+	'sfrenickoistic',
+	'umbluresf@myumanitoba.ca',
+	'password',
+	1
 );
 
 insert into PROFESSORS values(
