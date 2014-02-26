@@ -24,16 +24,16 @@ block jumbotron
 	
 	div.startTime.well
 		h3 Release Date:
-		div#releaseDate.input-append.bootstrap-datepicker
-			input(type="text") 
+		div.input-append
+			input#releaseDate.bootstrap-datepicker(type="text") 
 			span.add-on
 				i.glyphicon.glyphicon-calendar
 		p#startTime-error(style="color:red;")
 
 	div.endTime.well
 		h3 Due Date:
-		div#dueDate.input-append.bootstrap-datepicker
-			input(type="text")
+		div.input-append
+			input#dueDate.bootstrap-datepicker(type="text")
 			span.add-on
 				i.glyphicon.glyphicon-calendar
 		p#endTime-error(style="color:red;")
@@ -42,4 +42,4 @@ block jumbotron
 		a#submitBtn.btn.btn-lg.btn-success.cl Create Assignment
 		p#submit-error(style="color:red;")
 
-	script(src="/public/javascripts/add-assignment.js")
+	script(src="/public/javascripts/professor.js")

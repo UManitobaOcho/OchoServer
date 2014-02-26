@@ -102,9 +102,10 @@ create table COURSE_NOTES(
 create table ASSIGNMENTS(
 	assignment_id 	BIGINT UNIQUE primary key,
 	course_id 		BIGINT references COURSES(course_id),
-	due_date 		DATE NOT NULL,
-	viewable_date 	DATE NOT NULL,
-	assignment_name	VARCHAR(200) NOT NULL
+	due_date 		VARCHAR(11) NOT NULL,
+	viewable_date 	VARCHAR(11) NOT NULL,
+	assignment_name	VARCHAR(200) NOT NULL,
+	assignment_file	BYTEA NOT NULL
 );
 
 create table SUBMITTED_ASSIGNMENTS(
@@ -182,6 +183,21 @@ insert into ENROLLED values(
 /**
 *	Create Stored Procedures
 */
+CREATE OR REPLACE FUNCTION addAssignment(courseid BIGINT, duedate VARCHAR, viewabledate VARCHAR, assignmentname VARCHAR, assignmentfile BYTEA)
+        RETURNS integer AS $val$
+begin
+        insert into ASSIGNMENTS values(
+                nextval('ASSIGNMENT_SEQ'),
+                courseid,
+                duedate,
+                viewabledate,
+                assignmentname,
+                assignmentfile
+        );
+        return 0;
+end;
+$val$ language plpgsql;
+
 CREATE OR REPLACE FUNCTION addCourse(cNum VARCHAR, sect VARCHAR, cName VARCHAR, pId BIGINT, cTimes VARCHAR)
 	RETURNS integer AS $val$
 begin
