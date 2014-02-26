@@ -170,6 +170,28 @@ exports.getProfCourses = function(socket,data) {
     });
 };
 
+exports.getStudNotInCourse = function(socket,data) {
+    pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        console.log(data + ""); 
+
+        var querystring = "SELECT S.username, S.first_name, S.last_name FROM STUDENTS S LEFT JOIN ENROLLED E ON (S.student_id = E.student_id) LEFT JOIN COURSES C ON (E.course_id = C.course_id) WHERE C.course_number != \'" + data.course + "\' OR C.course_number IS NULL";
+
+        client.query(querystring, function(err, result) {
+            done();  // release the client back to the pool
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+
+            socket.emit('foundStudNotInCourse', result);
+        });
+    });
+};
+
 exports.profAddAssignment = function(socket,data) {
     pg.connect(pgHost, function(err, client, done) {
 

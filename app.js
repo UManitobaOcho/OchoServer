@@ -145,6 +145,10 @@ io.sockets.on('connection', function(socket) {
     socket.on('getProfCourses', function(data) {
 		db.getProfCourses(socket,data);
     });
+    			
+    socket.on('getStudNotInCourse', function(data) {
+    	db.getStudNotInCourse(socket, data);
+    });
 
     socket.on('profAddAssignment', function(data) {
 	db.profAddAssignment(socket,data);
