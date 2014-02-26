@@ -39,7 +39,7 @@ exports.getProf = function(socket, session) {
 			session.reload(function() {
 				session.userId = result.rows[0].prof_id;
 				session.isProf = true;
-				session.touch().save();
+				session.save();
 			});
 			
             socket.emit('foundProf', result.rows[0]);
@@ -179,16 +179,16 @@ exports.profAddAssignment = function(socket,data) {
         
 	console.log(data.course);
 	var querystring1 = "SELECT C.course_id FROM COURSES C WHERE C.course_number = \'" + data.course + "\'";
-	
+
 	client.query(querystring1, function(err, result){
 		done();
-		
+
 		if(err){
 			return console.error('error running first query', err);
 		}
-		
+
 		console.log(result.rows[0].course_id);
-		
+
 		var queryVars = (result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignTitle + "\', \'" + data.file + "\'";
 		client.query( ("SELECT * FROM addAssignment(" + queryVars + ");") , function(err, result) {
 			done();
