@@ -96,6 +96,7 @@ io.set('authorization', function (handshakeData, accept) {
     // accept(null, true);
 });
 
+
 io.sockets.on('connection', function(socket) {
 	var session = socket.handshake.session;
 	
@@ -103,6 +104,44 @@ io.sockets.on('connection', function(socket) {
 	*	The function below allows us to set any variable into session by emitting 'setSessionVariable' 
 	*	with a JSON object containing a variable name and value stored as strings
 	*/
+	function foundStudent(data) {
+		socket.emit('foundStudent', data);
+	}
+	function foundProf(data){
+		socket.emit('foundProf', data);
+	}
+	function courseAdded(data){
+		socket.emit('courseAdded', data);
+	}
+	function courseInfo(data){
+		socket.emit('returnCourseInfo', data);
+	}
+	function updatedCourse(data){
+		socket.emit('courseUpdated', data);
+	}
+	function deletedCourse(data){
+		if(data = "success")
+		{
+			socket.emit('courseDeleted');
+		}
+		else
+		{
+			console.error("Course did not get deleted");
+		}
+	}
+	function foundCourseList(data){
+		socket.emit('foundCourses', data);
+	}
+	function foundProfCourses(data){
+		socket.emit('foundProfCourses', data);
+	}
+	function foundStudNotInCourse(data){
+		socket.emit('foundStudNotInCourse', data);
+	}
+	function AssignmentSubmitted(data){
+		socket.emit('AssignmentSubmitted', data);
+	}
+
 	socket.on('setSessionVariable', function(variable) {
 		session.reload(function() {
 			eval('session.' + variable.varName + ' = ' + variable.varValue);
@@ -111,65 +150,50 @@ io.sockets.on('connection', function(socket) {
 	});
 	
     socket.on('getStudent', function(func) {
-        var result = db.getStudent(socket);
-        socket.emit('foundStudent', result);
+    	db.getStudent(socket, foundStudent);
     });
 
     socket.on('getProf', function(data) {
-        var result = db.getProf(socket, session);
-        socket.emit('foundProf', result);
+        db.getProf(socket, session, foundProf);        
     });
 	
 	socket.on('addCourse', function(course) {
 		if(session.isProf == true) {
-			var result = db.addCourse(socket, course, session);
-			socket.emit('courseAdded', result);
+			db.addCourse(socket, course, session, courseAdded);
 		} else {
-			console.log('Error: not a professor, adding a course is unauthorized.');
+			console.error('Error: not a professor, adding a course is unauthorized.');
 		}
 	});
 	
 	socket.on('getCourseInfo', function() {
-
-		var result = db.getCourseInfo(socket, session.courseId);	
-		socket.emit('returnCourseInfo', result);	
+		db.getCourseInfo(socket, session.courseId, courseInfo);			
 	});
 	
 	socket.on('updateCourse', function(course) {
-		var result = db.updateCourse(socket, session.courseId, course);
-		socket.emit('courseUpdated', result);
+		db.updateCourse(socket, session.courseId, course, updatedCourse);
 	});
 	
 	socket.on('deleteCourse', function(courseId) {
-		var result = db.deleteCourse(socket, courseId);
-		if(result == "success")
-		{
-			socket.emit('courseDeleted');
-		}
-		else
-		{
-			console.log('Error: course was not deleted');
-		}
+		db.deleteCourse(socket, courseId);
 	});
 
     socket.on('getCourses', function() {
-        var result = db.getCourses(socket);
-        socket.emit('foundCourses', result);
+        db.getCourses(socket, foundCourseList);
+        
     });
 
     socket.on('getProfCourses', function(data) {
-		var result = db.getProfCourses(socket,data);
-		socket.emit('foundProfCourses', result);
+		db.getProfCourses(socket,data, foundProfCourses);		
     });
     			
     socket.on('getStudNotInCourse', function(data) {
-    	var result = db.getStudNotInCourse(socket, data);
-    	socket.emit('foundStudNotInCourse', result);
+    	db.getStudNotInCourse(socket, data, foundStudNotInCourse);
+    	
     });
 
     socket.on('profAddAssignment', function(data) {
-		var result = db.profAddAssignment(socket,data);
-		socket.emit('AssignmentSubmitted', result);
+		db.profAddAssignment(socket,data, AssignmentSubmitted);
+		
     });
 	
 	socket.on('logout', function() {
