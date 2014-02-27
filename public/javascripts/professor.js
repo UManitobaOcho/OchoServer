@@ -3,8 +3,18 @@
 window.onload = function() {
 	getProfCourses();
 	$('.logout').show();
-        $('#releaseDate').datepicker();
-        $('#dueDate').datepicker();
+    $('#releaseDate').datepicker()
+		.on('changeDate', function(ev){
+			$('#releaseDate').datepicker('hide'); //Autohides date picker after click
+		});
+	$('.startTime span').click( function() { $('#releaseDate').datepicker('show'); }); //Show calendar on icon click
+
+    $('#dueDate').datepicker()
+		.on('changeDate', function(ev){
+			$('#dueDate').datepicker('hide'); //Autohides date picker after click
+		});
+	$('.endTime span').click( function() { $('#dueDate').datepicker('show'); }); //Show calendar on icon click
+
 	$('#submitBtn').click( function() {
 		addAssignment()
 	});
