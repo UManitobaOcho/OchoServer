@@ -20,8 +20,8 @@ var sessionStore = new MemoryStore();
  * Other JS files
  */
 
-var db = require('./testdb');
-//var db = require('./db');
+//var db = require('./testdb');
+var db = require('./db');
 
 /* The server */
 var app = express();
