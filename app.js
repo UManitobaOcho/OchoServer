@@ -3,12 +3,11 @@
  */
 
 var express = require('express');
-var routes = require('./routes');
-var user = require('./routes/user');
-var addCourse = require('./routes/addCourse');
-var addAssignment = require('./routes/addAssignment');
-var addStudent = require('./routes/addStudent');
-var about = require('./routes/about');
+var controllers = require('./controllers');
+var addCourse = require('./controllers/addCourse');
+var addAssignment = require('./controllers/addAssignment');
+var addStudent = require('./controllers/addStudent');
+var about = require('./controllers/about');
 var http = require('http');
 var path = require('path');
 var pg = require('pg');
@@ -49,8 +48,8 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
-app.get('/users', user.list);
+//Load Controllers
+app.get('/', controllers.index);
 app.get('/AddCourse', addCourse.addCourse);
 app.get('/UpdateCourse', addCourse.addCourse);
 app.get('/AddAssignment', addAssignment.addAssignment);
