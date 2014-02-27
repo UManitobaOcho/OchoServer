@@ -2,7 +2,7 @@ var pg = require('pg');
 var pgHost = "postgres://ocho:ocho@localhost/OchoDb";
 
 exports.getStudent = function(socket) {
-    pg.connect(pgHost, function(err, client, done) {
+    return pg.connect(pgHost, function(err, client, done) {
     
         if (err) {
             return console.error('error fetching client from pool', err);
@@ -15,14 +15,16 @@ exports.getStudent = function(socket) {
                 return console.error('error running query', err);
             }
 
-            socket.emit('foundStudent', result.rows[0]);
+            return result.rows[0];
+
+            //socket.emit('foundStudent', result.rows[0]);
         });
     });
 };
 
 
 exports.getProf = function(socket, session) {
-    pg.connect(pgHost, function(err, client, done) {
+    return pg.connect(pgHost, function(err, client, done) {
 		
         if (err) {
             return console.error('error fetching client from pool', err);
@@ -41,14 +43,13 @@ exports.getProf = function(socket, session) {
 				session.isProf = true;
 				session.save();
 			});
-			
-            socket.emit('foundProf', result.rows[0]);
+			return result.rows[0];
         });
     });
 };
 
 exports.addCourse = function(socket, course, session) {
-	pg.connect(pgHost, function(err, client, done) {
+	return pg.connect(pgHost, function(err, client, done) {
         
         if (err) {
             return console.error('error fetching client from pool', err);
@@ -64,13 +65,13 @@ exports.addCourse = function(socket, course, session) {
                 return console.error('error running query', err);
             }
 
-            socket.emit('courseAdded', result.rows[0].courseId);
+            return results.row[0].courseId; 
         });
     });
 };
 
 exports.getCourseInfo = function(socket, courseId) {
-	pg.connect(pgHost, function(err, client, done) {
+	return pg.connect(pgHost, function(err, client, done) {
         console.log(courseId);
         if (err) {
             return console.error('error fetching client from pool', err);
@@ -83,13 +84,13 @@ exports.getCourseInfo = function(socket, courseId) {
                 return console.error('error running query', err);
             }
 
-            socket.emit('returnCourseInfo', result.rows[0]);
+            return result.row[0]; 
         });
     });
 };
 
 exports.updateCourse = function(socket, courseId, course) {
-	pg.connect(pgHost, function(err, client, done) {
+	return pg.connect(pgHost, function(err, client, done) {
         
         if (err) {
             return console.error('error fetching client from pool', err);
@@ -105,13 +106,14 @@ exports.updateCourse = function(socket, courseId, course) {
                 return console.error('error running query', err);
             }
 
-            socket.emit('courseUpdated', result);
+            return result;
+            
         });
     });
 };
 
 exports.deleteCourse = function(socket, courseId) {
-	pg.connect(pgHost, function(err, client, done) {
+	return pg.connect(pgHost, function(err, client, done) {
 		
 		if (err) {
 			return console.error('error fetching client from pool', err);
@@ -123,14 +125,13 @@ exports.deleteCourse = function(socket, courseId) {
 			if (err) {
 				return console.error('error running query', err);
 			}
-			
-			socket.emit('courseDeleted');
+			return "success"
 		});
 	});
 };
 
 exports.getCourses = function(socket) {
-    pg.connect(pgHost, function(err, client, done) {
+    return pg.connect(pgHost, function(err, client, done) {
         
         if (err) {
             return console.error('error fetching client from pool', err);
@@ -143,14 +144,14 @@ exports.getCourses = function(socket) {
             if (err) {
                 return console.error('error running query', err);
             }
-
-            socket.emit('foundCourses', result);
+            return result;
+            
         });
     });
 };
 
 exports.getProfCourses = function(socket,data) {
-    pg.connect(pgHost, function(err, client, done) {
+    return pg.connect(pgHost, function(err, client, done) {
 
         if (err) {
             return console.error('error fetching client from pool', err);
@@ -164,8 +165,9 @@ exports.getProfCourses = function(socket,data) {
             if (err) {
                 return console.error('error running query', err);
             }
+            return result;
 
-            socket.emit('foundProfCourses', result);
+            
         });
     });
 };
@@ -186,14 +188,13 @@ exports.getStudNotInCourse = function(socket,data) {
             if (err) {
                 return console.error('error running query', err);
             }
-
-            socket.emit('foundStudNotInCourse', result);
+            result result;
         });
     });
 };
 
 exports.profAddAssignment = function(socket,data) {
-    pg.connect(pgHost, function(err, client, done) {
+    return pg.connect(pgHost, function(err, client, done) {
 
         if (err) {
             return console.error('error fetching client from pool', err);
@@ -219,7 +220,9 @@ exports.profAddAssignment = function(socket,data) {
 				return console.error('error running second query', err);
 			}
 
-			socket.emit('AssignmentSubmitted', result.rows[0]);
+            return result.rows[0];
+
+			
 		});
 	});
     });

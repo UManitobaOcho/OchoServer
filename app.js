@@ -111,47 +111,65 @@ io.sockets.on('connection', function(socket) {
 	});
 	
     socket.on('getStudent', function(func) {
-        db.getStudent(socket);
+        var result = db.getStudent(socket);
+        socket.emit('foundStudent', result);
     });
 
     socket.on('getProf', function(data) {
-        db.getProf(socket, session);
+        var result = db.getProf(socket, session);
+        socket.emit('foundProf', result);
     });
 	
 	socket.on('addCourse', function(course) {
 		if(session.isProf == true) {
-			db.addCourse(socket, course, session);
+			var result = db.addCourse(socket, course, session);
+			socket.emit('courseAdded', result);
 		} else {
 			console.log('Error: not a professor, adding a course is unauthorized.');
 		}
 	});
 	
 	socket.on('getCourseInfo', function() {
-		db.getCourseInfo(socket, session.courseId);		
+
+		var result = db.getCourseInfo(socket, session.courseId);	
+		socket.emit('returnCourseInfo', result);	
 	});
 	
 	socket.on('updateCourse', function(course) {
-		db.updateCourse(socket, session.courseId, course);
+		var result = db.updateCourse(socket, session.courseId, course);
+		socket.emit('courseUpdated', result);
 	});
 	
 	socket.on('deleteCourse', function(courseId) {
-		db.deleteCourse(socket, courseId);
+		var result = db.deleteCourse(socket, courseId);
+		if(result == "success")
+		{
+			socket.emit('courseDeleted');
+		}
+		else
+		{
+			console.log('Error: course was not deleted');
+		}
 	});
 
     socket.on('getCourses', function() {
-        db.getCourses(socket);
+        var result = db.getCourses(socket);
+        socket.emit('foundCourses', result);
     });
 
     socket.on('getProfCourses', function(data) {
-		db.getProfCourses(socket,data);
+		var result = db.getProfCourses(socket,data);
+		socket.emit('foundProfCourses', result);
     });
     			
     socket.on('getStudNotInCourse', function(data) {
-    	db.getStudNotInCourse(socket, data);
+    	var result = db.getStudNotInCourse(socket, data);
+    	socket.emit('foundStudNotInCourse', result);
     });
 
     socket.on('profAddAssignment', function(data) {
-		db.profAddAssignment(socket,data);
+		var result = db.profAddAssignment(socket,data);
+		socket.emit('AssignmentSubmitted', result);
     });
 	
 	socket.on('logout', function() {
