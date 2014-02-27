@@ -20,8 +20,8 @@ var sessionStore = new MemoryStore();
  * Other JS files
  */
 
-var db = require('./testdb');
-//var db = require('./db');
+// var db = require('./testdb');
+var db = require('./db');
 
 /* The server */
 var app = express();
@@ -174,7 +174,7 @@ io.sockets.on('connection', function(socket) {
 	});
 	
 	socket.on('deleteCourse', function(courseId) {
-		db.deleteCourse(socket, courseId);
+		db.deleteCourse(socket, courseId, deletedCourse);
 	});
 
     socket.on('getCourses', function() {

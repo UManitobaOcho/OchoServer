@@ -76,7 +76,7 @@ exports.addCourse = function(socket, course, session, res) {
 
 exports.getCourseInfo = function(socket, courseId, res) {
 	return pg.connect(pgHost, function(err, client, done) {
-        console.log(courseId);
+        
         if (err) {
             return console.error('error fetching client from pool', err);
         }
@@ -87,8 +87,8 @@ exports.getCourseInfo = function(socket, courseId, res) {
             if (err) {
                 return console.error('error running query', err);
             }
-
-            res(result.row[0]); 
+			
+            res(result.rows[0]); 
         });
     });
 };
