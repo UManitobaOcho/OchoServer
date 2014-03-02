@@ -20,7 +20,7 @@ var sessionStore = new MemoryStore();
  * Other JS files
  */
 
-// var db = require('./testdb');
+//var db = require('./testdb');
 var db = require('./db');
 
 /* The server */
@@ -120,14 +120,8 @@ io.sockets.on('connection', function(socket) {
 		socket.emit('courseUpdated', data);
 	}
 	function deletedCourse(data){
-		if(data = "success")
-		{
-			socket.emit('courseDeleted');
-		}
-		else
-		{
-			console.error("Course did not get deleted");
-		}
+		if(data = "success") socket.emit('courseDeleted');
+		else console.error("Course did not get deleted");
 	}
 	function foundCourseList(data){
 		socket.emit('foundCourses', data);
