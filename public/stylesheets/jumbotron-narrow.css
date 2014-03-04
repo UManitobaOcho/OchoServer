@@ -1,6 +1,4 @@
-/**
-*	Custom styling for test server data
-*/
+
 .user_details{
 	display: none;
 }
@@ -46,3 +44,13 @@ div.courses_list td.courseId {
 .centerfy {
   text-align: center;
 }
+
+div.txtInput {
+	display: block;
+	text-align: center;
+}
+
+
+
+
+

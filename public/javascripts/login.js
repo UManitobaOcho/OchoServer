@@ -83,9 +83,10 @@ function display_contents(courses) {
 	_td = "</td>";
 	btnGroup = "<div class='btn-group'>";
 	_btnGroup = "</div>";
+	homeBtn = "<button id='homeBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-home' /> </button>"; 
 	editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-pencil' /> </button>";
 	deleteBtn = "<button id='deleteBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-trash' /> </button>";
-	editBtnGroup = btnGroup + editBtn + deleteBtn + _btnGroup;
+	editBtnGroup = btnGroup + homeBtn + editBtn + deleteBtn + _btnGroup;
 	
 	//add rows to table
 	for(var i = 0; i < courses.rowCount; i++) {
