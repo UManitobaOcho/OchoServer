@@ -21,6 +21,9 @@ window.onload = function() {
 	$('#selectCourse').click(function() {
 		getStudNotInCourse();
 	});
+	$('#addStudent').click( function() {
+		addStudentToCourse();
+	});
 
 };
 
@@ -63,6 +66,7 @@ function getProfCourses(){
 			option = document.createElement("option");
 			console.log(courses.rows[i].course_number);
 			option.text = courses.rows[i].course_number;
+			option.val = courses.rows[i].course_id;
 			selector.add(option);
 		}
 		
@@ -83,8 +87,36 @@ function getStudNotInCourse(){
 			option = document.createElement("option");
 			console.log(student.rows[i].username);
 			option.text = "Username: " + student.rows[i].username + "  First Name: " + student.rows[i].first_name + "  Last Name: " + student.rows[i].last_name;
+			option.val = student.rows[i].student_id;
 			selector.add(option);
 		}
+	});
+}
+
+function addStudentToCourse() {
+	console.log("Add student");
+	var strStud = "";
+	var students = document.getElementById("student-picker");
+	var e = document.getElementById("class-picker");
+	var strClass = e.options[e.selectedIndex].val;
+	alert(strClass);
+
+	//place if statement if -1 then don't go to server, do something else
+	for(var i = 0;i < students.options.length; i++)
+	{
+		if(students[i].selected)
+		{
+			strStud = strStud + students[i].val + ",";
+			//alert(students[i].text);
+			//alert(students[i].val);
+		}
+	}
+	socket.emit('addStudentToCourse', {student: strStud, course: strClass});
+	socket.on('addedStudent', function (student) {
+		console.log("Student Added Successfully");
+		alert('Student(s) added');
+		document.location.href = "/";
+
 	});
 }
 

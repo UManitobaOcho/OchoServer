@@ -135,6 +135,9 @@ io.sockets.on('connection', function(socket) {
 	function AssignmentSubmitted(data){
 		socket.emit('AssignmentSubmitted', data);
 	}
+	function addedStudent(data) {
+		socket.emit('addedStudent', data);
+	}
 
 	socket.on('setSessionVariable', function(variable) {
 		session.reload(function() {
@@ -183,6 +186,9 @@ io.sockets.on('connection', function(socket) {
     socket.on('getStudNotInCourse', function(data) {
     	db.getStudNotInCourse(socket, data, foundStudNotInCourse);
     	
+    });
+    socket.on('addStudentToCourse', function(data) {
+		db.addStudentToCourse(socket, data, addedStudent);
     });
 
     socket.on('profAddAssignment', function(data) {
