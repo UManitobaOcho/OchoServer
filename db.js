@@ -161,7 +161,7 @@ exports.getProfCourses = function(socket,data,res) {
             return console.error('error fetching client from pool', err);
         }
 		console.log(data + "");	
-		var querystring = "SELECT C.course_number FROM COURSES C, PROFESSORS P WHERE C.prof_id = P.prof_id AND P.username = \'" + data.username + "\'";
+		var querystring = "SELECT C.course_number, C.course_id FROM COURSES C, PROFESSORS P WHERE C.prof_id = P.prof_id AND P.username = \'" + data.username + "\'";
 
         client.query(querystring, function(err, result) {
             done();  // release the client back to the pool
@@ -184,7 +184,7 @@ exports.getStudNotInCourse = function(socket,data,res) {
         }
         console.log(data + ""); 
 
-        var querystring = "SELECT S.username, S.first_name, S.last_name FROM STUDENTS S LEFT JOIN ENROLLED E ON (S.student_id = E.student_id) LEFT JOIN COURSES C ON (E.course_id = C.course_id) WHERE C.course_number != \'" + data.course + "\' OR C.course_number IS NULL";
+        var querystring = "SELECT S.username, S.first_name, S.last_name, S.student_id FROM STUDENTS S LEFT JOIN ENROLLED E ON (S.student_id = E.student_id) LEFT JOIN COURSES C ON (E.course_id = C.course_id) WHERE C.course_number != \'" + data.course + "\' OR C.course_number IS NULL";
 
         client.query(querystring, function(err, result) {
             done();  // release the client back to the pool
@@ -194,6 +194,32 @@ exports.getStudNotInCourse = function(socket,data,res) {
             }
             res(result);
         });
+    });
+};
+
+exports.addStudentToCourse = function(socket,data,res) {
+    return pg.connect(pgHost, function(err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        console.log(data + "");
+        var strStudent = data.student.split(',');
+        var query = "";
+        //var queryVars =  '" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', '" + course.times + "'";
+        for(var i = 0; i < strStudent.length-1;i++)
+        {
+            //result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignTitle + "\', \'" + data.file + "\'";
+            query = strStudent[i] + ", " + data.course;
+            console.log(query);
+            client.query( ( "Select * FROM addEnrolled(" + query + ");") , function(err, result) {
+                done();
+
+                if(err){
+                    return console.error('error running query', err);
+                }              
+            });
+        }
+        res("success");  
     });
 };
 
