@@ -257,3 +257,27 @@ exports.profAddAssignment = function(socket,data,res) {
     	});
     });
 };
+
+//exports.getStudentGrades = function(socket, courseID, studentID, res) {
+//   return pg.connect(pgHost, function(err, client, done) {
+//
+//        if (err) {
+//            return console.error('error fetchng client from pool', err);
+//        }
+//
+//        console.log(data + "");
+//        var querystring = "SELECT * FROM ENROLLED WHERE student_id = '1' AND course_id='1'";
+//
+//        client.query(querystring, function(err, result) {
+//            done();
+//
+//            if(err) {
+//                return console.error('error running query', err);
+//            }
+//
+//            console.log(result.rows[0]);
+//
+//            //res(result.rows[0]);
+//        });
+//    });
+//};

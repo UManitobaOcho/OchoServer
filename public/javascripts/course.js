@@ -5,7 +5,6 @@ var socket = io.connect(hostUrl);
 var addPath = "/AddCourse";
 var updatePath = "/UpdateCourse";
 
-
 $(document).ready(function () { 
 	$('#startTime').timepicker();
 	$('#endTime').timepicker();
