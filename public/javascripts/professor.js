@@ -77,7 +77,7 @@ function getProfCourses(){
 function getStudNotInCourse(){
 	console.log("Getting students not in this course");
 	var e = document.getElementById("class-picker");
-	var strClass = e.options[e.selectedIndex].text;
+	var strClass = e.options[e.selectedIndex].val;
 	socket.emit('getStudNotInCourse', {course: strClass});
 	socket.on('foundStudNotInCourse', function(student) {
 		
@@ -99,7 +99,6 @@ function addStudentToCourse() {
 	var students = document.getElementById("student-picker");
 	var e = document.getElementById("class-picker");
 	var strClass = e.options[e.selectedIndex].val;
-	alert(strClass);
 
 	//place if statement if -1 then don't go to server, do something else
 	for(var i = 0;i < students.options.length; i++)
