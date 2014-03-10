@@ -160,7 +160,7 @@ io.sockets.on('connection', function(socket) {
     });
 	
 	socket.on('addCourse', function(course) {
-		console.log(course);
+		
 		if(course.userId ? course.isProf : session.isProf == true) {
 			db.addCourse(socket, course, session, courseAdded);
 		} else {

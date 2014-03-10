@@ -68,7 +68,7 @@ exports.addCourse = function(socket, course, session, res) {
             if (err) {
                 return console.error('error running query', err);
             }
-			console.log(result);
+			
             res(result);
         });
     });
