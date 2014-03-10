@@ -8,6 +8,7 @@ var addCourse = require('./controllers/addCourse');
 var addAssignment = require('./controllers/addAssignment');
 var addStudent = require('./controllers/addStudent');
 var about = require('./controllers/about');
+var courseHomepage = require('./controllers/courseHomepage');
 var http = require('http');
 var path = require('path');
 var pg = require('pg');
@@ -20,7 +21,7 @@ var sessionStore = new MemoryStore();
  * Other JS files
  */
 
-// var db = require('./testdb');
+//var db = require('./testdb');
 var db = require('./db');
 
 /* The server */
@@ -55,6 +56,7 @@ app.get('/UpdateCourse', addCourse.addCourse);
 app.get('/AddAssignment', addAssignment.addAssignment);
 app.get('/about', about.about);
 app.get('/AddStudent', addStudent.addStudent);
+app.get('/Course', courseHomepage.courseHomepage);
 
 /**
  *	Set up server
@@ -120,14 +122,8 @@ io.sockets.on('connection', function(socket) {
 		socket.emit('courseUpdated', data);
 	}
 	function deletedCourse(data){
-		if(data = "success")
-		{
-			socket.emit('courseDeleted');
-		}
-		else
-		{
-			console.error("Course did not get deleted");
-		}
+		if(data = "success") socket.emit('courseDeleted');
+		else console.error("Course did not get deleted");
 	}
 	function foundCourseList(data){
 		socket.emit('foundCourses', data);
@@ -141,6 +137,12 @@ io.sockets.on('connection', function(socket) {
 	function AssignmentSubmitted(data){
 		socket.emit('AssignmentSubmitted', data);
 	}
+	function addedStudent(data) {
+		socket.emit('addedStudent', data);
+	}
+//	function StudentGrades(data) {
+//		socket.emit('StudentGrades', data);
+//	}
 
 	socket.on('setSessionVariable', function(variable) {
 		session.reload(function() {
@@ -169,6 +171,10 @@ io.sockets.on('connection', function(socket) {
 	socket.on('getCourseInfo', function() {
 		db.getCourseInfo(socket, session.courseId, courseInfo);			
 	});
+
+//	socket.on('getStudentGrades', function() {
+//		db.getStudentGrades(socket, session.courseId, session.studentID, studentGrades);
+//	});
 	
 	socket.on('updateCourse', function(course) {
 		db.updateCourse(socket, session.courseId, course, updatedCourse);
@@ -181,7 +187,6 @@ io.sockets.on('connection', function(socket) {
 
     socket.on('getCourses', function() {
         db.getCourses(socket, foundCourseList);
-        
     });
 
     socket.on('getProfCourses', function(data) {
@@ -191,6 +196,9 @@ io.sockets.on('connection', function(socket) {
     socket.on('getStudNotInCourse', function(data) {
     	db.getStudNotInCourse(socket, data, foundStudNotInCourse);
     	
+    });
+    socket.on('addStudentToCourse', function(data) {
+		db.addStudentToCourse(socket, data, addedStudent);
     });
 
     socket.on('profAddAssignment', function(data) {

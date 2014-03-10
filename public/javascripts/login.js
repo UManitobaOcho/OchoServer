@@ -1,5 +1,5 @@
-//var hostUrl = "http://localhost:8080"; 
-var hostUrl = window.location.host;
+var hostUrl = "http://localhost:8080"; 
+//var hostUrl = window.location.host;
 
 var socket = io.connect(hostUrl);
 
@@ -83,9 +83,10 @@ function display_contents(courses) {
 	_td = "</td>";
 	btnGroup = "<div class='btn-group'>";
 	_btnGroup = "</div>";
+	homeBtn = "<button id='homeBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-home' /> </button>"; 
 	editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-pencil' /> </button>";
 	deleteBtn = "<button id='deleteBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-trash' /> </button>";
-	editBtnGroup = btnGroup + editBtn + deleteBtn + _btnGroup;
+	editBtnGroup = btnGroup + homeBtn + editBtn + deleteBtn + _btnGroup;
 	
 	//add rows to table
 	for(var i = 0; i < courses.rowCount; i++) {
@@ -106,6 +107,10 @@ function display_contents(courses) {
 };
 
 function addTableBtnFuncs() {
+	$('td #homeBtn').click(function () {
+		// Go to Course HomePage
+		goToCourseHomePage( $(this).parent().parent().parent() );
+	});
 	$('td #editBtn').click(function () { 
 		goToUpdatePage( $(this).parent().parent().parent() ); 
 	});
@@ -115,6 +120,13 @@ function addTableBtnFuncs() {
 		deleteCourse(tr); 
 	});
 };
+
+function goToCourseHomePage(tr) {
+	var cId = $("td.courseId", tr).text();
+	socket.emit("setSessionVariable", {varName: 'courseId', varValue: cId});
+
+	document.location.href = "/Course";
+}
 
 function goToUpdatePage(tr) {
 	var cId = $("td.courseId", tr).text();

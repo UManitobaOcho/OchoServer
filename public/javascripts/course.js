@@ -1,9 +1,9 @@
-var hostUrl = window.location.host;
+var hostUrl = "http://localhost:8080"; 
+//var hostUrl = window.location.host;
 var socket = io.connect(hostUrl);
 
 var addPath = "/AddCourse";
 var updatePath = "/UpdateCourse";
-
 
 $(document).ready(function () { 
 	$('#startTime').timepicker();
