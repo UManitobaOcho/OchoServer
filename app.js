@@ -179,7 +179,7 @@ io.sockets.on('connection', function(socket) {
 //	});
 	
 	socket.on('updateCourse', function(course) {
-		db.updateCourse(socket, session.courseId, course, updatedCourse);
+		db.updateCourse(socket, (course.courseId ? course.courseId : session.courseId), course, updatedCourse);
 	});
 	
 	socket.on('deleteCourse', function(courseId) {
