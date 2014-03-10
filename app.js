@@ -81,9 +81,11 @@ io.set('authorization', function (handshakeData, accept) {
         }
 		
 		handshakeData.sessionStore = sessionStore;
+		
+		var isTestOrIos = handshakeData.cookie['express.sid'] == 's:test';
 		sessionStore.load(handshakeData.sessionID, function(err, session) {
 			//if handshakeData.sessionID == false then we are doing a test and passed cookie with a sid that ends up as false
-			if((err || !session) && handshakeData.sessionID != false) {				
+			if((err || !session) && !isTestOrIos) {				
 				return accept('Error 1', false);
 			} else {
 				handshakeData.session = new Session(handshakeData, session);
@@ -161,7 +163,7 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on('addCourse', function(course) {
 		
-		if(course.userId ? course.isProf : session.isProf == true) {
+		if((course.userId ? course.isProf : session.isProf) == true) {
 			db.addCourse(socket, course, session, courseAdded);
 		} else {
 			console.error('Error: not a professor, adding a course is unauthorized.');

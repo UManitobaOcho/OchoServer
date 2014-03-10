@@ -44,7 +44,7 @@ exports.getProf = function(socket, session, res) {
 			session.reload(function() {
 				session.userId = result.rows[0].prof_id;
 				session.isProf = true;
-				// session.save();
+				session.save();
 			});
 			res(result.rows[0]);
         });
