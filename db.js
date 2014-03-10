@@ -58,8 +58,9 @@ exports.addCourse = function(socket, course, session, res) {
             return console.error('error fetching client from pool', err);
         }
 		
+		var id = course.userId ? course.userId : session.userId;
 		//need to setup query variables as strings if they are to be used as VARCHARS in the DB
-		var queryVars = "'" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', " + session.userId + ", '" + course.times + "'";
+		var queryVars = "'" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', " + id + ", '" + course.times + "'";
 		
         client.query( ("SELECT * FROM addCourse(" + queryVars + ");") , function(err, result) {
             done();  // release the client back to the pool
@@ -67,9 +68,8 @@ exports.addCourse = function(socket, course, session, res) {
             if (err) {
                 return console.error('error running query', err);
             }
-            res(result.rows[0].courseId);
-
-            //return results.row[0].courseId; 
+			console.log(result);
+            res(result);
         });
     });
 };

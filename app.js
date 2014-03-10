@@ -158,7 +158,8 @@ io.sockets.on('connection', function(socket) {
     });
 	
 	socket.on('addCourse', function(course) {
-		if(session.isProf == true) {
+		console.log(course);
+		if(course.userId ? course.isProf : session.isProf == true) {
 			db.addCourse(socket, course, session, courseAdded);
 		} else {
 			console.error('Error: not a professor, adding a course is unauthorized.');
@@ -174,6 +175,7 @@ io.sockets.on('connection', function(socket) {
 	});
 	
 	socket.on('deleteCourse', function(courseId) {
+		console.log(courseId);
 		db.deleteCourse(socket, courseId, deletedCourse);
 	});
 
