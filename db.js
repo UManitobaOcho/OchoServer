@@ -1,4 +1,4 @@
-var pg = require('pg');
+    var pg = require('pg');
 var pgHost = "postgres://ocho:ocho@localhost/OchoDb";
 
 exports.getStudent = function(socket, res) {
@@ -231,3 +231,13 @@ exports.profAddAssignment = function(socket,data,res) {
     	});
     });
 };
+
+exports.studentSubmitAssignment = function(soket,data,res) {
+    return pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        
+    });
+}
