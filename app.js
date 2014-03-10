@@ -132,8 +132,8 @@ io.sockets.on('connection', function(socket) {
 	function foundStudNotInCourse(data){
 		socket.emit('foundStudNotInCourse', data);
 	}
-	function AssignmentSubmitted(data){
-		socket.emit('AssignmentSubmitted', data);
+	function ProfAssignmentSubmitted(data){
+		socket.emit('ProfAssignmentSubmitted', data);
 	}
 	function addedStudent(data) {
 		socket.emit('addedStudent', data);
@@ -192,7 +192,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('profAddAssignment', function(data) {
-		db.profAddAssignment(socket,data, AssignmentSubmitted);
+		db.profAddAssignment(socket,data, ProfAssignmentSubmitted);
 		
     });
 	

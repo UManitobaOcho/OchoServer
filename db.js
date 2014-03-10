@@ -240,19 +240,20 @@ exports.profAddAssignment = function(socket,data,res) {
     			return console.error('error running first query', err);
     		}
 
-    		console.log(result.rows[0].course_id);
+    		//console.log(result.rows[0].course_id);
 
-    		var queryVars = (result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignTitle + "\', \'" + data.file + "\'";
-    		client.query( ("SELECT * FROM addAssignment(" + queryVars + ");") , function(err, result) {
+    		var queryVars = (result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignmentTitle + "\', \'" + data.file + "\'";
+    		
+		console.log(queryVars + " ");
+
+		client.query( ("SELECT * FROM addAssignment(" + queryVars + ");") , function(err, result) {
     			done();
 
     			if(err){
     				return console.error('error running second query', err);
     			}
 
-                res(result.rows[0]);
-
-    			
+                	res(result);
     		});
     	});
     });

@@ -102,10 +102,10 @@ create table COURSE_NOTES(
 create table ASSIGNMENTS(
 	assignment_id 	BIGINT UNIQUE primary key,
 	course_id 		BIGINT references COURSES(course_id),
-	due_date 		VARCHAR(11) NOT NULL,
-	viewable_date 	VARCHAR(11) NOT NULL,
+	due_date 		VARCHAR(30) NOT NULL,
+	viewable_date 	VARCHAR(30) NOT NULL,
 	assignment_name	VARCHAR(200) NOT NULL,
-	assignment_file	BYTEA NOT NULL
+	assignment_file	BYTEA
 );
 
 create table SUBMITTED_ASSIGNMENTS(
