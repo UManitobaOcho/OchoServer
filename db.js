@@ -184,7 +184,7 @@ exports.getStudNotInCourse = function(socket,data,res) {
         }
         console.log(data + ""); 
 
-        var querystring = "SELECT S.username, S.first_name, S.last_name, S.student_id FROM STUDENTS S LEFT JOIN ENROLLED E ON (S.student_id = E.student_id) LEFT JOIN COURSES C ON (E.course_id = C.course_id) WHERE C.course_number != \'" + data.course + "\' OR C.course_number IS NULL";
+        var querystring = "SELECT S.username, S.first_name, S.last_name, S.student_id FROM STUDENTS S WHERE student_id not in ( Select student_id from Enrolled E where E.course_id = \'" + data.course + "\')";
 
         client.query(querystring, function(err, result) {
             done();  // release the client back to the pool
