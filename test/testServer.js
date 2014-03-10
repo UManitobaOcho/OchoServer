@@ -83,6 +83,34 @@ describe('addCourse', function(){
 		});
 	});
 	
+	it('should get list of all courses and first course should exist',function(done) {
+		var client = io.connect(socketUrl, options);
+		
+		client.on('connect', function(data) {
+			client.emit('getCourses');
+		});
+		
+		client.on('foundCourses', function(data) {
+			data.should.be.ok;
+			
+			data.rowCount.should.be.above(0);
+			data.rows.should.be.ok;
+			
+			var first = data.rows[0];
+			first.should.be.ok;
+			
+			first.course_id.should.equal('1');
+			first.course_number.should.equal('COMP 4350');
+			first.course_section.should.equal('A01');
+			first.course_name.should.equal('Software Engineering 2');
+			first.name.should.equal('Michael Zapp');
+			first.class_times.should.equal('TR 11:30 AM - 11:45 PM');
+			
+			client.disconnect();
+			done();
+		});
+	});
+	
 	it('should get prof from database',function(done) {
 		var client = io.connect(socketUrl, options);
 		

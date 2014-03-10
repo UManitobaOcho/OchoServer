@@ -1,4 +1,4 @@
-var pg = require('pg');
+    var pg = require('pg');
 var pgHost = "postgres://ocho:ocho@localhost/OchoDb";
 
 exports.getStudent = function(socket, res) {
@@ -58,8 +58,9 @@ exports.addCourse = function(socket, course, session, res) {
             return console.error('error fetching client from pool', err);
         }
 		
+		var id = course.userId ? course.userId : session.userId;
 		//need to setup query variables as strings if they are to be used as VARCHARS in the DB
-		var queryVars = "'" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', " + session.userId + ", '" + course.times + "'";
+		var queryVars = "'" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', " + id + ", '" + course.times + "'";
 		
         client.query( ("SELECT * FROM addCourse(" + queryVars + ");") , function(err, result) {
             done();  // release the client back to the pool
@@ -67,9 +68,8 @@ exports.addCourse = function(socket, course, session, res) {
             if (err) {
                 return console.error('error running query', err);
             }
-            res(result.rows[0].courseId);
-
-            //return results.row[0].courseId; 
+			
+            res(result);
         });
     });
 };
@@ -257,4 +257,50 @@ exports.profAddAssignment = function(socket,data,res) {
     		});
     	});
     });
+};
+
+
+exports.getCourseAssignments = function(socket, courseID, res) {
+    return pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        
+    });
+}
+
+exports.studentSubmitAssignment = function(socket, courseID, studentID, res) {
+    return pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        
+    });
+};
+
+
+exports.getStudentGrades = function(socket, courseID, studentID, res) {
+  return pg.connect(pgHost, function(err, client, done) {
+
+       if (err) {
+           return console.error('error fetchng client from pool', err);
+       }
+
+       console.log(data + "");
+       var querystring = "SELECT * FROM ENROLLED WHERE student_id = '1' AND course_id='1'";
+
+       client.query(querystring, function(err, result) {
+           done();
+
+           if(err) {
+               return console.error('error running query', err);
+           }
+
+           console.log(result.rows[0]);
+
+           //res(result.rows[0]);
+       });
+   });
 };

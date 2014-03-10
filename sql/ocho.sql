@@ -112,6 +112,7 @@ create table SUBMITTED_ASSIGNMENTS(
 	enrolled_id 	BIGINT references ENROLLED(enrolled_id),
 	assignment_id 	BIGINT references ASSIGNMENTS(assignment_id),
 	submission_time DATE NOT NULL,
+	comments		VARCHAR(1000),
 	grade 			NUMERIC(3) NOT NULL
 );
 
@@ -230,16 +231,19 @@ $val$ language plpgsql;
 
 CREATE OR REPLACE FUNCTION addCourse(cNum VARCHAR, sect VARCHAR, cName VARCHAR, pId BIGINT, cTimes VARCHAR)
 	RETURNS integer AS $val$
+declare
+	val BIGINT;
 begin
+	val = nextval('COURSE_SEQ');
 	insert into COURSES values(
-		nextval('COURSE_SEQ'),
+		val,
 		cNum,
 		sect,
 		cName,
 		pId,
 		cTimes
 	);
-	return 0;
+	return val;
 end;
 $val$ language plpgsql;
 

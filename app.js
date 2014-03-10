@@ -8,6 +8,7 @@ var addCourse = require('./controllers/addCourse');
 var addAssignment = require('./controllers/addAssignment');
 var addStudent = require('./controllers/addStudent');
 var about = require('./controllers/about');
+var courseHomepage = require('./controllers/courseHomepage');
 var http = require('http');
 var path = require('path');
 var pg = require('pg');
@@ -55,6 +56,7 @@ app.get('/UpdateCourse', addCourse.addCourse);
 app.get('/AddAssignment', addAssignment.addAssignment);
 app.get('/about', about.about);
 app.get('/AddStudent', addStudent.addStudent);
+app.get('/Course', courseHomepage.courseHomepage);
 
 /**
  *	Set up server
@@ -138,6 +140,9 @@ io.sockets.on('connection', function(socket) {
 	function addedStudent(data) {
 		socket.emit('addedStudent', data);
 	}
+//	function StudentGrades(data) {
+//		socket.emit('StudentGrades', data);
+//	}
 
 	socket.on('setSessionVariable', function(variable) {
 		session.reload(function() {
@@ -155,7 +160,8 @@ io.sockets.on('connection', function(socket) {
     });
 	
 	socket.on('addCourse', function(course) {
-		if(session.isProf == true) {
+		
+		if(course.userId ? course.isProf : session.isProf == true) {
 			db.addCourse(socket, course, session, courseAdded);
 		} else {
 			console.error('Error: not a professor, adding a course is unauthorized.');
@@ -165,18 +171,22 @@ io.sockets.on('connection', function(socket) {
 	socket.on('getCourseInfo', function() {
 		db.getCourseInfo(socket, session.courseId, courseInfo);			
 	});
+
+//	socket.on('getStudentGrades', function() {
+//		db.getStudentGrades(socket, session.courseId, session.studentID, studentGrades);
+//	});
 	
 	socket.on('updateCourse', function(course) {
 		db.updateCourse(socket, session.courseId, course, updatedCourse);
 	});
 	
 	socket.on('deleteCourse', function(courseId) {
+		console.log(courseId);
 		db.deleteCourse(socket, courseId, deletedCourse);
 	});
 
     socket.on('getCourses', function() {
         db.getCourses(socket, foundCourseList);
-        
     });
 
     socket.on('getProfCourses', function(data) {
