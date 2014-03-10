@@ -1,5 +1,5 @@
-//var hostUrl = "http://localhost:8080"; 
-var hostUrl = window.location.host;
+var hostUrl = "http://localhost:8080"; 
+//var hostUrl = window.location.host;
 
 var socket = io.connect(hostUrl);
 
@@ -107,6 +107,10 @@ function display_contents(courses) {
 };
 
 function addTableBtnFuncs() {
+	$('td #homeBtn').click(function () {
+		// Go to Course HomePage
+		goToCourseHomePage( $(this).parent().parent().parent() );
+	});
 	$('td #editBtn').click(function () { 
 		goToUpdatePage( $(this).parent().parent().parent() ); 
 	});
@@ -116,6 +120,13 @@ function addTableBtnFuncs() {
 		deleteCourse(tr); 
 	});
 };
+
+function goToCourseHomePage(tr) {
+	var cId = $("td.courseId", tr).text();
+	socket.emit("setSessionVariable", {varName: 'courseId', varValue: cId});
+
+	document.location.href = "/Course";
+}
 
 function goToUpdatePage(tr) {
 	var cId = $("td.courseId", tr).text();

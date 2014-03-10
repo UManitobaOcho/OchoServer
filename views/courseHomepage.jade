@@ -1,0 +1,12 @@
+extends layout
+
+block index_content
+	.container
+		include includes/navbar	
+		
+	.container-fluid
+		.row
+			.col-sm-3.col-md-2.sidebar
+				ul.nav.nav-sidebar
+					| <li class="active"><a href="#">Overview</a></li>
+					| <li><a href="#">Grades</a></li>

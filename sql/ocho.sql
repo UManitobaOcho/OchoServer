@@ -202,6 +202,18 @@ insert into ENROLLED values(
 /**
 *	Create Stored Procedures
 */
+CREATE OR REPLACE FUNCTION addEnrolled(studentid BIGINT, courseid BIGINT )
+        RETURNS integer AS $val$
+begin
+        insert into Enrolled values(
+                nextval('ASSIGNMENT_SEQ'),
+                studentid,
+                courseid
+        );
+        return 0;
+end;
+$val$ language plpgsql;
+
 CREATE OR REPLACE FUNCTION addAssignment(courseid BIGINT, duedate VARCHAR, viewabledate VARCHAR, assignmentname VARCHAR, assignmentfile BYTEA)
         RETURNS integer AS $val$
 begin
@@ -219,16 +231,19 @@ $val$ language plpgsql;
 
 CREATE OR REPLACE FUNCTION addCourse(cNum VARCHAR, sect VARCHAR, cName VARCHAR, pId BIGINT, cTimes VARCHAR)
 	RETURNS integer AS $val$
+declare
+	val BIGINT;
 begin
+	val = nextval('COURSE_SEQ');
 	insert into COURSES values(
-		nextval('COURSE_SEQ'),
+		val,
 		cNum,
 		sect,
 		cName,
 		pId,
 		cTimes
 	);
-	return 0;
+	return val;
 end;
 $val$ language plpgsql;
 
