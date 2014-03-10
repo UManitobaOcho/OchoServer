@@ -85,7 +85,7 @@ function display_contents(courses) {
 	_btnGroup = "</div>";
 	homeBtn = "<button id='homeBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-home' /> </button>"; 
 	editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-pencil' /> </button>";
-	assignmentsBtn = "<button id='assignmentBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-tasks' /> </button>";
+	assignmentsBtn = "<button id='assignmentsBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-tasks' /> </button>";
 	deleteBtn = "<button id='deleteBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-trash' /> </button>";
 
 	editBtnGroup = btnGroup + homeBtn + editBtn + assignmentsBtn + deleteBtn + _btnGroup;
@@ -116,6 +116,10 @@ function addTableBtnFuncs() {
 	$('td #editBtn').click(function () { 
 		goToUpdatePage( $(this).parent().parent().parent() ); 
 	});
+	$('td #assignmentsBtn').click(function () {
+		// Go to View Assignments HomePage
+		goToAssignmentsPage( $(this).parent().parent().parent() );
+	});
 	$('td #deleteBtn').click(function () { 
 	
 		var tr = $(this).parent().parent().parent();		
@@ -136,6 +140,13 @@ function goToUpdatePage(tr) {
 	
 	document.location.href = "/UpdateCourse";
 };
+
+function goToAssignmentsPage(tr) {
+	var cId = $("td.courseId", tr).text();
+	socket.emit("setSessionVariable", {varName: 'courseId', varValue: cId});
+
+	document.location.href = "/ViewCourseAssignments";
+}
 
 function deleteCourse(tr) {
 	//get courseId from td.courseId of the tr object that contains the current delete button

@@ -259,7 +259,17 @@ exports.profAddAssignment = function(socket,data,res) {
 };
 
 
-exports.studentSubmitAssignment = function(soket,data,res) {
+exports.getCourseAssignments = function(socket, courseID, res) {
+    return pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        
+    });
+}
+
+exports.studentSubmitAssignment = function(socket, courseID, studentID, res) {
     return pg.connect(pgHost, function(err, client, done) {
 
         if (err) {
