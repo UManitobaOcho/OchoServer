@@ -1,3 +1,7 @@
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
 
 .user_details{
 	display: none;
@@ -30,11 +34,6 @@ div.courses_list text text{
 
 div.courses_list td.courseId {
 	display: none;
-}
-
-.body {
-  padding-top: 50px;
-  padding-bottom: 20px;
 }
 
 .centerfy img {
