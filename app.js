@@ -181,6 +181,10 @@ io.sockets.on('connection', function(socket) {
 	socket.on('getCourseInfo', function() {
 		db.getCourseInfo(socket, session.courseId, courseInfo);			
 	});
+
+	socket.on('getCourseInfoByCourseID', function(courseID) {
+		db.getCourseInfo(socket, courseID, courseInfo);
+	});
 	
 	socket.on('updateCourse', function(course) {
 		db.updateCourse(socket, (course.courseId ? course.courseId : session.courseId), course, updatedCourse);
