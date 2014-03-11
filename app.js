@@ -81,9 +81,11 @@ io.set('authorization', function (handshakeData, accept) {
         }
 		
 		handshakeData.sessionStore = sessionStore;
+		
+		var isTestOrIos = handshakeData.cookie['express.sid'] == 's:test';
 		sessionStore.load(handshakeData.sessionID, function(err, session) {
 			//if handshakeData.sessionID == false then we are doing a test and passed cookie with a sid that ends up as false
-			if((err || !session) && handshakeData.sessionID != false) {				
+			if((err || !session) && !isTestOrIos) {				
 				return accept('Error 1', false);
 			} else {
 				handshakeData.session = new Session(handshakeData, session);
@@ -134,11 +136,11 @@ io.sockets.on('connection', function(socket) {
 	function foundStudNotInCourse(data){
 		socket.emit('foundStudNotInCourse', data);
 	}
-	function AssignmentAdded(data){
-		socket.emit('AssignmentAdded', data);
-	}
 	function AssignmentSubmitted(data){
 		socket.emit('AssignmentSubmitted', data);
+	}
+	function ProfAssignmentSubmitted(data){
+		socket.emit('ProfAssignmentSubmitted', data);
 	}
 	function addedStudent(data) {
 		socket.emit('addedStudent', data);
@@ -164,7 +166,7 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on('addCourse', function(course) {
 		
-		if(course.userId ? course.isProf : session.isProf == true) {
+		if((course.userId ? course.isProf : session.isProf) == true) {
 			db.addCourse(socket, course, session, courseAdded);
 		} else {
 			console.error('Error: not a professor, adding a course is unauthorized.');
@@ -180,7 +182,7 @@ io.sockets.on('connection', function(socket) {
 //	});
 	
 	socket.on('updateCourse', function(course) {
-		db.updateCourse(socket, session.courseId, course, updatedCourse);
+		db.updateCourse(socket, (course.courseId ? course.courseId : session.courseId), course, updatedCourse);
 	});
 	
 	socket.on('deleteCourse', function(courseId) {
@@ -205,7 +207,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('profAddAssignment', function(data) {
-		db.profAddAssignment(socket,data, AssignmentAdded);
+		db.profAddAssignment(socket,data, ProfAssignmentSubmitted);
 		
     });
 
