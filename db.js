@@ -1,4 +1,4 @@
-    var pg = require('pg');
+var pg = require('pg');
 var pgHost = "postgres://ocho:ocho@localhost/OchoDb";
 
 exports.getStudent = function(socket, res) {
