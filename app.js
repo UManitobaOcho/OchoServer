@@ -217,7 +217,6 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('getEnrolledInfo', function(data) {
-    	console.log(data.student_id);
     	db.getStudentEnrolledInfo(socket, data.student_id, foundEnrolledInfo);
     });
 	
