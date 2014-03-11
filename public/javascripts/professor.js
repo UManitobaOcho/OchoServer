@@ -142,8 +142,8 @@ function addAssignment(){
 			
 			console.log("Submitting Assignment");
 			socket.emit('profAddAssignment', {assignmentTitle: assignTitle, course: strClass, file: file, releaseDate: releaseDate, dueDate: dueDate})
-		        socket.on('AssignmentSubmitted', function(courses){
-                		console.log("Assignment Submitted Successfully");
+		        socket.on('AssignmentAdded', function(courses){
+                		console.log("Assignment Added Successfully");
 				alert('Submitted Successfully!');
 				document.location.href = "/";
         		});

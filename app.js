@@ -134,6 +134,9 @@ io.sockets.on('connection', function(socket) {
 	function foundStudNotInCourse(data){
 		socket.emit('foundStudNotInCourse', data);
 	}
+	function AssignmentAdded(data){
+		socket.emit('AssignmentAdded', data);
+	}
 	function AssignmentSubmitted(data){
 		socket.emit('AssignmentSubmitted', data);
 	}
@@ -202,8 +205,12 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('profAddAssignment', function(data) {
-		db.profAddAssignment(socket,data, AssignmentSubmitted);
+		db.profAddAssignment(socket,data, AssignmentAdded);
 		
+    });
+
+    socket.on('studentSubmitAssignment', function(data){
+    	db.studentSubmitAssignment(socket, data, AssignmentSubmitted)
     });
 	
 	socket.on('logout', function() {
