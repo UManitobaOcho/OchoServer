@@ -1,0 +1,18 @@
+extends layout
+
+block index_content
+	.container
+		include includes/navbar
+
+	h1.page-header.centerfy Grades Info
+
+	.table-responsive
+		table.table.table-striped(id="grade_table")
+			thead
+				tr
+					th Course Name
+					th Course Section
+					th Credit Hours
+					th Grades
+			tbody
+	script(src="/public/javascripts/grade.js")

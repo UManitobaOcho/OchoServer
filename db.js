@@ -278,8 +278,9 @@ exports.getCourseAssignments = function(socket, courseID, res) {
            }
 
            console.log(result.rows[0]);
+       });
     });
-}
+};
 
 exports.studentSubmitAssignment = function(socket, courseID, studentID, res) {
     return pg.connect(pgHost, function(err, client, done) {
@@ -291,7 +292,7 @@ exports.studentSubmitAssignment = function(socket, courseID, studentID, res) {
     });
 };
 
-
+/****************************************************************************************************************************/
 exports.getStudentGrades = function(socket, courseID, studentID, res) {
   return pg.connect(pgHost, function(err, client, done) {
 
@@ -299,8 +300,7 @@ exports.getStudentGrades = function(socket, courseID, studentID, res) {
            return console.error('error fetchng client from pool', err);
        }
 
-       console.log(data + "");
-       var querystring = "SELECT * FROM ENROLLED WHERE student_id = '1' AND course_id='1'";
+       var querystring = "SELECT * FROM ENROLLED WHERE student_id = " + studentID + " AND course_id " + courseID;
 
        client.query(querystring, function(err, result) {
            done();
@@ -311,7 +311,35 @@ exports.getStudentGrades = function(socket, courseID, studentID, res) {
 
            console.log(result.rows[0]);
 
-           //res(result.rows[0]);
+           res(result.rows[0]);
        });
    });
 };
+
+// getCourseInfo already implemented above
+
+exports.getStudentEnrolledInfo = function(socket, studentID, res) {
+    return pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+
+        var querystring = "SELECT * FROM ENROLLED WHERE student_id = " + studentID;
+
+        client.query(querystring, function(err, result) {
+            done();
+
+            if(err) {
+                return console.error('error running query', err);
+            }
+
+            console.log(result.rows[0]);
+
+            res(result.rows[0]);
+        });
+    });
+};
+
+/****************************************************************************************************************************/
+

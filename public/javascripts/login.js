@@ -1,3 +1,4 @@
+//var hostUrl = "http://localhost:8080";
 var hostUrl = window.location.host;
 
 var socket = io.connect(hostUrl);
@@ -26,6 +27,7 @@ function getProf() {
 	socket.emit('getProf', {username: 'cszapp'});
 	socket.on('foundProf', function(prof) {
 		logIn(prof);
+				$('#grade-btn').hide();
                 $('#add_course-btn').show();
                 $('#add_assignment-btn').show();
                 $('#add_student-btn').show();
