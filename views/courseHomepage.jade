@@ -8,7 +8,12 @@ block index_content
 		.row
 			.col-sm-3.col-md-2.sidebar
 				ul.nav.nav-sidebar
-					| <li><a href="#">Overview</a></li>
-					| <li class="active"><a href="#">Grades</a></li>
+					| <li class='active' id='homeBtn'><a href="#">Overview</a></li>
+					| <li id='gradeBtn'><a href="#">Grades</a></li>
 			.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
-				h1.page-header Grades
+				h1.page-header
+			.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.content
+				h3.test
+
+	script(src="/public/javascripts/courseHome.js")
+
