@@ -40,7 +40,8 @@ app.configure( function() {
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.cookieParser());
-    app.use(express.session({store: sessionStore, secret: 'secret', key: 'express.sid'}));
+    app.use(express.session({ store: sessionStore, secret: 'secret', key: 'express.sid' }));
+
     // If we don't add /public to the path then we can access our stored node_modules
     app.use(express.static(path.join(__dirname, '')));
 });
@@ -182,9 +183,9 @@ io.sockets.on('connection', function(socket) {
 		db.getCourseInfo(socket, session.courseId, courseInfo);			
 	});
 
-	socket.on('getCourseInfoByCourseID', function(courseID) {
-		db.getCourseInfo(socket, courseID, courseInfo);
-	});
+	//socket.on('getCourseInfoByCourseID', function(courseID) {
+	//	db.getCourseInfo(socket, courseID, courseInfo);
+	//});
 	
 	socket.on('updateCourse', function(course) {
 		db.updateCourse(socket, (course.courseId ? course.courseId : session.courseId), course, updatedCourse);
