@@ -45,6 +45,9 @@ exports.getProf = function(socket, session, res) {
 				session.userId = result.rows[0].prof_id;
 				session.isProf = true;
 				session.save();
+
+				// if the session expires, reset it to max age
+				session.resetMaxAge();
 			});
 			res(result.rows[0]);
         });
