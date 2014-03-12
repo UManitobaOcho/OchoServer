@@ -292,7 +292,6 @@ exports.studentSubmitAssignment = function(socket, courseID, studentID, res) {
     });
 };
 
-/****************************************************************************************************************************/
 exports.getStudentGrades = function(socket, courseID, studentID, res) {
   return pg.connect(pgHost, function(err, client, done) {
 
@@ -316,8 +315,6 @@ exports.getStudentGrades = function(socket, courseID, studentID, res) {
    });
 };
 
-// getCourseInfo already implemented above
-
 exports.getStudentEnrolledInfo = function(socket, studentID, res) {
     return pg.connect(pgHost, function(err, client, done) {
 
@@ -325,7 +322,7 @@ exports.getStudentEnrolledInfo = function(socket, studentID, res) {
             return console.error('error fetching client from pool', err);
         }
 
-        var querystring = "SELECT * FROM ENROLLED WHERE student_id = " + studentID;
+        var querystring = "SELECT * FROM ENROLLED E, COURSES C WHERE student_id = " + studentID + " AND E.course_id = C.course_id";
 
         client.query(querystring, function(err, result) {
             done();
@@ -334,12 +331,8 @@ exports.getStudentEnrolledInfo = function(socket, studentID, res) {
                 return console.error('error running query', err);
             }
 
-            //console.log(result);
-
             res(result.rows);
         });
     });
 };
-
-/****************************************************************************************************************************/
 
