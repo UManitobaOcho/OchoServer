@@ -45,9 +45,6 @@ exports.getProf = function(socket, session, res) {
 				session.userId = result.rows[0].prof_id;
 				session.isProf = true;
 				session.save();
-
-				// if the session expires, reset it to max age
-				session.resetMaxAge();
 			});
 			res(result.rows[0]);
         });
@@ -360,3 +357,42 @@ exports.getAssignmentsForCourse = function(socket, courseId, res) {
 	});
 };
 
+exports.getSubmittedAssignment = function(socket, enrolledID, res) {
+    return pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+
+        var querystring = "SELECT * FROM ASSIGNMENTS A, SUBMITTED_ASSIGNMENTS S WHERE S.enrolled_id = " + enrolledID + " AND A.assignment_id = S.assignment_id";
+        client.query(querystring, function(err, result) {
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+
+            res(result.rows);
+        });
+    });
+};
+
+exports.getCompletedTests = function(socket, enrolledID, res) {
+    return pg.connect(pgHost, function(err, client, done) {
+        
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+
+        var querystring = "SELECT * FROM TESTS T, COMPLETED_TESTS C WHERE C.enrolled_id = " + enrolledID + " AND C.test_id = T.test_id"; 
+        client.query(querystring, function(err, result) {
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+
+            res(result.rows);
+        });
+    });
+};

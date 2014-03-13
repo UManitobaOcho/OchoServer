@@ -267,3 +267,102 @@ begin
 	return true;
 end;
 $deleted$ language plpgsql;
+
+
+/***************************** Test Only!!!!!!! *****************************/
+/* Only for Grade Display purpose......Do not include this in your database */
+/* for other usage......Also, modify the id (SUBMITTED_ASSIGNMENTS &        */
+/* COMPLETED_TEST) accordingly.											    */
+/****************************************************************************/
+insert into ASSIGNMENTS values(
+	nextval('ASSIGNMENT_SEQ'),
+	1,
+	current_date,
+	current_date,
+	'Assignment 1',
+	(E'\\320\\170'::bytea)
+);
+
+insert into ASSIGNMENTS values(
+	nextval('ASSIGNMENT_SEQ'),
+	1,
+	current_date,
+	current_date,
+	'Assignment 2',
+	(E'\\320\\170'::bytea)
+);
+
+insert into ASSIGNMENTS values(
+	nextval('ASSIGNMENT_SEQ'),
+	1,
+	current_date,
+	current_date,
+	'Assignment 3',
+	(E'\\320\\170'::bytea)
+);
+
+insert into SUBMITTED_ASSIGNMENTS values(
+	1,
+	9,
+	current_date,
+	80
+);
+
+insert into SUBMITTED_ASSIGNMENTS values(
+	1,
+	10,
+	current_date,
+	65
+);
+
+insert into SUBMITTED_ASSIGNMENTS values(
+	1,
+	11,
+	current_date,
+	73
+);
+
+insert into TESTS values(
+	nextval('TEST_SEQ'),
+	1,
+	current_date,
+	current_date,
+	60
+);
+
+
+insert into TESTS values(
+	nextval('TEST_SEQ'),
+	1,
+	current_date,
+	current_date,
+	60
+);
+
+
+insert into TESTS values(
+	nextval('TEST_SEQ'),
+	1,
+	current_date,
+	current_date,
+	60
+);
+
+insert into COMPLETED_TESTS values(
+	1,
+	4,
+	100
+);
+
+insert into COMPLETED_TESTS values(
+	1,
+	5,
+	50
+);
+
+insert into COMPLETED_TESTS values(
+	1,
+	6,
+	60
+);
+/***************************** Test Only!!!!!!! *****************************/

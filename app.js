@@ -154,9 +154,12 @@ io.sockets.on('connection', function(socket) {
 	function foundAssignments(data) {
 		socket.emit('foundAssignments', data);
 	}
-//	function StudentGrades(data) {
-//		socket.emit('StudentGrades', data);
-//	}
+	function foundSubmittedAssignment(data) {
+		socket.emit('foundSubmittedAssignment', data);
+	}
+	function foundCompletedTests(data) {
+		socket.emit('foundCompletedTests', data);
+	}
 
 	socket.on('setSessionVariable', function(variable) {
 		session.reload(function() {
@@ -186,10 +189,6 @@ io.sockets.on('connection', function(socket) {
 		console.log(session);
 		db.getCourseInfo(socket, session.courseId, courseInfo);			
 	});
-
-	//socket.on('getCourseInfoByCourseID', function(courseID) {
-	//	db.getCourseInfo(socket, courseID, courseInfo);
-	//});
 	
 	socket.on('updateCourse', function(course) {
 		db.updateCourse(socket, (course.courseId ? course.courseId : session.courseId), course, updatedCourse);
@@ -231,6 +230,14 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on('getAssignmentsForCourse', function(data) {
 		db.getAssignmentsForCourse(socket, data.courseId, foundAssignments);
+	});
+
+	socket.on('getSubmittedAssignment', function(enrolledID) {
+		db.getSubmittedAssignment(socket, enrolledID, foundSubmittedAssignment);
+	});
+
+	socket.on('getCompletedTests', function(enrolledID) {
+		db.getCompletedTests(socket, enrolledID, foundCompletedTests);
 	});
 	
 	socket.on('logout', function() {

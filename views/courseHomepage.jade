@@ -24,9 +24,14 @@ block index_content
 					div.modal-body(style="height: 400px")
 					div.modal-footer
 						a.btn(href="#" data-dismiss="modal") Close
+
+				h2.grades-header Grades
+				#grades
+					| <canvas id="assignmentChart" width="400" height="400"></canvas>
 			.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.content
 				h3.test
 		
 	script(src="/bower_components/underscore/underscore.js")
 	script(src="/bower_components/bootstrap-calendar/js/calendar.js")
+	script(src="/bower_components/chartjs/Chart.js")
 	script(src="/public/javascripts/courseHome.js")
