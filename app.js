@@ -10,6 +10,7 @@ var addStudent = require('./controllers/addStudent');
 var about = require('./controllers/about');
 var courseHomepage = require('./controllers/courseHomepage');
 var checkGrade = require('./controllers/checkGrade');
+var viewAssignments = require('./controllers/viewAssignments');
 var http = require('http');
 var path = require('path');
 var pg = require('pg');
@@ -60,6 +61,7 @@ app.get('/about', about.about);
 app.get('/AddStudent', addStudent.addStudent);
 app.get('/CheckGrade', checkGrade.checkGrade);
 app.get('/Course', courseHomepage.courseHomepage);
+app.get('/ViewAssignments',viewAssignments.viewAssignments);
 
 /**
  *	Set up server

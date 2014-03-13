@@ -277,7 +277,9 @@ exports.getCourseAssignments = function(socket, courseID, res) {
                return console.error('error running query', err);
            }
 
-           console.log(result.rows[0]);
+           console.log(result);
+
+           res(result);
        });
     });
 };

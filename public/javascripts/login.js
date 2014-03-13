@@ -146,7 +146,7 @@ function goToAssignmentsPage(tr) {
 	var cId = $("td.courseId", tr).text();
 	socket.emit("setSessionVariable", {varName: 'courseId', varValue: cId});
 
-	document.location.href = "/ViewCourseAssignments";
+	document.location.href = "/ViewAssignments";
 }
 
 function deleteCourse(tr) {
