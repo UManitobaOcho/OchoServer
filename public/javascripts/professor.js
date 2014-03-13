@@ -3,17 +3,20 @@
 window.onload = function() {
 	getProfCourses();
 	$('.logout').show();
-    $('#releaseDate').datepicker()
+        $('#releaseTime').timepicker();
+        $('#dueTime').timepicker();
+
+	$('#releaseDate').datepicker()
 		.on('changeDate', function(ev){
 			$('#releaseDate').datepicker('hide'); //Autohides date picker after click
 		});
-	$('.startTime span').click( function() { $('#releaseDate').datepicker('show'); }); //Show calendar on icon click
+	$('.startDate span').click( function() { $('#releaseDate').datepicker('show'); }); //Show calendar on icon click
 
-    $('#dueDate').datepicker()
+	$('#dueDate').datepicker()
 		.on('changeDate', function(ev){
 			$('#dueDate').datepicker('hide'); //Autohides date picker after click
 		});
-	$('.endTime span').click( function() { $('#dueDate').datepicker('show'); }); //Show calendar on icon click
+	$('.endDate span').click( function() { $('#dueDate').datepicker('show'); }); //Show calendar on icon click
 
 	$('#submitBtn').click( function() {
 		addAssignment()
@@ -122,13 +125,25 @@ function addStudentToCourse() {
 function addAssignment(){
 	console.log("Verifing Assignment");
 
-	var verified = verifyAssignmentFields();
-	
 	var e = document.getElementById("class-picker");
 	var strClass = e.options[e.selectedIndex].text;
-	var assignTitle = $('#assignment-title').val()
-	var releaseDate = $('#releaseDate').val();
-	var dueDate = $('#dueDate').val();
+	var assignTitle = $('#assignment-title').val();
+	var releaseDate = $('#releaseDate').val() + ' ';
+	var dueDate = $('#dueDate').val() + ' ';
+	var releasetime = $('#releaseTime').val();
+	var dueTime = $('#dueTime').val();
+
+	if(($('#releaseTime').val().split(":"))[0].length < 2) {
+		releaseTime = '0' + $('#releaseTime').val();
+	}
+	if(($('#dueTime').val().split(":"))[0].length < 2) {
+                dueTime = '0' + $('#dueTime').val();
+        }
+
+	releaseDate = releaseDate + releaseTime
+	dueDate = dueDate + dueTime;
+	
+	var verified = verifyAssignmentFields();
 
 	if(verified == 1) {
 		var input,file;
@@ -158,19 +173,30 @@ function verifyAssignmentFields(){
 	var d = new Date();
 	var dueDate = ($('#dueDate').val().split('/'));
 	var releaseDate = ($('#releaseDate').val().split('/'));
+	var regex = /^\d{1,}:\d{2} \s?(AM|PM|am|pm)?$/m;
 
 	// clear errors
 	$('#assignment-title--error').html(' ');
 	$('#endTime-error').html(' ');
 	$('#startTime-error').html(' ');
 	$('#errorbox').html(' ');
+
+	if(!regex.test($('#releaseTime').val())) {
+                $('#startTime-error').html('*Not a Valid Time');
+                returnVal = 0;
+        }
+
+        if(!regex.test($('#dueTime').val())) {
+                $('#endTime-error').html('*Not a Valid Time');
+                returnVal = 0;
+        }
 	
 	if($('#assignment-title')[0].value.length <= 1) {
-		$("#assignment-title-error").html('*Name To Short');
+		$("#assignment-title-error").html('*Name is to Short');
 		returnVal = 0;
 	}
-	if(assignmentboxlen <= 3) {
-		$("#errorbox").html('*Name To Short');
+	if(assignmentboxlen < 1) {
+		$("#errorbox").html('*No File Selected');
 		returnVal = 0;
 	}
 	

@@ -1,6 +1,7 @@
 extends index
 
 block jumbotron
+	link(rel='stylesheet', href='/public/stylesheets/addCourse.css')
 	a.logout(href="#" onclick="logout()") Logout
 	
 	h1 Add Assignment
@@ -22,21 +23,30 @@ block jumbotron
 			a.btn.btn-small(id="browse-btn") Browse
 		p#errorbox(style="color:red;")
 	
-	div.startTime.well
+	div.well
 		h3 Release Date:
-		div.input-append
-			input#releaseDate.bootstrap-datepicker(type="text") 
-			span.add-on
-				i.glyphicon.glyphicon-calendar
+		div.startDate
+			div.input-append
+				input#releaseDate.bootstrap-datepicker(type="text") 
+				span.add-on
+					i.glyphicon.glyphicon-calendar
+		.input-append.bootstrap-timepicker
+			input#releaseTime.input-small(type="text")
+			span.add-on: i.icon-time
+
 		p#startTime-error(style="color:red;")
 
 
-	div.endTime.well
+	div.well
 		h3 Due Date:
-		div.input-append
-			input#dueDate.bootstrap-datepicker(type="text")
-			span.add-on
-				i.glyphicon.glyphicon-calendar
+		div.endDate
+			div.input-append
+				input#dueDate.bootstrap-datepicker(type="text")
+				span.add-on
+					i.glyphicon.glyphicon-calendar
+		.input-append.bootstrap-timepicker
+			input#dueTime.input-small(type="text")
+			span.add-on: i.icon-time
 		p#endTime-error(style="color:red;")
 
 	div.submitButton.well
@@ -44,3 +54,5 @@ block jumbotron
 		p#submit-error(style="color:red;")
 
 	script(src="/public/javascripts/professor.js")
+	script(src="/node_modules/jquery-watermark/jquery.watermark.min.js")
+
