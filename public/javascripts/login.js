@@ -84,10 +84,10 @@ function display_contents(courses) {
 	_td = "</td>";
 	btnGroup = "<div class='btn-group'>";
 	_btnGroup = "</div>";
-	homeBtn = "<button id='homeBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-home' /> </button>"; 
-	editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-pencil' /> </button>";
-	assignmentsBtn = "<button id='assignmentsBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-tasks' /> </button>";
-	deleteBtn = "<button id='deleteBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-trash' /> </button>";
+	homeBtn = "<button id='homeBtn' type='button' class='btn btn-default btn-lg'> <span title='Course Home' class='glyphicon glyphicon-home' /> </button>"; 
+	editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span title='Edit' class='glyphicon glyphicon-pencil' /> </button>";
+	assignmentsBtn = "<button id='assignmentsBtn' type='button' class='btn btn-default btn-lg'> <span title='Assignments' class='glyphicon glyphicon-tasks' /> </button>";
+	deleteBtn = "<button id='deleteBtn' type='button' class='btn btn-default btn-lg'> <span title='Delete' class='glyphicon glyphicon-trash' /> </button>";
 
 	editBtnGroup = btnGroup + homeBtn + editBtn + assignmentsBtn + deleteBtn + _btnGroup;
 	

@@ -40,7 +40,8 @@ app.configure( function() {
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.cookieParser());
-    app.use(express.session({store: sessionStore, secret: 'secret', key: 'express.sid'}));
+    app.use(express.session({ store: sessionStore, secret: 'secret', key: 'express.sid' }));
+
     // If we don't add /public to the path then we can access our stored node_modules
     app.use(express.static(path.join(__dirname, '')));
 });
@@ -150,9 +151,15 @@ io.sockets.on('connection', function(socket) {
 	function foundEnrolledInfo(data) {
 		socket.emit('returnEnrolledInfo', data);
 	}
-//	function StudentGrades(data) {
-//		socket.emit('StudentGrades', data);
-//	}
+	function foundAssignments(data) {
+		socket.emit('foundAssignments', data);
+	}
+	function foundSubmittedAssignment(data) {
+		socket.emit('foundSubmittedAssignment', data);
+	}
+	function foundCompletedTests(data) {
+		socket.emit('foundCompletedTests', data);
+	}
 
 	socket.on('setSessionVariable', function(variable) {
 		session.reload(function() {
@@ -179,11 +186,8 @@ io.sockets.on('connection', function(socket) {
 	});
 	
 	socket.on('getCourseInfo', function() {
+		console.log(session);
 		db.getCourseInfo(socket, session.courseId, courseInfo);			
-	});
-
-	socket.on('getCourseInfoByCourseID', function(courseID) {
-		db.getCourseInfo(socket, courseID, courseInfo);
 	});
 	
 	socket.on('updateCourse', function(course) {
@@ -223,6 +227,18 @@ io.sockets.on('connection', function(socket) {
     socket.on('getEnrolledInfo', function(data) {
     	db.getStudentEnrolledInfo(socket, data.student_id, foundEnrolledInfo);
     });
+	
+	socket.on('getAssignmentsForCourse', function(data) {
+		db.getAssignmentsForCourse(socket, data.courseId, foundAssignments);
+	});
+
+	socket.on('getSubmittedAssignment', function(enrolledID) {
+		db.getSubmittedAssignment(socket, enrolledID, foundSubmittedAssignment);
+	});
+
+	socket.on('getCompletedTests', function(enrolledID) {
+		db.getCompletedTests(socket, enrolledID, foundCompletedTests);
+	});
 	
 	socket.on('logout', function() {
 		session.reload(function() {
