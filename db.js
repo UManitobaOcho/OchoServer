@@ -339,3 +339,24 @@ exports.getStudentEnrolledInfo = function(socket, studentID, res) {
     });
 };
 
+exports.getAssignmentsForCourse = function(socket, courseId, res) {
+	return pg.connect(pgHost, function(err, client, done) {
+		
+		if(err) {
+			return console.error('error fetching client from pool', err);
+		}
+		
+		var querystring = "SELECT * FROM ASSIGNMENTS WHERE course_id = " + courseId + ";";
+		
+		client.query(querystring, function(err, result) {
+			done();
+			
+			if(err) {
+				return console.error('error running query', err);
+			}
+			
+			res(result.rows);
+		});
+	});
+};
+

@@ -151,6 +151,9 @@ io.sockets.on('connection', function(socket) {
 	function foundEnrolledInfo(data) {
 		socket.emit('returnEnrolledInfo', data);
 	}
+	function foundAssignments(data) {
+		socket.emit('foundAssignments', data);
+	}
 //	function StudentGrades(data) {
 //		socket.emit('StudentGrades', data);
 //	}
@@ -180,6 +183,7 @@ io.sockets.on('connection', function(socket) {
 	});
 	
 	socket.on('getCourseInfo', function() {
+		console.log(session);
 		db.getCourseInfo(socket, session.courseId, courseInfo);			
 	});
 
@@ -224,6 +228,10 @@ io.sockets.on('connection', function(socket) {
     socket.on('getEnrolledInfo', function(data) {
     	db.getStudentEnrolledInfo(socket, data.student_id, foundEnrolledInfo);
     });
+	
+	socket.on('getAssignmentsForCourse', function(data) {
+		db.getAssignmentsForCourse(socket, data.courseId, foundAssignments);
+	});
 	
 	socket.on('logout', function() {
 		session.reload(function() {
