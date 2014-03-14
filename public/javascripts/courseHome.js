@@ -193,7 +193,7 @@ function loadHome(){
 	$('.grades-header').addClass('displayNone');
 	$('#grades').addClass('displayNone');
 
-	$('.content').html('<p> HOME PAGE ! </p>');
+	$('.content').html('<p> </p>');
 }
 
 function loadGrades(){
