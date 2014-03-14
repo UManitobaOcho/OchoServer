@@ -3,7 +3,8 @@ var hostUrl = window.location.host;
 var socket = io.connect(hostUrl);
 
 
-window.onload = function () { 
+window.onload = function () {
+	console.log("entered on assignmens.js"); 
 	getAssignmentsForCourse("1");
 };
 
@@ -15,13 +16,13 @@ function getAssignmentsForCourse(CourseID) {
 };
 
 function displayAssignments(assignment) {
-	
+	console.log("displayAssignments has called.")
 	for (var i = 0; i < assignment.length; i++) {
 		var tableElements = "	<tr>" +
 						 	"		<td>" + assignment[i].course_id + "</td>" +
 						 	"		<td>" + assignment[i].assignment_id + "</td>" +
 							"		<td>" + assignment[i].assignment_name + "</td>" +
-						 	"		<td>" + assignment[i].viewable_date "</td>" +
+						 	"		<td>" + assignment[i].viewable_date + "</td>" +
 						 	"		<td>" + assignment[i].due_date + "</td>";
 		
 		/* Can I conver percentage grade into letter grade?
