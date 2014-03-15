@@ -91,7 +91,7 @@ function loadCalendar(course) {
 		events = createDatesForClassTimes(course.class_times);
 	}
 	
-	socket.emit('getAssignmentsForCourse', {courseId: course.course_id});
+	socket.emit('getAssignmentsForCourse', {course_id: course.course_id});
 	socket.on('foundAssignments', function(data) {
 	
 		//for each assignment convert it into a calendar event
