@@ -1,5 +1,5 @@
-//var hostUrl = "http://localhost:8080";
-var hostUrl = window.location.host;
+var hostUrl = "http://localhost:8080";
+//var hostUrl = window.location.host;
 var socket = io.connect(hostUrl);
 
 $(function() {
@@ -117,28 +117,16 @@ function loadGradesDetails(enrolledID) {
 
 	socket.emit('getSubmittedAssignment', enrolledID);
 	socket.on('foundSubmittedAssignment', function(data) {
-		var table = "<div class="table-responsive">" + 
-					"	<table class="table table-striped">" +
-					"		<thead>" +
-					"			<tr>" +
-					"				<th>Assignment Name</th>" + 
-					"				<th>Marks</th>"	+
-					"			</tr>" +
-					"		</thead>" +
-					"		<tbody>"; 
 
 		for (var i = 0; i < data.length; i++) {
-			table += "<tr>" +
-					 "	<td>" + data[i].assignment_name + "</td>" + 
-					 "	<td>" + data[i].grade + "</td>" +
-					 "</tr>";
+			var tableElements = "<tr>" +
+					 			"	<td>" + data[i].assignment_name + "</td>" + 
+					 			"	<td>" + data[i].grade + "</td>" +
+					 			"</tr>";
+			$("#grade_table tbody").append(tableElements);
 		}
 
-		table += "		</tbody>" +
-				 "	</tbale>" +
-				 "</div>";
-
-		$("#grades").append(table);
+		
 	});
 
 	//socket.emit('getCompletedTests', enrolledID);
