@@ -269,7 +269,7 @@ exports.getCourseAssignments = function(socket, courseID, res) {
             return console.error('error fetching client from pool', err);
         }
         
-        console.log(data + "");
+        console.log(courseID + "");
         var querystring = "SELECT * FROM ASSIGNMENTS WHERE course_id = " + courseID;
 
         client.query(querystring, function(err, result) {
@@ -279,9 +279,9 @@ exports.getCourseAssignments = function(socket, courseID, res) {
                return console.error('error running query', err);
            }
 
-           console.log(result);
+           console.log(result.rows);
 
-           res(result);
+           res(result.rows);
        });
     });
 };
