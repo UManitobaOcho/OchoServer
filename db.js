@@ -243,10 +243,8 @@ exports.profAddAssignment = function(socket,data,res) {
     		//console.log(result.rows[0].course_id);
 
     		var queryVars = (result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignmentTitle + "\', \'" + data.file + "\'";
-    		
-		console.log(queryVars + " ");
-
-		client.query( ("SELECT * FROM addAssignment(" + queryVars + ");") , function(err, result) {
+    		console.log(queryVars + " ");
+            client.query( ("SELECT * FROM addAssignment(" + queryVars + ");") , function(err, result) {
     			done();
 
     			if(err){
@@ -347,7 +345,8 @@ exports.getAssignmentsForCourse = function(socket, courseId, res) {
 			return console.error('error fetching client from pool', err);
 		}
 		
-		var querystring = "SELECT * FROM ASSIGNMENTS WHERE course_id = " + courseId + ";";
+        var querystring = "SELECT rank() over(), C.course_number, A.assignment_name, A.viewable_date, A.due_date FROM
+        COURSES C, ASSIGNMENTS A WHERE C.course_id = A.course_id AND C.course_id = " + courseId + ";";
 		
 		client.query(querystring, function(err, result) {
 			done();

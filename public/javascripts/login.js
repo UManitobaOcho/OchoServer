@@ -92,17 +92,17 @@ function display_contents(courses) {
 	editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span title='Edit' class='glyphicon glyphicon-pencil' /> </button>";
 	assignmentsBtn = "<button id='assignmentsBtn' type='button' class='btn btn-default btn-lg'> <span title='Assignments' class='glyphicon glyphicon-tasks' /> </button>";
 	deleteBtn = "<button id='deleteBtn' type='button' class='btn btn-default btn-lg'> <span title='Delete' class='glyphicon glyphicon-trash' /> </button>";
-	
+
 	if(isProf) {
 		editBtnGroup = btnGroup + homeBtn + editBtn + assignmentsBtn + deleteBtn + _btnGroup;
 		for(var i = 0; i < courses.rowCount; i++) {
             $('.courses_list').append(
                 table + tr + tdIdDisplayNone + courses.rows[i].course_id + _td +
-                            td + courses.rows[i].course_number + _td +
-                            td + courses.rows[i].course_name   + _td +
-                            td + courses.rows[i].course_section+ _td +
-                            td + courses.rows[i].class_times   + _td +
-                            td + editBtnGroup + _td +
+                    td + courses.rows[i].course_number + _td +
+                    td + courses.rows[i].course_name   + _td +
+                    td + courses.rows[i].course_section+ _td +
+                    td + courses.rows[i].class_times   + _td +
+                    td + editBtnGroup + _td +
                 _tr + _table
             );
         }
@@ -112,12 +112,12 @@ function display_contents(courses) {
 		for(var i = 0; i < courses.rowCount; i++) {
 			$('.courses_list').append(
 				table + tr + tdIdDisplayNone + courses.rows[i].course_id + _td +
-						 	td + courses.rows[i].course_number + _td +
-							td + courses.rows[i].course_name   + _td +
-							td + courses.rows[i].course_section+ _td +
-							td + courses.rows[i].name          + _td +
-							td + courses.rows[i].class_times   + _td +
-							td + editBtnGroup + _td +
+				 	td + courses.rows[i].course_number + _td +
+					td + courses.rows[i].course_name   + _td +
+					td + courses.rows[i].course_section+ _td +
+					td + courses.rows[i].name          + _td +
+					td + courses.rows[i].class_times   + _td +
+					td + editBtnGroup + _td +
 				_tr + _table
 			);
 		}

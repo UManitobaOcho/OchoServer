@@ -23,12 +23,12 @@ function displayAssignments(assignment) {
 	// homeBtn = "<button id='homeBtn' type='button' class='btn btn-default btn-lg'> <span title='Course Home' class='glyphicon glyphicon-home' /> </button>";
 	//editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span title='Edit' class='glyphicon glyphicon-pencil' /> </button>";
 	downloadBtn = "<button id='downloadBtn' type='button' class='btn btn-default btn-lg'> <span title='Downlad' class='glyphicon glyphicon-download' /> </button>";
-	submitBtn = "<button id='submitBtn' type='button' class='btn btn-default btn-lg'> <span title='Submit class='glyphicon glyphicon-inbox' /> </button>";
+	submitBtn = "<button id='submitBtn' type='button' class='btn btn-default btn-lg'> <span title='Submit' class='glyphicon glyphicon-inbox' /> </button>";
 
 	btnGroup = btnGroupTag + downloadBtn + submitBtn + _btnGroupTag;
 
 	for (var i = 0; i < assignment.length; i++) {
-		var tableElements = "	<tr>" +
+		var tableElements = "		<tr>" +
 						 	"		<td>" + assignment[i].course_id + "</td>" +
 						 	"		<td>" + assignment[i].assignment_id + "</td>" +
 							"		<td>" + assignment[i].assignment_name + "</td>" +
@@ -36,7 +36,6 @@ function displayAssignments(assignment) {
 						 	"		<td>" + assignment[i].due_date + "</td>" +
 						 	"		<td>" + btnGroup + "</td>";
 
-		
 		/* Can I conver percentage grade into letter grade?
 		 * parseInt(enrolled.grade,10) >= 90) gives me an error
 		 */

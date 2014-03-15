@@ -247,6 +247,24 @@ begin
 end;
 $val$ language plpgsql;
 
+CREATE OR REPLACE FUNCTION answerAssignment(cId VARCHAR, sect VARCHAR, cName VARCHAR, pId BIGINT, cTimes VARCHAR)
+	RETURNS integer AS $val$
+declare
+	val BIGINT;
+begin
+	val = nextval('COURSE_SEQ');
+	insert into COURSES values(
+		val,
+		cNum,
+		sect,
+		cName,
+		pId,
+		cTimes
+	);
+	return val;
+end;
+$val$ language plpgsql;
+
 CREATE OR REPLACE FUNCTION updateCourse(cId BIGINT, cNum VARCHAR, sect VARCHAR, cName VARCHAR, cTimes VARCHAR)
 	RETURNS BOOLEAN as $updated$
 begin
@@ -274,6 +292,7 @@ $deleted$ language plpgsql;
 /* for other usage......Also, modify the id (SUBMITTED_ASSIGNMENTS &        */
 /* COMPLETED_TEST) accordingly.											    */
 /****************************************************************************/
+/*
 insert into ASSIGNMENTS values(
 	nextval('ASSIGNMENT_SEQ'),
 	1,
@@ -365,4 +384,5 @@ insert into COMPLETED_TESTS values(
 	6,
 	60
 );
+*/
 /***************************** Test Only!!!!!!! *****************************/
