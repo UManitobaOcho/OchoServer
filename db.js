@@ -243,10 +243,8 @@ exports.profAddAssignment = function(socket,data,res) {
     		//console.log(result.rows[0].course_id);
 
     		var queryVars = (result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignmentTitle + "\', \'" + data.file + "\'";
-    		
-		console.log(queryVars + " ");
-
-		client.query( ("SELECT * FROM addAssignment(" + queryVars + ");") , function(err, result) {
+    		console.log(queryVars + " ");
+            client.query( ("SELECT * FROM addAssignment(" + queryVars + ");") , function(err, result) {
     			done();
 
     			if(err){
