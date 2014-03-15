@@ -261,6 +261,8 @@ exports.profAddAssignment = function(socket,data,res) {
 
 
 exports.getCourseAssignments = function(socket, courseID, res) {
+    console.log("getCourseAssignment: courseID " + courseID);
+
     return pg.connect(pgHost, function(err, client, done) {
 
         if (err) {

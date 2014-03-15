@@ -9,7 +9,7 @@ window.onload = function () {
 };
 
 function getAssignmentsForCourse(CourseID) {
-	socket.emit('getAssignmentsForCourse', {courseID: CourseID});
+	socket.emit('getAssignmentsForCourse', {course_id: CourseID});
 	socket.on('foundAssignments', function(assignments) {
 		displayAssignments(assignments);
 	});
