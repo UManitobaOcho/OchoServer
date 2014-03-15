@@ -230,8 +230,8 @@ io.sockets.on('connection', function(socket) {
     	db.getStudentEnrolledInfo(socket, data.student_id, foundEnrolledInfo);
     });
 	
-	socket.on('getAssignmentsForCourse', function(data) {
-		db.getAssignmentsForCourse(socket, data.courseId, foundAssignments);
+	socket.on('getAssignmentsForCourse', function(courseID) {
+		db.getCourseAssignments(socket, courseId, foundAssignments);
 	});
 
 	socket.on('getSubmittedAssignment', function(enrolledID) {

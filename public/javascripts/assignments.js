@@ -5,7 +5,7 @@ var socket = io.connect(hostUrl);
 
 window.onload = function () {
 	console.log("entered on assignmens.js"); 
-	getAssignmentsForCourse("1");
+	getAssignmentsForCourse('1');
 };
 
 function getAssignmentsForCourse(CourseID) {
