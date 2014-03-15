@@ -132,6 +132,9 @@ io.sockets.on('connection', function(socket) {
 		if(data = "success") socket.emit('courseDeleted');
 		else console.error("Course did not get deleted");
 	}
+	function downloadedAssignment(data) {
+		socket.emit('AssignmentDownloaded', data);
+	}
 	function foundCourseList(data){
 		socket.emit('foundCourses', data);
 	}
@@ -218,7 +221,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('profAddAssignment', function(data) {
-		db.profAddAssignment(socket,data, ProfAssignmentSubmitted);
+		db.profAddAssignment(socket, data, ProfAssignmentSubmitted);
 		
     });
 
@@ -230,8 +233,12 @@ io.sockets.on('connection', function(socket) {
     	db.getStudentEnrolledInfo(socket, data.student_id, foundEnrolledInfo);
     });
 	
-	socket.on('getAssignmentsForCourse', function(courseID) {
-		db.getCourseAssignments(socket, courseId, foundAssignments);
+	socket.on('getAssignmentsForCourse', function(data) {
+		db.getCourseAssignments(socket, data.course_id, foundAssignments);
+	});
+
+	socket.on('downloadAssignment', function(data) {
+		db.downloadAssignment(socket, data.assignment_id, downloadedAssignment);
 	});
 
 	socket.on('getSubmittedAssignment', function(enrolledID) {
