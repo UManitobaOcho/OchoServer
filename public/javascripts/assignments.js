@@ -29,8 +29,8 @@ function displayAssignments(assignment) {
 
 	for (var i = 0; i < assignment.length; i++) {
 		var tableElements = "		<tr>" +
-						 	"		<td>" + assignment[i].course_id + "</td>" +
-						 	"		<td>" + assignment[i].assignment_id + "</td>" +
+						 	"		<td>" + assignment[i].course_number + "</td>" +
+						 	"		<td>" + assignment[i].rank + "</td>" +
 							"		<td>" + assignment[i].assignment_name + "</td>" +
 						 	"		<td>" + assignment[i].viewable_date + "</td>" +
 						 	"		<td>" + assignment[i].due_date + "</td>" +

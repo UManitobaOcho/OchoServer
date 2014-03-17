@@ -105,7 +105,8 @@ create table ASSIGNMENTS(
 	due_date 		VARCHAR(30) NOT NULL,
 	viewable_date 	VARCHAR(30) NOT NULL,
 	assignment_name	VARCHAR(200) NOT NULL,
-	assignment_file	BYTEA
+	assignment_file	BYTEA,
+	file_name 		VARCHAR(64)
 );
 
 create table SUBMITTED_ASSIGNMENTS(
@@ -114,6 +115,7 @@ create table SUBMITTED_ASSIGNMENTS(
 	submission_time DATE NOT NULL,
 	comments		VARCHAR(1000),
 	grade 			NUMERIC(3) NOT NULL
+	assignment_file BYTEA
 );
 
 create table TESTS(
