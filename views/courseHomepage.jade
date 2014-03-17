@@ -27,7 +27,13 @@ block index_content
 
 				h2.grades-header Grades
 				#grades
-					| <canvas id="assignmentChart" width="400" height="400"></canvas>
+					.table-responsive
+						table.table.table-striped(id="grade_table")
+							thead
+								tr
+									th Assignment Name
+									th Marks
+							tbody
 			.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.content
 				h3.test
 		
