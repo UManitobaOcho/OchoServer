@@ -197,6 +197,27 @@ exports.getStudNotInCourse = function(socket,data,res) {
     });
 };
 
+exports.getStudInCourse = function(socket,data,res) {
+    return pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        console.log(data + ""); 
+
+        var querystring = "SELECT S.username, S.first_name, S.last_name, S.student_id FROM STUDENTS S WHERE student_id in ( Select student_id from Enrolled E where E.course_id = \'" + data.course + "\')";
+
+        client.query(querystring, function(err, result) {
+            done();  // release the client back to the pool
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+            res(result);
+        });
+    });
+};
+
 exports.addStudentToCourse = function(socket,data,res) {
     return pg.connect(pgHost, function(err, client, done) {
         if (err) {
@@ -219,6 +240,32 @@ exports.addStudentToCourse = function(socket,data,res) {
                 }              
             });
         }
+        res("success");  
+    });
+};
+
+exports.removeStudentToCourse = function(socket,data,res) {
+    return pg.connect(pgHost, function(err, client, done) {
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        // console.log(data + "");
+        // var strStudent = data.student.split(',');
+        // var query = "";
+        // //var queryVars =  '" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', '" + course.times + "'";
+        // for(var i = 0; i < strStudent.length-1;i++)
+        // {
+        //     //result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignTitle + "\', \'" + data.file + "\'";
+        //     query = strStudent[i] + ", " + data.course;
+        //     console.log(query);
+        //     client.query( ( "Select * FROM addEnrolled(" + query + ");") , function(err, result) {
+        //         done();
+
+        //         if(err){
+        //             return console.error('error running query', err);
+        //         }              
+        //     });
+        // }
         res("success");  
     });
 };

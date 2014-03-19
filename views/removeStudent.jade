@@ -1,0 +1,20 @@
+extends index
+
+block jumbotron
+	a.logout(href="#" onclick="logout()") Logout
+	
+	h2 Class List
+
+	div.select-class
+		h3 Select Course
+		select.selectpicker(id="class-picker")
+		a#selectStudents.btn.btn-lg.btn-success Select Course
+
+	div.select-student
+		h3 Select one to many student to remove
+		select.selectpicker(id = "student-picker" multiple = "multiple" )
+
+	div.select-button
+		a#removeStudent.btn.btn-lg.btn-success remove Student(s)
+	
+	script(src="/public/javascripts/professor.js")

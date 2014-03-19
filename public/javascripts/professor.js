@@ -24,8 +24,14 @@ window.onload = function() {
 	$('#selectCourse').click(function() {
 		getStudNotInCourse();
 	});
+	$('#selectStudents').click(function() {
+		getStudInCourse();
+	});
 	$('#addStudent').click( function() {
 		addStudentToCourse();
+	});
+	$('#removeStudent').click( function() {
+		removeStudentToCourse();
 	});
 
 };
@@ -96,6 +102,25 @@ function getStudNotInCourse(){
 	});
 }
 
+function getStudInCourse(){
+	console.log("Getting students in this course");
+	var e = document.getElementById("class-picker");
+	var strClass = e.options[e.selectedIndex].val;
+	socket.emit('getStudInCourse', {course: strClass});
+	socket.on('foundStudInCourse', function(student) {
+		
+		var selector = document.getElementById("student-picker");
+		selector.innerHTML= "";
+		for(var i=0; i<student.rows.length; i++){
+			option = document.createElement("option");
+			console.log(student.rows[i].username);
+			option.text = "Username: " + student.rows[i].username + "  First Name: " + student.rows[i].first_name + "  Last Name: " + student.rows[i].last_name;
+			option.val = student.rows[i].student_id;
+			selector.add(option);
+		}
+	});
+}
+
 function addStudentToCourse() {
 	console.log("Add student");
 	var strStud = "";
@@ -121,6 +146,30 @@ function addStudentToCourse() {
 
 	});
 }
+
+function removeStudentToCourse() {
+	console.log("Remove student");
+	var strStud = "";
+	var students = document.getElementById("student-picker");
+	var e = document.getElementById("class-picker");
+	var strClass = e.options[e.selectedIndex].val;
+
+	for(var i = 0;i < students.options.length; i++)
+	{
+		if(students[i].selected)
+		{
+			strStud = strStud + students[i].val + ",";
+		}
+	}
+	socket.emit('removeStudentToCourse', {student: strStud, course: strClass});
+	socket.on('removedStudent', function (student) {
+		console.log("Student Removed Successfully");
+		alert('Student(s) removed');
+		document.location.href = "/";
+
+	});
+}
+
 
 function addAssignment(){
 	console.log("Verifing Assignment");
