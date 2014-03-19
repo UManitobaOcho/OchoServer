@@ -7,6 +7,7 @@ var controllers = require('./controllers');
 var addCourse = require('./controllers/addCourse');
 var addAssignment = require('./controllers/addAssignment');
 var addStudent = require('./controllers/addStudent');
+var removeStudent = require('./controllers/removeStudent');
 var about = require('./controllers/about');
 var courseHomepage = require('./controllers/courseHomepage');
 var checkGrade = require('./controllers/checkGrade');
@@ -62,6 +63,7 @@ app.get('/AddStudent', addStudent.addStudent);
 app.get('/CheckGrade', checkGrade.checkGrade);
 app.get('/Course', courseHomepage.courseHomepage);
 app.get('/ViewAssignments',viewAssignments.viewAssignments);
+app.get('/RemoveStudent', removeStudent.removeStudent);
 
 /**
  *	Set up server
@@ -144,6 +146,9 @@ io.sockets.on('connection', function(socket) {
 	function foundStudNotInCourse(data){
 		socket.emit('foundStudNotInCourse', data);
 	}
+	function foundStudInCourse(data){
+		socket.emit('foundStudInCourse', data);
+	}
 	function AssignmentSubmitted(data){
 		socket.emit('AssignmentSubmitted', data);
 	}
@@ -152,6 +157,9 @@ io.sockets.on('connection', function(socket) {
 	}
 	function addedStudent(data) {
 		socket.emit('addedStudent', data);
+	}
+	function removedStudent(data) {
+		socket.emit('removedStudent', data);
 	}
 	function foundEnrolledInfo(data) {
 		socket.emit('returnEnrolledInfo', data);
@@ -214,17 +222,20 @@ io.sockets.on('connection', function(socket) {
     			
     socket.on('getStudNotInCourse', function(data) {
     	db.getStudNotInCourse(socket, data, foundStudNotInCourse);
-    	
+    });
+    socket.on('getStudInCourse', function(data) {
+    	db.getStudInCourse(socket, data, foundStudInCourse);
     });
     socket.on('addStudentToCourse', function(data) {
 		db.addStudentToCourse(socket, data, addedStudent);
     });
-
+	socket.on('removeStudentToCourse', function(data) {
+		db.addStudentToCourse(socket, data, removedStudent);
+    });
     socket.on('profAddAssignment', function(data) {
 		db.profAddAssignment(socket, data, ProfAssignmentSubmitted);
 		
     });
-
     socket.on('studentSubmitAssignment', function(data){
     	db.studentSubmitAssignment(socket, data, AssignmentSubmitted)
     });
