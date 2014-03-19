@@ -104,7 +104,7 @@ describe('addCourse', function(){
 			first.course_section.should.equal('A01');
 			first.course_name.should.equal('Software Engineering 2');
 			first.name.should.equal('Michael Zapp');
-			first.class_times.should.equal('TR 11:30 AM - 11:45 PM');
+			first.class_times.should.equal('TR 11:30 AM - 12:45 PM');
 			
 			client.disconnect();
 			done();
