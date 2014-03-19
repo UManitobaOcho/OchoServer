@@ -105,7 +105,8 @@ create table ASSIGNMENTS(
 	due_date 		VARCHAR(30) NOT NULL,
 	viewable_date 	VARCHAR(30) NOT NULL,
 	assignment_name	VARCHAR(200) NOT NULL,
-	assignment_file	BYTEA
+	assignment_file	BYTEA,
+	file_name 		VARCHAR(64)
 );
 
 create table SUBMITTED_ASSIGNMENTS(
@@ -114,6 +115,7 @@ create table SUBMITTED_ASSIGNMENTS(
 	submission_time DATE NOT NULL,
 	comments		VARCHAR(1000),
 	grade 			NUMERIC(3) NOT NULL
+	assignment_file BYTEA
 );
 
 create table TESTS(
@@ -247,6 +249,24 @@ begin
 end;
 $val$ language plpgsql;
 
+CREATE OR REPLACE FUNCTION answerAssignment(cId VARCHAR, sect VARCHAR, cName VARCHAR, pId BIGINT, cTimes VARCHAR)
+	RETURNS integer AS $val$
+declare
+	val BIGINT;
+begin
+	val = nextval('COURSE_SEQ');
+	insert into COURSES values(
+		val,
+		cNum,
+		sect,
+		cName,
+		pId,
+		cTimes
+	);
+	return val;
+end;
+$val$ language plpgsql;
+
 CREATE OR REPLACE FUNCTION updateCourse(cId BIGINT, cNum VARCHAR, sect VARCHAR, cName VARCHAR, cTimes VARCHAR)
 	RETURNS BOOLEAN as $updated$
 begin
@@ -267,3 +287,104 @@ begin
 	return true;
 end;
 $deleted$ language plpgsql;
+
+
+/***************************** Test Only!!!!!!! *****************************/
+/* Only for Grade Display purpose......Do not include this in your database */
+/* for other usage......Also, modify the id (SUBMITTED_ASSIGNMENTS &        */
+/* COMPLETED_TEST) accordingly.											    */
+/****************************************************************************/
+/*
+insert into ASSIGNMENTS values(
+	nextval('ASSIGNMENT_SEQ'),
+	1,
+	current_date,
+	current_date,
+	'Assignment 1',
+	(E'\\320\\170'::bytea)
+);
+
+insert into ASSIGNMENTS values(
+	nextval('ASSIGNMENT_SEQ'),
+	1,
+	current_date,
+	current_date,
+	'Assignment 2',
+	(E'\\320\\170'::bytea)
+);
+
+insert into ASSIGNMENTS values(
+	nextval('ASSIGNMENT_SEQ'),
+	1,
+	current_date,
+	current_date,
+	'Assignment 3',
+	(E'\\320\\170'::bytea)
+);
+
+insert into SUBMITTED_ASSIGNMENTS values(
+	1,
+	9,
+	current_date,
+	80
+);
+
+insert into SUBMITTED_ASSIGNMENTS values(
+	1,
+	10,
+	current_date,
+	65
+);
+
+insert into SUBMITTED_ASSIGNMENTS values(
+	1,
+	11,
+	current_date,
+	73
+);
+
+insert into TESTS values(
+	nextval('TEST_SEQ'),
+	1,
+	current_date,
+	current_date,
+	60
+);
+
+
+insert into TESTS values(
+	nextval('TEST_SEQ'),
+	1,
+	current_date,
+	current_date,
+	60
+);
+
+
+insert into TESTS values(
+	nextval('TEST_SEQ'),
+	1,
+	current_date,
+	current_date,
+	60
+);
+
+insert into COMPLETED_TESTS values(
+	1,
+	4,
+	100
+);
+
+insert into COMPLETED_TESTS values(
+	1,
+	5,
+	50
+);
+
+insert into COMPLETED_TESTS values(
+	1,
+	6,
+	60
+);
+*/
+/***************************** Test Only!!!!!!! *****************************/

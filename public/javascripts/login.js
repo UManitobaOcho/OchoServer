@@ -1,8 +1,11 @@
+//var hostUrl = "http://localhost:8080";
 var hostUrl = window.location.host;
 
 var socket = io.connect(hostUrl);
 
 var isRoot = (location.pathname == "/");
+
+var isProf = false;
 
 $(function() {
 	$("#professor-btn").click( function(){ getProf() });
@@ -17,6 +20,7 @@ function getStudent() {
 		$('#add_course-btn').hide();
 		$('#add_assignment-btn').hide();
 		$('#add_student-btn').hide();
+		isProf = false;
 		logIn(student);
 	});
 };
@@ -26,9 +30,11 @@ function getProf() {
 	socket.emit('getProf', {username: 'cszapp'});
 	socket.on('foundProf', function(prof) {
 		logIn(prof);
+		$('#grade-btn').hide();
                 $('#add_course-btn').show();
                 $('#add_assignment-btn').show();
                 $('#add_student-btn').show();
+		isProf = true;
 	});
 };
 
@@ -82,25 +88,39 @@ function display_contents(courses) {
 	_td = "</td>";
 	btnGroup = "<div class='btn-group'>";
 	_btnGroup = "</div>";
-	homeBtn = "<button id='homeBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-home' /> </button>"; 
-	editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-pencil' /> </button>";
-	assignmentsBtn = "<button id='assignmentsBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-tasks' /> </button>";
-	deleteBtn = "<button id='deleteBtn' type='button' class='btn btn-default btn-lg'> <span class='glyphicon glyphicon-trash' /> </button>";
+	homeBtn = "<button id='homeBtn' type='button' class='btn btn-default btn-lg'> <span title='Course Home' class='glyphicon glyphicon-home' /> </button>";
+	editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span title='Edit' class='glyphicon glyphicon-pencil' /> </button>";
+	assignmentsBtn = "<button id='assignmentsBtn' type='button' class='btn btn-default btn-lg'> <span title='Assignments' class='glyphicon glyphicon-tasks' /> </button>";
+	deleteBtn = "<button id='deleteBtn' type='button' class='btn btn-default btn-lg'> <span title='Delete' class='glyphicon glyphicon-trash' /> </button>";
 
-	editBtnGroup = btnGroup + homeBtn + editBtn + assignmentsBtn + deleteBtn + _btnGroup;
-	
-	//add rows to table
-	for(var i = 0; i < courses.rowCount; i++) {
-		$('.courses_list').append(
-			table + tr + tdIdDisplayNone + courses.rows[i].course_id + _td +
-						 td + courses.rows[i].course_number + _td +
-						 td + courses.rows[i].course_name   + _td +
-						 td + courses.rows[i].course_section+ _td +
-						 td + courses.rows[i].name          + _td +
-						 td + courses.rows[i].class_times   + _td +
-						 td + editBtnGroup + _td +
-			_tr + _table
-		);
+	if(isProf) {
+		editBtnGroup = btnGroup + homeBtn + editBtn + assignmentsBtn + deleteBtn + _btnGroup;
+		for(var i = 0; i < courses.rowCount; i++) {
+            $('.courses_list').append(
+                table + tr + tdIdDisplayNone + courses.rows[i].course_id + _td +
+                    td + courses.rows[i].course_number + _td +
+                    td + courses.rows[i].course_name   + _td +
+                    td + courses.rows[i].course_section+ _td +
+                    td + courses.rows[i].class_times   + _td +
+                    td + editBtnGroup + _td +
+                _tr + _table
+            );
+        }
+    }
+	else {
+		editBtnGroup = btnGroup + homeBtn + assignmentsBtn + _btnGroup;
+		for(var i = 0; i < courses.rowCount; i++) {
+			$('.courses_list').append(
+				table + tr + tdIdDisplayNone + courses.rows[i].course_id + _td +
+				 	td + courses.rows[i].course_number + _td +
+					td + courses.rows[i].course_name   + _td +
+					td + courses.rows[i].course_section+ _td +
+					td + courses.rows[i].name          + _td +
+					td + courses.rows[i].class_times   + _td +
+					td + editBtnGroup + _td +
+				_tr + _table
+			);
+		}
 	}
 	
 	addTableBtnFuncs();
@@ -144,7 +164,7 @@ function goToAssignmentsPage(tr) {
 	var cId = $("td.courseId", tr).text();
 	socket.emit("setSessionVariable", {varName: 'courseId', varValue: cId});
 
-	document.location.href = "/ViewCourseAssignments";
+	document.location.href = "/ViewAssignments";
 }
 
 function deleteCourse(tr) {

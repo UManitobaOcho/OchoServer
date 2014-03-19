@@ -2,3 +2,21 @@ extends index
 
 block jumbotron
 	a.logout(href="#" onclick="logout()") Logout
+
+	.container
+		include includes/navbar
+
+	h1.page-header.centerfy List of Assignments
+
+	.table-responsive
+		table.table.table-striped(id="assignment_table")
+			thead
+				tr
+					th Course Number
+					th Assignment #
+					th Assignment Description
+					th Viewable Date
+					th Due Date
+					th 
+			tbody
+	script(src="/public/javascripts/assignments.js")

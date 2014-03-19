@@ -1,4 +1,4 @@
-    var pg = require('pg');
+var pg = require('pg');
 var pgHost = "postgres://ocho:ocho@localhost/OchoDb";
 
 exports.getStudent = function(socket, res) {
@@ -243,10 +243,8 @@ exports.profAddAssignment = function(socket,data,res) {
     		//console.log(result.rows[0].course_id);
 
     		var queryVars = (result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignmentTitle + "\', \'" + data.file + "\'";
-    		
-		console.log(queryVars + " ");
-
-		client.query( ("SELECT * FROM addAssignment(" + queryVars + ");") , function(err, result) {
+    		console.log(queryVars + " ");
+            client.query( ("SELECT * FROM addAssignment(" + queryVars + ");") , function(err, result) {
     			done();
 
     			if(err){
@@ -261,14 +259,30 @@ exports.profAddAssignment = function(socket,data,res) {
 
 
 exports.getCourseAssignments = function(socket, courseID, res) {
+    console.log("getCourseAssignment: courseID " + courseID);
+
     return pg.connect(pgHost, function(err, client, done) {
 
         if (err) {
             return console.error('error fetching client from pool', err);
         }
         
+        console.log(courseID + "");
+        var querystring = "SELECT * FROM ASSIGNMENTS WHERE course_id = " + courseID;
+
+        client.query(querystring, function(err, result) {
+           done();
+
+           if(err) {
+               return console.error('error running query', err);
+           }
+
+           console.log(result);
+
+           res(result);
+       });
     });
-}
+};
 
 exports.studentSubmitAssignment = function(socket, courseID, studentID, res) {
     return pg.connect(pgHost, function(err, client, done) {
@@ -280,7 +294,6 @@ exports.studentSubmitAssignment = function(socket, courseID, studentID, res) {
     });
 };
 
-
 exports.getStudentGrades = function(socket, courseID, studentID, res) {
   return pg.connect(pgHost, function(err, client, done) {
 
@@ -288,8 +301,7 @@ exports.getStudentGrades = function(socket, courseID, studentID, res) {
            return console.error('error fetchng client from pool', err);
        }
 
-       console.log(data + "");
-       var querystring = "SELECT * FROM ENROLLED WHERE student_id = '1' AND course_id='1'";
+       var querystring = "SELECT * FROM ENROLLED WHERE student_id = " + studentID + " AND course_id " + courseID;
 
        client.query(querystring, function(err, result) {
            done();
@@ -300,7 +312,89 @@ exports.getStudentGrades = function(socket, courseID, studentID, res) {
 
            console.log(result.rows[0]);
 
-           //res(result.rows[0]);
+           res(result.rows[0]);
        });
    });
+};
+
+exports.getStudentEnrolledInfo = function(socket, studentID, res) {
+    return pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+
+        var querystring = "SELECT * FROM ENROLLED E, COURSES C WHERE student_id = " + studentID + " AND E.course_id = C.course_id";
+
+        client.query(querystring, function(err, result) {
+            done();
+
+            if(err) {
+                return console.error('error running query', err);
+            }
+
+            res(result.rows);
+        });
+    });
+};
+
+exports.getAssignmentsForCourse = function(socket, courseId, res) {
+	return pg.connect(pgHost, function(err, client, done) {
+		
+		if(err) {
+			return console.error('error fetching client from pool', err);
+		}
+		
+        var querystring = "SELECT rank() over(), C.course_number, A.assignment_name, A.viewable_date, A.due_date FROM COURSES C, ASSIGNMENTS A WHERE C.course_id = A.course_id AND C.course_id = " + courseId + ";";
+		
+		client.query(querystring, function(err, result) {
+			done();
+			
+			if(err) {
+				return console.error('error running query', err);
+			}
+			
+			res(result.rows);
+		});
+	});
+};
+
+exports.getSubmittedAssignment = function(socket, enrolledID, res) {
+    return pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+
+        var querystring = "SELECT * FROM ASSIGNMENTS A, SUBMITTED_ASSIGNMENTS S WHERE S.enrolled_id = " + enrolledID + " AND A.assignment_id = S.assignment_id";
+        client.query(querystring, function(err, result) {
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+
+            res(result.rows);
+        });
+    });
+};
+
+exports.getCompletedTests = function(socket, enrolledID, res) {
+    return pg.connect(pgHost, function(err, client, done) {
+        
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+
+        var querystring = "SELECT * FROM TESTS T, COMPLETED_TESTS C WHERE C.enrolled_id = " + enrolledID + " AND C.test_id = T.test_id"; 
+        client.query(querystring, function(err, result) {
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+
+            res(result.rows);
+        });
+    });
 };

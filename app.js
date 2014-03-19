@@ -9,6 +9,8 @@ var addAssignment = require('./controllers/addAssignment');
 var addStudent = require('./controllers/addStudent');
 var about = require('./controllers/about');
 var courseHomepage = require('./controllers/courseHomepage');
+var checkGrade = require('./controllers/checkGrade');
+var viewAssignments = require('./controllers/viewAssignments');
 var http = require('http');
 var path = require('path');
 var pg = require('pg');
@@ -39,7 +41,8 @@ app.configure( function() {
     app.use(express.methodOverride());
     app.use(app.router);
     app.use(express.cookieParser());
-    app.use(express.session({store: sessionStore, secret: 'secret', key: 'express.sid'}));
+    app.use(express.session({ store: sessionStore, secret: 'secret', key: 'express.sid' }));
+
     // If we don't add /public to the path then we can access our stored node_modules
     app.use(express.static(path.join(__dirname, '')));
 });
@@ -56,7 +59,9 @@ app.get('/UpdateCourse', addCourse.addCourse);
 app.get('/AddAssignment', addAssignment.addAssignment);
 app.get('/about', about.about);
 app.get('/AddStudent', addStudent.addStudent);
+app.get('/CheckGrade', checkGrade.checkGrade);
 app.get('/Course', courseHomepage.courseHomepage);
+app.get('/ViewAssignments',viewAssignments.viewAssignments);
 
 /**
  *	Set up server
@@ -127,6 +132,9 @@ io.sockets.on('connection', function(socket) {
 		if(data = "success") socket.emit('courseDeleted');
 		else console.error("Course did not get deleted");
 	}
+	function downloadedAssignment(data) {
+		socket.emit('AssignmentDownloaded', data);
+	}
 	function foundCourseList(data){
 		socket.emit('foundCourses', data);
 	}
@@ -136,15 +144,27 @@ io.sockets.on('connection', function(socket) {
 	function foundStudNotInCourse(data){
 		socket.emit('foundStudNotInCourse', data);
 	}
+	function AssignmentSubmitted(data){
+		socket.emit('AssignmentSubmitted', data);
+	}
 	function ProfAssignmentSubmitted(data){
 		socket.emit('ProfAssignmentSubmitted', data);
 	}
 	function addedStudent(data) {
 		socket.emit('addedStudent', data);
 	}
-//	function StudentGrades(data) {
-//		socket.emit('StudentGrades', data);
-//	}
+	function foundEnrolledInfo(data) {
+		socket.emit('returnEnrolledInfo', data);
+	}
+	function foundAssignments(data) {
+		socket.emit('foundAssignments', data);
+	}
+	function foundSubmittedAssignment(data) {
+		socket.emit('foundSubmittedAssignment', data);
+	}
+	function foundCompletedTests(data) {
+		socket.emit('foundCompletedTests', data);
+	}
 
 	socket.on('setSessionVariable', function(variable) {
 		session.reload(function() {
@@ -171,12 +191,9 @@ io.sockets.on('connection', function(socket) {
 	});
 	
 	socket.on('getCourseInfo', function() {
+		console.log(session);
 		db.getCourseInfo(socket, session.courseId, courseInfo);			
 	});
-
-//	socket.on('getStudentGrades', function() {
-//		db.getStudentGrades(socket, session.courseId, session.studentID, studentGrades);
-//	});
 	
 	socket.on('updateCourse', function(course) {
 		db.updateCourse(socket, (course.courseId ? course.courseId : session.courseId), course, updatedCourse);
@@ -204,9 +221,33 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('profAddAssignment', function(data) {
-		db.profAddAssignment(socket,data, ProfAssignmentSubmitted);
+		db.profAddAssignment(socket, data, ProfAssignmentSubmitted);
 		
     });
+
+    socket.on('studentSubmitAssignment', function(data){
+    	db.studentSubmitAssignment(socket, data, AssignmentSubmitted)
+    });
+
+    socket.on('getEnrolledInfo', function(data) {
+    	db.getStudentEnrolledInfo(socket, data.student_id, foundEnrolledInfo);
+    });
+	
+	socket.on('getAssignmentsForCourse', function(data) {
+		db.getCourseAssignments(socket, data.course_id, foundAssignments);
+	});
+
+	socket.on('downloadAssignment', function(data) {
+		db.downloadAssignment(socket, data.assignment_id, downloadedAssignment);
+	});
+
+	socket.on('getSubmittedAssignment', function(enrolledID) {
+		db.getSubmittedAssignment(socket, enrolledID, foundSubmittedAssignment);
+	});
+
+	socket.on('getCompletedTests', function(enrolledID) {
+		db.getCompletedTests(socket, enrolledID, foundCompletedTests);
+	});
 	
 	socket.on('logout', function() {
 		session.reload(function() {
