@@ -345,8 +345,7 @@ exports.getAssignmentsForCourse = function(socket, courseId, res) {
 			return console.error('error fetching client from pool', err);
 		}
 		
-        var querystring = "SELECT rank() over(), C.course_number, A.assignment_name, A.viewable_date, A.due_date FROM
-        COURSES C, ASSIGNMENTS A WHERE C.course_id = A.course_id AND C.course_id = " + courseId + ";";
+        var querystring = "SELECT rank() over(), C.course_number, A.assignment_name, A.viewable_date, A.due_date FROM COURSES C, ASSIGNMENTS A WHERE C.course_id = A.course_id AND C.course_id = " + courseId + ";";
 		
 		client.query(querystring, function(err, result) {
 			done();
