@@ -203,9 +203,8 @@ io.sockets.on('connection', function(socket) {
 		}
 	});
 	
-	socket.on('getCourseInfo', function() {
-		console.log(session);
-		db.getCourseInfo(socket, session.courseId, courseInfo);			
+	socket.on('getCourseInfo', function(data) {	
+		db.getCourseInfo(socket, (data ? data.courseId : session.courseId), courseInfo);			
 	});
 	
 	socket.on('updateCourse', function(course) {
