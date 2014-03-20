@@ -1,6 +1,8 @@
 //Change Textbox Value
 
 window.onload = function() {
+	$('.select-student').hide();
+	$('.select-button').hide();
 	getProfCourses();
 	$('.logout').show();
         $('#releaseTime').timepicker();
@@ -99,6 +101,9 @@ function getStudNotInCourse(){
 			option.val = student.rows[i].student_id;
 			selector.add(option);
 		}
+
+		$('.select-student').show();
+		$('.select-button').show();
 	});
 }
 
@@ -118,6 +123,8 @@ function getStudInCourse(){
 			option.val = student.rows[i].student_id;
 			selector.add(option);
 		}
+		$('.select-student').show();
+		$('.select-button').show();
 	});
 }
 
@@ -138,6 +145,7 @@ function addStudentToCourse() {
 			//alert(students[i].val);
 		}
 	}
+
 	socket.emit('addStudentToCourse', {student: strStud, course: strClass});
 	socket.on('addedStudent', function (student) {
 		console.log("Student Added Successfully");
