@@ -93,62 +93,109 @@ function loadCalendar(course) {
 	
 	socket.emit('getAssignmentsForCourse', {course_id: course.course_id});
 	socket.on('foundAssignments', function(data) {
-	
-		//for each assignment convert it into a calendar event
-		for(var i = 0; i < data.length; i++) {
-			var dueDate = new Date(data[0].due_date);
+		
+		events = createEventsForAssignments(data, events);
+		
+		var calendar = $('#calendar').calendar({ modal: "#events-modal", events_source: events});
+	});	
+}
+
+function createEventsForAssignments(data, events) {
+	data = data.rows;
+	//for each assignment convert it into a calendar event
+	for(var i = 0; i < data.length; i++) {
+		var dueDate = new Date(data[i].due_date);
+		var viewableDate = new Date(data[i].viewable_date);
+		
+		if(viewableDate < new Date()) {		
 			dueDate.setFullYear(2014);
 			dueDate = dueDate.getTime();
 			events.push({
-				"id": data[0].assignment_id,
-				"title": data[0].assignment_name + " is due",
+				"id": data[i].assignment_id,
+				"title": data[i].assignment_name + " is due",
 				"url": "http://example.com",
 				"class": "event-important",
 				"start": dueDate, // Milliseconds
 				"end": dueDate // Milliseconds
 			});
 		}
+	}
 		
-		var calendar = $('#calendar').calendar({ modal: "#events-modal", events_source: events});
-	});	
+	return events;
 }
 
 function loadGradesDetails(enrolledID) {
 
 	socket.emit('getSubmittedAssignment', enrolledID);
 	socket.on('foundSubmittedAssignment', function(data) {
+		var assignmentLabel = [];
+		var assignmentGrade = [];
 
 		for (var i = 0; i < data.length; i++) {
-			var tableElements = "<tr>" +
-					 			"	<td>" + data[i].assignment_name + "</td>" + 
-					 			"	<td>" + data[i].grade + "</td>" +
-					 			"</tr>";
-			$("#grade_table tbody").append(tableElements);
+			assignmentLabel.push(data[i].assignment_name);
+			assignmentGrade.push(data[i].grade);
 		}
 
-		
+		var data = {
+			labels : assignmentLabel,
+			datasets : [
+				{
+					fillColor : "rgba(220,220,220,0.5)",
+					strokeColor : "rgba(220,220,200,1)",
+					data : assignmentGrade
+				}
+			]
+		}
+
+		var assignmentChart = new Chart($("#assignmentChart").get(0).getContext("2d")).Bar(data);
 	});
 
-	//socket.emit('getCompletedTests', enrolledID);
-	//socket.on('foundCompletedTests', function(data) {
-	//
-	//	var table = "<table>" + 
-	//				"<tr>" +
-	//				"	<th>Test Name</th>" + 
-	//				"	<th>Test Score</th>" +
-	//				"</tr>";
-	//
-	//	for (var i = 0; i < data.length; i++) {
-	//		table += "<tr>" +
-	//				"	<th>Test " + data[i].test_id + "</th>" + 
-	//				"	<th>" + data[i].grade + "</th>" +
-	//				"</tr>";
-	//	}
-	//
-	//	table += "</table>";
-	//
-	//	$("#grades").append(table);
-	//});
+	socket.emit('getCompletedTests', enrolledID);
+	socket.on('foundCompletedTests', function(data) {
+
+		var table = "<table>" + 
+					"<tr>" +
+					"	<th>Test Name</th>" + 
+					"	<th>Test Score</th>" +
+					"</tr>";
+
+		for (var i = 0; i < data.length; i++) {
+			table += "<tr>" +
+					"	<th>Test " + data[i].test_id + "</th>" + 
+					"	<th>" + data[i].grade + "</th>" +
+					"</tr>";
+		}
+
+		table += "</table>";
+
+		$("#grades").append(table);
+
+
+		/* Failed to update the 2nd bar chart */
+		/* Add <canvas id="testChart" width="400" height="400"></canvas> after another canvas in courseHomepage.jade to fix this problem */
+		/*
+		var testLabel = [];
+		var testGrade = [];
+
+		for (var i = 0; i < data.length; i++) {
+			testLabel.push("Test " + data[i].test_id);
+			testGrade.push(data[i].grade);
+		}
+
+		var testData = {
+			labels : testLabel,
+			datasets : [
+				{
+					fillColor : "rgba(220,220,220,0.5)",
+					strokeColor : "rgba(220,220,220,1)",
+					data : testGrade
+				}
+			]
+		}
+
+		new Chart($("#testChart").get(0).getContext("2d")).Line(testData);
+		*/
+	});
 }
 
 function loadHome(){
