@@ -12,7 +12,12 @@ var about = require('./controllers/about');
 var courseHomepage = require('./controllers/courseHomepage');
 var checkGrade = require('./controllers/checkGrade');
 var viewAssignments = require('./controllers/viewAssignments');
+
+//need to change the max number of sockets so we can run our mocha tests
 var http = require('http');
+http.globalAgent.maxSockets = 1000;
+http.Agent.defaultMaxSockets = 1000;
+
 var path = require('path');
 var pg = require('pg');
 var cookie = require("cookie");
@@ -186,7 +191,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     socket.on('getProf', function(data) {
-        db.getProf(socket, session, foundProf);        
+        db.getProf(socket, data, session, foundProf);        
     });
 	
 	socket.on('addCourse', function(course) {

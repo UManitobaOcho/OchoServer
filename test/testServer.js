@@ -13,7 +13,7 @@ describe('addCourse', function(){
 		var client = io.connect(socketUrl, options);
 		
 		client.on('connect', function(data) {
-			client.emit('testios', {test: 'test'});
+			client.emit('testios', {isTest: true, test: 'test'});
 		});
 		
 		client.on('test', function(data) {
@@ -28,7 +28,7 @@ describe('addCourse', function(){
 		var client = io.connect(socketUrl, options);
 		
 		client.on('connect', function(data) {
-			client.emit('getStudent', {studentId: '1'});
+			client.emit('getStudent', {isTest: true, studentId: '1'});
 		});
 		
 		client.on('foundStudent', function(data) {
@@ -59,7 +59,7 @@ describe('addCourse', function(){
 		var client = io.connect(socketUrl, options);
 		
 		client.on('connect', function(data) {
-			client.emit('getCourses');
+			client.emit('getCourses', {isTest: true});
 		});
 		
 		client.on('foundCourses', function(data) {
@@ -70,44 +70,72 @@ describe('addCourse', function(){
 			
 			var first = data.rows[0];
 			first.should.be.ok;
-			
-			first.course_id.should.equal('1');
-			first.course_number.should.equal('COMP 4350');
-			first.course_section.should.equal('A01');
-			first.course_name.should.equal('Software Engineering 2');
-			first.name.should.equal('Michael Zapp');
-			first.class_times.should.equal('TR 11:30 AM - 12:45 PM');
 			
 			client.disconnect();
 			done();
 		});
 	});
 	
-	it('should get list of all courses and first course should exist',function(done) {
+	it('add course and check it is in list', function(done) {
 		var client = io.connect(socketUrl, options);
 		
 		client.on('connect', function(data) {
-			client.emit('getCourses');
+			client.emit('addCourse', {isTest: true, userId: '1', isProf: true,
+										courseName: 'Test Course',
+										courseNum: 'TEST 1001',
+										section: 'A01',
+										times: 'Online'});
+			
+			client.on('courseAdded', function(data) {
+				data.should.be.ok;
+				data.rowCount.should.equal(1);
+				data.rows[0].addcourse.should.be.ok;
+				
+				//must then delete course
+				client.emit('deleteCourse', {isTest: true, courseId: data.rows[0].addcourse});
+				client.on('courseDeleted', function(data) {
+					client.disconnect();
+					done();
+				});
+			});
 		});
+	});
+	
+	it('add course and then update it', function(done) {
+		var client = io.connect(socketUrl, options);
 		
-		client.on('foundCourses', function(data) {
-			data.should.be.ok;
+		client.on('connect', function(data) {
+			client.emit('addCourse', {isTest: true, userId: '1', isProf: true,
+										courseName: 'Test Course',
+										courseNum: 'TEST 1001',
+										section: 'A01',
+										times: 'Online'});
 			
-			data.rowCount.should.be.above(0);
-			data.rows.should.be.ok;
-			
-			var first = data.rows[0];
-			first.should.be.ok;
-			
-			first.course_id.should.equal('1');
-			first.course_number.should.equal('COMP 4350');
-			first.course_section.should.equal('A01');
-			first.course_name.should.equal('Software Engineering 2');
-			first.name.should.equal('Michael Zapp');
-			first.class_times.should.equal('TR 11:30 AM - 12:45 PM');
-			
-			client.disconnect();
-			done();
+			client.on('courseAdded', function(data) {
+				data.should.be.ok;
+				data.rowCount.should.equal(1);
+				
+				var cId = data.rows[0].addcourse;
+				cId.should.be.ok;
+				
+				//now update course
+				client.emit('updateCourse', {isTest: true, courseId: cId,
+										courseName: 'New Test Course Name',
+										courseNum: 'TEST 1001',
+										section: 'A01',
+										times: 'Online'});
+				client.on('courseUpdated', function(data) {
+					data.should.be.ok;
+					data.rows[0].updatecourse.should.equal(true);
+					
+					//must then delete course
+					client.emit('deleteCourse', {isTest: true, courseId: cId});
+					client.on('courseDeleted', function(data) {
+						client.disconnect();
+						done();
+					});
+				});				
+			});
 		});
 	});
 	
@@ -115,7 +143,7 @@ describe('addCourse', function(){
 		var client = io.connect(socketUrl, options);
 		
 		client.on('connect', function(data) {
-			client.emit('getProf', {profId: '1'});
+			client.emit('getProf', {isTest: true, profId: '1'});
 		});
 		
 		client.on('foundProf', function(data) {

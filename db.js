@@ -26,7 +26,7 @@ exports.getStudent = function(socket, res) {
 };
 
 
-exports.getProf = function(socket, session, res) {
+exports.getProf = function(socket, data, session, res) {
     return pg.connect(pgHost, function(err, client, done) {
 		
         if (err) {
@@ -41,11 +41,14 @@ exports.getProf = function(socket, session, res) {
             }
 			
 			//set into session
-			session.reload(function() {
-				session.userId = result.rows[0].prof_id;
-				session.isProf = true;
-				session.save();
-			});
+			if(!data.isTest) {
+				session.reload(function() {
+					session.userId = result.rows[0].prof_id;
+					session.isProf = true;
+					session.save();
+				});
+			}
+			
 			res(result.rows[0]);
         });
     });
