@@ -5,11 +5,11 @@ var socket = io.connect(hostUrl);
 
 window.onload = function () {
 	console.log("entered on assignmens.js"); 
-	getAssignmentsForCourse('1');
+	getAssignmentsForCourse();
 };
 
-function getAssignmentsForCourse(CourseID) {
-	socket.emit('getAssignmentsForCourse', {course_id: CourseID});
+function getAssignmentsForCourse() {
+	socket.emit('getAssignmentsForCourse');
 	socket.on('foundAssignments', function(assignments) {
 		displayAssignments(assignments);
 	});
