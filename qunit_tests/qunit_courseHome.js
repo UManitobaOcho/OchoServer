@@ -55,15 +55,15 @@ test("test getting date from day returned in milliseconds(365th day of 2014)", f
 
 test("test creating events for zero assignments", function() {
 	var events = [];
-	var data = {'rows': []};
+	var data = [];
 	events = createEventsForAssignments(data, events);
 	equal(events.length, 0, "There should be no new events");
 });
 
 test("test creating event for one assignment", function() {
 	var events = [];
-	var data = {'rows': []};	
-	data.rows[0] = {'assignment_id': '1', 'assignment_name': 'Random', 'course_id': '1', 'due_date': '03/26/2014 05:30 PM', 'viewable_date': '03/19/2014 05:30 PM'};
+	var data = [];
+	data[0] = {'assignment_id': '1', 'assignment_name': 'Random', 'course_id': '1', 'due_date': '03/26/2014 05:30 PM', 'viewable_date': '03/19/2014 05:30 PM'};
 	
 	events = createEventsForAssignments(data, events);
 	equal(events.length, 1, "There should be one new events");
@@ -72,21 +72,21 @@ test("test creating event for one assignment", function() {
 
 test("test creating events for multiple assignments", function() {
 	var events = [];
-	var data = {'rows': []};
-	data.rows[0] = {'assignment_id': '1', 'assignment_name': 'Random 1', 'course_id': '1', 'due_date': '03/26/2014 05:30 PM', 'viewable_date': '03/19/2014 05:30 PM'};
-	data.rows[1] = {'assignment_id': '1', 'assignment_name': 'Random 2', 'course_id': '1', 'due_date': '03/26/2014 05:30 PM', 'viewable_date': '03/19/2014 05:30 PM'};
+	var data = [];
+	data[0] = {'assignment_id': '1', 'assignment_name': 'Random 1', 'course_id': '1', 'due_date': '03/26/2014 05:30 PM', 'viewable_date': '03/19/2014 05:30 PM'};
+	data[1] = {'assignment_id': '1', 'assignment_name': 'Random 2', 'course_id': '1', 'due_date': '03/26/2014 05:30 PM', 'viewable_date': '03/19/2014 05:30 PM'};
 
 	events = createEventsForAssignments(data, events);
-	equal(events.length, data.rows.length, "There should be multiple new events");
+	equal(events.length, data.length, "There should be multiple new events");
 	equal(events[0].title, 'Random 1 is due', "Title for event should be '{name} is due'");	
 	equal(events[1].title, 'Random 2 is due', "Title for event should be '{name} is due'");
 });
 
 test("test that assignmnets are not added to calendar unless passed viewable date", function() {
 	var events = [];
-	var data = {'rows': []};
-	data.rows[0] = {'assignment_id': '1', 'assignment_name': 'Invalid', 'course_id': '1', 'due_date': '03/26/2014 05:30 PM', 'viewable_date': '03/27/2014 05:30 PM'};
-	data.rows[1] = {'assignment_id': '1', 'assignment_name': 'Valid', 'course_id': '1', 'due_date': '03/26/2014 05:30 PM', 'viewable_date': '03/19/2014 05:30 PM'};
+	var data = [];
+	data[0] = {'assignment_id': '1', 'assignment_name': 'Invalid', 'course_id': '1', 'due_date': '03/26/2014 05:30 PM', 'viewable_date': '03/27/2014 05:30 PM'};
+	data[1] = {'assignment_id': '1', 'assignment_name': 'Valid', 'course_id': '1', 'due_date': '03/26/2014 05:30 PM', 'viewable_date': '03/19/2014 05:30 PM'};
 	
 	events = createEventsForAssignments(data, events);
 	equal(events.length, 1, "There should be only one new event");	
