@@ -31,7 +31,10 @@ function displayEnrolledInfo(enrolled) {
 
 function convertNumberToLetterGrade(n){
     var grade = 'F';
-    switch(n/10){
+    switch(Math.floor(n/10)){
+    case 10:
+        grade = 'A';
+        break;
     case 9: 
         grade = 'A';
         break;
