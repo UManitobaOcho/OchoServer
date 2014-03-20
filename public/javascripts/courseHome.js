@@ -152,23 +152,21 @@ function loadGradesDetails(enrolledID) {
 
 	socket.emit('getCompletedTests', enrolledID);
 	socket.on('foundCompletedTests', function(data) {
-
-		var table = "<table>" + 
+		var t = $('#grade_table > tbody');
+		var table =
 					"<tr>" +
-					"	<th>Test Name</th>" + 
-					"	<th>Test Score</th>" +
+					"	<td>Test Name</td>" + 
+					"	<td>Test Score</td>" +
 					"</tr>";
 
 		for (var i = 0; i < data.length; i++) {
 			table += "<tr>" +
-					"	<th>Test " + data[i].test_id + "</th>" + 
-					"	<th>" + data[i].grade + "</th>" +
+					"	<td>Test " + data[i].test_id + "</td>" + 
+					"	<td>" + data[i].grade + "</td>" +
 					"</tr>";
 		}
+		t.html(table);
 
-		table += "</table>";
-
-		$("#grades").append(table);
 
 
 		/* Failed to update the 2nd bar chart */
