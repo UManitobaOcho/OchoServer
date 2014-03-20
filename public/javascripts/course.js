@@ -191,15 +191,22 @@ function validateTimes() {
 };
 
 function classTimeToString() {
-	var result = "";
 	var days = $('input.daysCheckbox:checked');
+	var startTime = $('input#startTime')[0].value;
+	var endTime = $('input#endTime')[0].value;
+
+	return classTimeToStringWithVars(days, startTime, endTime);
+};
+
+function classTimeToStringWithVars(days, start, end) {
+	var result = "";
 	
 	for(var i = 0; i < days.length; i++) {
 		result += days[i].value;
 	}
 	
-	result += (" " + $('input#startTime')[0].value + " - " + $('input#endTime')[0].value);
-
+	result += (" " + start + " - " + end);
+	
 	return result;
-};
+}
     
