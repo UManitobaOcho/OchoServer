@@ -114,7 +114,7 @@ create table SUBMITTED_ASSIGNMENTS(
 	assignment_id 	BIGINT references ASSIGNMENTS(assignment_id),
 	submission_time DATE NOT NULL,
 	comments		VARCHAR(1000),
-	grade 			NUMERIC(3) NOT NULL
+	grade 			NUMERIC(3) NOT NULL,
 	assignment_file BYTEA
 );
 
