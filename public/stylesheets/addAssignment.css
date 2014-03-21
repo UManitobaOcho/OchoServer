@@ -4,3 +4,6 @@
 .calendar{width:3%; margin:9px 5px 5px;}
 .datepickers{width:100%;}
 .dateboxes{width:95%;}
+#selectStudents, #selectCourse{margin-left: 10px;}
+#removeStudent, #addStudent{margin-top: 10px;}
+.user_details{margin-bottom: 20px;}
