@@ -280,7 +280,6 @@ exports.profAddAssignment = function(socket,data,res) {
             return console.error('error fetching client from pool', err);
         }
         
-    	console.log(data.course);
     	var querystring1 = "SELECT C.course_id FROM COURSES C WHERE C.course_number = \'" + data.course + "\'";
 
     	client.query(querystring1, function(err, result){
@@ -292,9 +291,11 @@ exports.profAddAssignment = function(socket,data,res) {
 
     		//console.log(result.rows[0].course_id);
 
-    		var queryVars = (result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignmentTitle + "\', \'" + data.file + "\'";
-    		console.log(queryVars + " ");
-            client.query( ("SELECT * FROM addAssignment(" + queryVars + ");") , function(err, result) {
+    		var queryVars = (result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignmentTitle + "\', \'" + data.name  + "\', \'" + data.type + "\', \'" + data.size + "\', \'" + data.file + "\'";
+    		
+		console.log(queryVars + " ");
+            	
+		client.query( ("SELECT * FROM addAssignment(" + queryVars + ");") , function(err, result) {
     			done();
 
     			if(err){
