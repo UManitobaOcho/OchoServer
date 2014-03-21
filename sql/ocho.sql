@@ -294,6 +294,32 @@ end;
 $deleted$ language plpgsql;
 
 
+CREATE OR REPLACE FUNCTION deleteCompleteTest(eId BIGINT)
+	RETURNS BOOLEAN as $deleted$
+begin
+	delete from completed_tests where enrolled_id = eId;
+	return true;
+end;
+$deleted$ language plpgsql;
+
+CREATE OR REPLACE FUNCTION deletesumbittedAssignment(eId BIGINT)
+	RETURNS BOOLEAN as $deleted$
+begin
+	delete from submitted_assignments where enrolled_id = eId;
+	return true;
+end;
+$deleted$ language plpgsql;
+
+
+CREATE OR REPLACE FUNCTION deleteEnrolled(eId BIGINT)
+	RETURNS BOOLEAN as $deleted$
+begin
+	delete from enrolled where enrolled_id = eId;
+	return true;
+end;
+$deleted$ language plpgsql;
+
+
 /***************************** Test Only!!!!!!! *****************************/
 /* Only for Grade Display purpose......Do not include this in your database */
 /* for other usage......Also, modify the id (SUBMITTED_ASSIGNMENTS &        */

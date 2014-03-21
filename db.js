@@ -251,9 +251,6 @@ exports.removeStudentToCourse = function(socket,data,res) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        //make sure student assignment are deleted first
-        //makes sure student test are also deleted next
-        //I need enrolled_id
 
         console.log(data + "");
         var strStudent = data.student.split(',');
@@ -271,15 +268,29 @@ exports.removeStudentToCourse = function(socket,data,res) {
                     return console.error('error running query', err);
                 }
                 console.log(result.rows[0].enrolled_id);
+                client.query( ("SELECT * FROM deleteCompleteTest(" + result.rows[0].enrolled_id + ")") , function(err, result) {
+                    done();
+                    
+                    if (err) {
+                        return console.error('error running query', err);
+                    }
+                });
+                client.query( ("SELECT * FROM deletesumbittedAssignment(" + result.rows[0].enrolled_id + ")") , function(err, result) {
+                    done();
+                    
+                    if (err) {
+                        return console.error('error running query', err);
+                    }
+                });
+                client.query( ("SELECT * FROM deleteEnrolled(" + result.rows[0].enrolled_id + ")") , function(err, result) {
+                    done();
+                    
+                    if (err) {
+                        return console.error('error running query', err);
+                    }
+                });
             });
             
-            // client.query( ( "Select * FROM removeEnrolled(" + query + ");") , function(err, result) {
-            //     done();
-
-            //     if(err){
-            //         return console.error('error running query', err);
-            //     }              
-            // });
         }
         res("success");  
     });
