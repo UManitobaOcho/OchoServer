@@ -249,7 +249,7 @@ io.sockets.on('connection', function(socket) {
     });
 	
 	socket.on('getAssignmentsForCourse', function(data) {
-		db.getCourseAssignments(socket, data.course_id, foundAssignments);
+		db.getCourseAssignments(socket, (data ? data.course_id : session.course_id), foundAssignments);
 	});
 
 	socket.on('downloadAssignment', function(data) {

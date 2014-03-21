@@ -1,6 +1,8 @@
 //Change Textbox Value
 
 window.onload = function() {
+	$('.select-student').hide();
+	$('.select-button').hide();
 	getProfCourses();
 	$('.logout').show();
         $('#releaseTime').timepicker();
@@ -99,6 +101,9 @@ function getStudNotInCourse(){
 			option.val = student.rows[i].student_id;
 			selector.add(option);
 		}
+
+		$('.select-student').show();
+		$('.select-button').show();
 	});
 }
 
@@ -118,6 +123,8 @@ function getStudInCourse(){
 			option.val = student.rows[i].student_id;
 			selector.add(option);
 		}
+		$('.select-student').show();
+		$('.select-button').show();
 	});
 }
 
@@ -138,6 +145,7 @@ function addStudentToCourse() {
 			//alert(students[i].val);
 		}
 	}
+
 	socket.emit('addStudentToCourse', {student: strStud, course: strClass});
 	socket.on('addedStudent', function (student) {
 		console.log("Student Added Successfully");
@@ -179,15 +187,16 @@ function addAssignment(){
 	var assignTitle = $('#assignment-title').val();
 	var releaseDate = $('#releaseDate').val() + ' ';
 	var dueDate = $('#dueDate').val() + ' ';
-	var releasetime = $('#releaseTime').val();
+	var releaseTime = $('#releaseTime').val();
 	var dueTime = $('#dueTime').val();
 
+	// To make formating consistent
 	if(($('#releaseTime').val().split(":"))[0].length < 2) {
 		releaseTime = '0' + $('#releaseTime').val();
 	}
 	if(($('#dueTime').val().split(":"))[0].length < 2) {
-        dueTime = '0' + $('#dueTime').val();
-    }
+		dueTime = '0' + $('#dueTime').val();
+	}
 
 	releaseDate = releaseDate + releaseTime
 	dueDate = dueDate + dueTime;
@@ -196,20 +205,35 @@ function addAssignment(){
 
 	if(verified == 1) {
 		var input,file;
-        input = document.getElementById('assignment');
+		var fread = new FileReader();
+		var contents;
+		var name;
+		var type;
+		var size;
+		
+		input = document.getElementById('assignment');
 
 		if(!input){
-            document.getElementById("errorbox").innerHTML = "Error Loading File";
-        }else{
-            file = input.files[0];
+			document.getElementById("errorbox").innerHTML = "Error Loading File";
+        	} else {
+            		file = input.files[0];
+			name = file.name;
+			type = file.type;
+			size = file.size
+
+			fread.onload = function(e) {
+				contents = e.target.result;
 			
-			console.log("Submitting Assignment");
-			socket.emit('profAddAssignment', {assignmentTitle: assignTitle, course: strClass, file: file, releaseDate: releaseDate, dueDate: dueDate})
-	        socket.on('ProfAssignmentSubmitted', function(courses) {
-	    		console.log("Assignment Submitted Successfully");
-				alert('Submitted Successfully!');
-				document.location.href = "/";
-    		});
+				console.log("File:" + contents);
+				console.log("Submitting Assignment");
+				socket.emit('profAddAssignment', {assignmentTitle: assignTitle, course: strClass, name: name, type: type, size: size, file: contents, releaseDate: releaseDate, dueDate: dueDate})
+	        		socket.on('ProfAssignmentSubmitted', function(courses) {
+	    				console.log("Assignment Submitted Successfully");
+					alert('Submitted Successfully!');
+					document.location.href = "/";
+    				});
+			}
+			fread.readAsText(file);
 		}
 	} else {
 		console.log("Assignment fields failed verification");

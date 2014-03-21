@@ -101,7 +101,6 @@ function loadCalendar(course) {
 }
 
 function createEventsForAssignments(data, events) {
-	data = data.rows;
 	//for each assignment convert it into a calendar event
 	for(var i = 0; i < data.length; i++) {
 		var dueDate = new Date(data[i].due_date);
@@ -152,23 +151,21 @@ function loadGradesDetails(enrolledID) {
 
 	socket.emit('getCompletedTests', enrolledID);
 	socket.on('foundCompletedTests', function(data) {
-
-		var table = "<table>" + 
+		var t = $('#grade_table > tbody');
+		var table =
 					"<tr>" +
-					"	<th>Test Name</th>" + 
-					"	<th>Test Score</th>" +
+					"	<td>Test Name</td>" + 
+					"	<td>Test Score</td>" +
 					"</tr>";
 
 		for (var i = 0; i < data.length; i++) {
 			table += "<tr>" +
-					"	<th>Test " + data[i].test_id + "</th>" + 
-					"	<th>" + data[i].grade + "</th>" +
+					"	<td>Test " + data[i].test_id + "</td>" + 
+					"	<td>" + data[i].grade + "</td>" +
 					"</tr>";
 		}
+		t.html(table);
 
-		table += "</table>";
-
-		$("#grades").append(table);
 
 
 		/* Failed to update the 2nd bar chart */
@@ -213,7 +210,7 @@ function loadGrades(){
 	$('.grades-header').removeClass('displayNone');
 	$('#grades').removeClass('displayNone');
 
-	$('.content').html('<p> GRADES </p>');
+//	$('.content').html('<p> GRADES </p>');
 }
 
 function setActive(clicked){

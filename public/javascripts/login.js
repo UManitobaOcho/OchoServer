@@ -20,6 +20,7 @@ function getStudent() {
 		$('#add_course-btn').hide();
 		$('#add_assignment-btn').hide();
 		$('#add_student-btn').hide();
+		$('#rm_student-btn').hide();
 		isProf = false;
 		logIn(student);
 	});
@@ -34,6 +35,7 @@ function getProf() {
                 $('#add_course-btn').show();
                 $('#add_assignment-btn').show();
                 $('#add_student-btn').show();
+		$('#rm_student-btn').show();
 		isProf = true;
 	});
 };

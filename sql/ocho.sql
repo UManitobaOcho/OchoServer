@@ -105,8 +105,10 @@ create table ASSIGNMENTS(
 	due_date 		VARCHAR(30) NOT NULL,
 	viewable_date 	VARCHAR(30) NOT NULL,
 	assignment_name	VARCHAR(200) NOT NULL,
-	assignment_file	BYTEA,
-	file_name 		VARCHAR(64)
+	file_name	VARCHAR(200),
+	file_type	VARCHAR(200),
+	file_size	VARCHAR(200),
+	assignment_file	TEXT
 );
 
 create table SUBMITTED_ASSIGNMENTS(
@@ -216,7 +218,7 @@ begin
 end;
 $val$ language plpgsql;
 
-CREATE OR REPLACE FUNCTION addAssignment(courseid BIGINT, duedate VARCHAR, viewabledate VARCHAR, assignmentname VARCHAR, assignmentfile BYTEA)
+CREATE OR REPLACE FUNCTION addAssignment(courseid BIGINT, duedate VARCHAR, viewabledate VARCHAR, assignmentname VARCHAR, name VARCHAR, type VARCHAR, size VARCHAR, assignmentfile TEXT)
         RETURNS integer AS $val$
 begin
         insert into ASSIGNMENTS values(
@@ -225,6 +227,9 @@ begin
                 duedate,
                 viewabledate,
                 assignmentname,
+		name,
+		type,
+		size,
                 assignmentfile
         );
         return 0;
