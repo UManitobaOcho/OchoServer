@@ -149,7 +149,6 @@ function addStudentToCourse() {
 	socket.emit('addStudentToCourse', {student: strStud, course: strClass});
 	socket.on('addedStudent', function (student) {
 		console.log("Student Added Successfully");
-		alert('Student(s) added');
 		document.location.href = "/";
 
 	});
@@ -172,7 +171,6 @@ function removeStudentToCourse() {
 	socket.emit('removeStudentToCourse', {student: strStud, course: strClass});
 	socket.on('removedStudent', function (student) {
 		console.log("Student Removed Successfully");
-		alert('Student(s) removed');
 		document.location.href = "/";
 
 	});
@@ -229,7 +227,6 @@ function addAssignment(){
 				socket.emit('profAddAssignment', {assignmentTitle: assignTitle, course: strClass, name: name, type: type, size: size, file: contents, releaseDate: releaseDate, dueDate: dueDate})
 	        		socket.on('ProfAssignmentSubmitted', function(courses) {
 	    				console.log("Assignment Submitted Successfully");
-					alert('Submitted Successfully!');
 					document.location.href = "/";
     				});
 			}

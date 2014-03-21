@@ -232,7 +232,6 @@ exports.addStudentToCourse = function(socket,data,res) {
         //var queryVars =  '" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', '" + course.times + "'";
         for(var i = 0; i < strStudent.length-1;i++)
         {
-            //result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignTitle + "\', \'" + data.file + "\'";
             query = strStudent[i] + ", " + data.course;
             console.log(query);
             client.query( ( "Select * FROM addEnrolled(" + query + ");") , function(err, result) {
@@ -252,23 +251,47 @@ exports.removeStudentToCourse = function(socket,data,res) {
         if (err) {
             return console.error('error fetching client from pool', err);
         }
-        // console.log(data + "");
-        // var strStudent = data.student.split(',');
-        // var query = "";
-        // //var queryVars =  '" + course.courseNum + "', '" + course.section + "', '" + course.courseName + "', '" + course.times + "'";
-        // for(var i = 0; i < strStudent.length-1;i++)
-        // {
-        //     //result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignTitle + "\', \'" + data.file + "\'";
-        //     query = strStudent[i] + ", " + data.course;
-        //     console.log(query);
-        //     client.query( ( "Select * FROM addEnrolled(" + query + ");") , function(err, result) {
-        //         done();
 
-        //         if(err){
-        //             return console.error('error running query', err);
-        //         }              
-        //     });
-        // }
+        console.log(data + "");
+        var strStudent = data.student.split(',');
+        var query = "";
+
+        for(var i = 0; i < strStudent.length-1;i++)
+        {
+            //result.rows[0].course_id) + ", \'" + data.dueDate + "\', \'" + data.releaseDate + "\', \'" + data.assignTitle + "\', \'" + data.file + "\'";
+            query = strStudent[i] + ", " + data.course;
+            console.log(query);
+            client.query( ("SELECT enrolled_id From Enrolled E Where E.student_id = \'" + strStudent[i] + "\' AND E.course_id = \'" + data.course + "\'"), function(err, result) {
+                done();
+
+                if(err){
+                    return console.error('error running query', err);
+                }
+                console.log(result.rows[0].enrolled_id);
+                client.query( ("SELECT * FROM deleteCompleteTest(" + result.rows[0].enrolled_id + ")") , function(err, result) {
+                    done();
+                    
+                    if (err) {
+                        return console.error('error running query', err);
+                    }
+                });
+                client.query( ("SELECT * FROM deletesumbittedAssignment(" + result.rows[0].enrolled_id + ")") , function(err, result) {
+                    done();
+                    
+                    if (err) {
+                        return console.error('error running query', err);
+                    }
+                });
+                client.query( ("SELECT * FROM deleteEnrolled(" + result.rows[0].enrolled_id + ")") , function(err, result) {
+                    done();
+                    
+                    if (err) {
+                        return console.error('error running query', err);
+                    }
+                });
+            });
+            
+        }
         res("success");  
     });
 };
