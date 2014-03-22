@@ -201,6 +201,12 @@ insert into ENROLLED values(
 	1,
 	1,
 	80
+),
+(
+	nextval('ENROLLED_SEQ'),
+	2,
+	1,
+	90	
 );
 
 /**
