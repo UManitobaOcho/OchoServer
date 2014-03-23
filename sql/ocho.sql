@@ -105,8 +105,10 @@ create table ASSIGNMENTS(
 	due_date 		VARCHAR(30) NOT NULL,
 	viewable_date 	VARCHAR(30) NOT NULL,
 	assignment_name	VARCHAR(200) NOT NULL,
-	assignment_file	BYTEA,
-	file_name 		VARCHAR(64)
+	file_name	VARCHAR(200),
+	file_type	VARCHAR(200),
+	file_size	VARCHAR(200),
+	assignment_file	TEXT
 );
 
 create table SUBMITTED_ASSIGNMENTS(
@@ -114,7 +116,7 @@ create table SUBMITTED_ASSIGNMENTS(
 	assignment_id 	BIGINT references ASSIGNMENTS(assignment_id),
 	submission_time DATE NOT NULL,
 	comments		VARCHAR(1000),
-	grade 			NUMERIC(3) NOT NULL
+	grade 			NUMERIC(3) NOT NULL,
 	assignment_file BYTEA
 );
 
@@ -199,6 +201,12 @@ insert into ENROLLED values(
 	1,
 	1,
 	80
+),
+(
+	nextval('ENROLLED_SEQ'),
+	2,
+	1,
+	90	
 );
 
 /**
@@ -216,7 +224,7 @@ begin
 end;
 $val$ language plpgsql;
 
-CREATE OR REPLACE FUNCTION addAssignment(courseid BIGINT, duedate VARCHAR, viewabledate VARCHAR, assignmentname VARCHAR, assignmentfile BYTEA)
+CREATE OR REPLACE FUNCTION addAssignment(courseid BIGINT, duedate VARCHAR, viewabledate VARCHAR, assignmentname VARCHAR, name VARCHAR, type VARCHAR, size VARCHAR, assignmentfile TEXT)
         RETURNS integer AS $val$
 begin
         insert into ASSIGNMENTS values(
@@ -225,6 +233,9 @@ begin
                 duedate,
                 viewabledate,
                 assignmentname,
+		name,
+		type,
+		size,
                 assignmentfile
         );
         return 0;
@@ -284,6 +295,32 @@ CREATE OR REPLACE FUNCTION deleteCourse(cId BIGINT)
 	RETURNS BOOLEAN as $deleted$
 begin
 	delete from COURSES where course_id = cId;
+	return true;
+end;
+$deleted$ language plpgsql;
+
+
+CREATE OR REPLACE FUNCTION deleteCompleteTest(eId BIGINT)
+	RETURNS BOOLEAN as $deleted$
+begin
+	delete from completed_tests where enrolled_id = eId;
+	return true;
+end;
+$deleted$ language plpgsql;
+
+CREATE OR REPLACE FUNCTION deletesumbittedAssignment(eId BIGINT)
+	RETURNS BOOLEAN as $deleted$
+begin
+	delete from submitted_assignments where enrolled_id = eId;
+	return true;
+end;
+$deleted$ language plpgsql;
+
+
+CREATE OR REPLACE FUNCTION deleteEnrolled(eId BIGINT)
+	RETURNS BOOLEAN as $deleted$
+begin
+	delete from enrolled where enrolled_id = eId;
 	return true;
 end;
 $deleted$ language plpgsql;

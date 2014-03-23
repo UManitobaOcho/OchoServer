@@ -236,7 +236,7 @@ io.sockets.on('connection', function(socket) {
 		db.addStudentToCourse(socket, data, addedStudent);
     });
 	socket.on('removeStudentToCourse', function(data) {
-		db.addStudentToCourse(socket, data, removedStudent);
+		db.removeStudentToCourse(socket, data, removedStudent);
     });
     socket.on('profAddAssignment', function(data) {
 		db.profAddAssignment(socket, data, ProfAssignmentSubmitted);

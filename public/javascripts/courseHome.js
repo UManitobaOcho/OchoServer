@@ -101,7 +101,6 @@ function loadCalendar(course) {
 }
 
 function createEventsForAssignments(data, events) {
-	data = data.rows;
 	//for each assignment convert it into a calendar event
 	for(var i = 0; i < data.length; i++) {
 		var dueDate = new Date(data[i].due_date);
@@ -211,7 +210,7 @@ function loadGrades(){
 	$('.grades-header').removeClass('displayNone');
 	$('#grades').removeClass('displayNone');
 
-	$('.content').html('<p> GRADES </p>');
+//	$('.content').html('<p> GRADES </p>');
 }
 
 function setActive(clicked){
