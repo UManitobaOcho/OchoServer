@@ -308,7 +308,7 @@ exports.profAddAssignment = function(socket,data,res) {
 };
 
 
-exports.getCourseAssignments = function(socket, courseID, res) {
+exports.getAssignmentsForCourse = function(socket, courseID, res) {
     console.log("getCourseAssignment: courseID " + courseID);
 
     return pg.connect(pgHost, function(err, client, done) {
@@ -319,7 +319,7 @@ exports.getCourseAssignments = function(socket, courseID, res) {
         
         console.log(courseID + "");
         //var querystring = "SELECT * FROM ASSIGNMENTS WHERE course_id = " + courseID;
-	var querystring = "SELECT rank() over(), C.course_number, A.assignment_name, A.viewable_date, A.due_date FROM COURSES C, ASSIGNMENTS A WHERE C.course_id = A.course_id AND C.course_id = " + courseID;
+	    var querystring = "SELECT rank() over(), C.course_number, A.assignment_name, A.viewable_date, A.due_date FROM COURSES C, ASSIGNMENTS A WHERE C.course_id = A.course_id AND C.course_id = " + courseID;
         client.query(querystring, function(err, result) {
            done();
 
@@ -334,7 +334,29 @@ exports.getCourseAssignments = function(socket, courseID, res) {
     });
 };
 
-exports.studentSubmitAssignment = function(socket, courseID, studentID, res) {
+exports.getAssignment = function(socket, assignmentID, res) {
+    return pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+        var querystring = "SELECT assignment_file FROM ASSIGNMENTS WHERE assignment_id = " + assignmentID;
+        
+        client.query(querystring, function(err, result) {
+           done();
+
+           if(err) {
+               return console.error('error running query', err);
+           }
+
+           console.log(result.rows);
+
+           res(result.rows);
+       });    
+    });
+};
+
+exports.studentSubmitAssignment = function(socket, assignmentID, studentID, res) {
     return pg.connect(pgHost, function(err, client, done) {
 
         if (err) {

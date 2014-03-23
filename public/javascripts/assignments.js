@@ -5,11 +5,11 @@ var socket = io.connect(hostUrl);
 
 window.onload = function () {
 	console.log("entered on assignmens.js"); 
-	getAssignmentsForCourse();
+	getAssignmentsForCourse('1');
 };
 
-function getAssignmentsForCourse() {
-	socket.emit('getAssignmentsForCourse');
+function getAssignmentsForCourse(CourseID) {
+	socket.emit('getAssignmentsForCourse', {course_id: CourseID});
 	socket.on('foundAssignments', function(assignments) {
 		displayAssignments(assignments);
 	});
@@ -45,9 +45,10 @@ function displayAssignments(assignment) {
 
 function addTableBtnFuncs() {
 	$('td #downloadBtn').click(function () {
-		// Go to Course HomePage
+		// Download the assignment
 		downloadAssignment( $(this).parent().parent().parent() );
 	});
+		// Go to the submitAnswer HomePage
 	$('td #submitBtn').click(function () { 
 		submitAnswer( $(this).parent().parent().parent() ); 
 	});
@@ -55,7 +56,7 @@ function addTableBtnFuncs() {
 
 function downloadAssignment(tr) {
 	var assignmentId = $("td.assignment_id", tr).text();
-	socket.emit("setSessionVariable", {assignment_id: assignmentId});
+	socket.emit("setSessionVariable", {varName: 'assignmentId', varValue: assignmentId});
 	//document.location.href = "/Course";
 };
 
@@ -63,5 +64,5 @@ function submitAnswer(tr) {
 	var assignmentId = $("td.courseId", tr).text();
 	socket.emit("setSessionVariable", {varName: 'courseId', varValue: cId});
 
-	document.location.href = "/Course";
+	document.location.href = "/SubmitAssignmentAnswer";
 };

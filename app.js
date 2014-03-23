@@ -12,6 +12,7 @@ var about = require('./controllers/about');
 var courseHomepage = require('./controllers/courseHomepage');
 var checkGrade = require('./controllers/checkGrade');
 var viewAssignments = require('./controllers/viewAssignments');
+var submitAnswer = require('./controllers/submitAnswer');
 
 //need to change the max number of sockets so we can run our mocha tests
 var http = require('http');
@@ -69,6 +70,7 @@ app.get('/CheckGrade', checkGrade.checkGrade);
 app.get('/Course', courseHomepage.courseHomepage);
 app.get('/ViewAssignments',viewAssignments.viewAssignments);
 app.get('/RemoveStudent', removeStudent.removeStudent);
+app.get('/SubmitAssignmentAnswer', submitAnswer.submitAnswer);
 
 /**
  *	Set up server
@@ -249,7 +251,8 @@ io.sockets.on('connection', function(socket) {
     });
 	
 	socket.on('getAssignmentsForCourse', function(data) {
-		db.getCourseAssignments(socket, (data ? data.course_id : session.course_id), foundAssignments);
+		console.log(session);
+		db.getAssignmentsForCourse(socket, (data ? data.course_id : session.course_id), foundAssignments);
 	});
 
 	socket.on('downloadAssignment', function(data) {
