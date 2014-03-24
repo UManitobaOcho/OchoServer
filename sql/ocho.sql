@@ -201,6 +201,12 @@ insert into ENROLLED values(
 	1,
 	1,
 	80
+),
+(
+	nextval('ENROLLED_SEQ'),
+	2,
+	1,
+	90	
 );
 
 /**
@@ -287,7 +293,21 @@ $updated$ language plpgsql;
 
 CREATE OR REPLACE FUNCTION deleteCourse(cId BIGINT)
 	RETURNS BOOLEAN as $deleted$
+declare
+	i ENROLLED%rowType;
 begin
+	for i in
+		select * 
+		from ENROLLED
+		where course_id = cId
+		loop
+			if i.course_id = cId then
+				PERFORM deleteEnrolled(enrolled_id);
+			end if;
+	end loop;
+	
+	delete from ASSIGNMENTS where course_id = cId;
+	delete from TESTS where course_id = cId;
 	delete from COURSES where course_id = cId;
 	return true;
 end;
@@ -321,6 +341,8 @@ $deleted$ language plpgsql;
 CREATE OR REPLACE FUNCTION deleteEnrolled(eId BIGINT)
 	RETURNS BOOLEAN as $deleted$
 begin
+	PERFORM deletesumbittedAssignment(eid);
+	PERFORM deleteCompleteTest(eid);
 	delete from enrolled where enrolled_id = eId;
 	return true;
 end;
@@ -362,23 +384,29 @@ insert into ASSIGNMENTS values(
 
 insert into SUBMITTED_ASSIGNMENTS values(
 	1,
-	9,
+	1,
 	current_date,
-	80
+	'no comments',
+	80,
+	(E'\\320\\170'::bytea)
 );
 
 insert into SUBMITTED_ASSIGNMENTS values(
 	1,
-	10,
+	2,
 	current_date,
-	65
+	'no comments',
+	65,
+	(E'\\320\\170'::bytea)
 );
 
 insert into SUBMITTED_ASSIGNMENTS values(
 	1,
-	11,
+	3,
 	current_date,
-	73
+	'no comments',
+	73,
+	(E'\\320\\170'::bytea)
 );
 
 insert into TESTS values(
@@ -409,19 +437,19 @@ insert into TESTS values(
 
 insert into COMPLETED_TESTS values(
 	1,
-	4,
+	1,
 	100
 );
 
 insert into COMPLETED_TESTS values(
 	1,
-	5,
+	2,
 	50
 );
 
 insert into COMPLETED_TESTS values(
 	1,
-	6,
+	3,
 	60
 );
 */

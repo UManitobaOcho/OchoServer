@@ -12,6 +12,8 @@ var about = require('./controllers/about');
 var courseHomepage = require('./controllers/courseHomepage');
 var checkGrade = require('./controllers/checkGrade');
 var viewAssignments = require('./controllers/viewAssignments');
+var markAssignments = require('./controllers/markAssignments');
+var submitAnswer = require('./controllers/submitAnswer');
 
 //need to change the max number of sockets so we can run our mocha tests
 var http = require('http');
@@ -68,7 +70,9 @@ app.get('/AddStudent', addStudent.addStudent);
 app.get('/CheckGrade', checkGrade.checkGrade);
 app.get('/Course', courseHomepage.courseHomepage);
 app.get('/ViewAssignments',viewAssignments.viewAssignments);
+app.get('/MarkAssignments',markAssignments.markAssignments);
 app.get('/RemoveStudent', removeStudent.removeStudent);
+app.get('/SubmitAssignmentAnswer', submitAnswer.submitAnswer);
 
 /**
  *	Set up server
@@ -172,16 +176,23 @@ io.sockets.on('connection', function(socket) {
 	function foundAssignments(data) {
 		socket.emit('foundAssignments', data);
 	}
+	/*********************************************************/
 	function foundSubmittedAssignment(data) {
 		socket.emit('foundSubmittedAssignment', data);
 	}
 	function foundCompletedTests(data) {
 		socket.emit('foundCompletedTests', data);
 	}
+
 	function deleteProfAssignment(data) {
 		socket.emit('profAssignmentDeleted', data);
 	}
 	
+	function foundEnrolledID(data) {
+		socket.emit('foundEnrolledID', data);
+	}
+	/*********************************************************/
+
 	socket.on('setSessionVariable', function(variable) {
 		session.reload(function() {
 			eval('session.' + variable.varName + ' = ' + variable.varValue);
@@ -246,18 +257,27 @@ io.sockets.on('connection', function(socket) {
     socket.on('studentSubmitAssignment', function(data){
     	db.studentSubmitAssignment(socket, data, AssignmentSubmitted)
     });
-
-    socket.on('getEnrolledInfo', function(data) {
-    	db.getStudentEnrolledInfo(socket, data.student_id, foundEnrolledInfo);
-    });
 	
 	socket.on('getAssignmentsForCourse', function(data) {
-		db.getCourseAssignments(socket, (data ? data.course_id : session.course_id), foundAssignments);
+		db.getAssignmentsForCourse(socket, (data ? data.course_id : session.course_id), foundAssignments);
 	});
 
 	socket.on('downloadAssignment', function(data) {
 		db.downloadAssignment(socket, data.assignment_id, downloadedAssignment);
 	});
+
+	/****************************************************************************/
+	socket.on('getUserType', function() {
+		socket.emit('returnUserType', {'userType' : session.userType });
+	});
+
+	socket.on('getEnrolledInfo', function(data) {
+    	db.getStudentEnrolledInfo(socket, data.student_id, foundEnrolledInfo);
+    });
+
+    socket.on('getEnrolledID', function(data) {
+    	db.getEnrolledID(socket, data, foundEnrolledID);
+    });
 
 	socket.on('getSubmittedAssignment', function(enrolledID) {
 		db.getSubmittedAssignment(socket, enrolledID, foundSubmittedAssignment);
@@ -266,14 +286,17 @@ io.sockets.on('connection', function(socket) {
 	socket.on('getCompletedTests', function(enrolledID) {
 		db.getCompletedTests(socket, enrolledID, foundCompletedTests);
 	});
+
 	socket.on('deleteProfAssignment', function(data) {
 		db.deleteProfAssignment(socket, data, deleteProfAssignment);
 	});
+	/*****************************************************************************/
 	
 	socket.on('logout', function() {
 		session.reload(function() {
 			session.userId = null;
 			session.isProf = null;
+			session.userType = null;
 			session.save();
 		});
 	});

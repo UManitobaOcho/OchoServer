@@ -12,10 +12,11 @@ block jumbotron
 		p#assignment-title-error(style="color:red;")
 
 		input#assignment(type="file" name="assignment" style="visibility:hidden;")
-		div.input-append
-			h3 Select File
-			input#assignmentbox(type="text" name="assignmentbox" readonly)
-			a.btn.btn-small(id="browse-btn") Browse
+		
+	div.input-append
+		h3 Select File
+		input#assignmentbox(type="text" name="assignmentbox" readonly)
+		a.btn.btn-small(id="browse-btn") Browse
 		p#errorbox(style="color:red;")
 
 	script(src="/public/javascripts/assignments.js")

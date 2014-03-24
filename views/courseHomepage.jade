@@ -2,7 +2,8 @@ extends layout
 
 block index_content
 	link(rel='stylesheet', href='/bower_components/bootstrap-calendar/css/calendar.css')
-	
+	link(rel='stylesheet', href='/public/stylesheets/courseHomepage.css')
+
 	.container
 		include includes/navbar	
 		
@@ -12,9 +13,16 @@ block index_content
 				ul.nav.nav-sidebar
 					| <li class='active' id='homeBtn'><a href="#">Overview</a></li>
 					| <li id='gradeBtn'><a href="#">Grades</a></li>
-			.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+			.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main		
 				h1.page-header
-				h2.calendar-header Course Calendar
+				
+				.pull-right.form-inline
+					.btn-group#calendar-btn-group
+						button.btn.btn-primary(data-calendar-nav="prev") Prev
+						button.btn(data-calendar-nav="today") Today
+						button.btn.btn-primary(data-calendar-nav="next") Next
+				
+				h2.calendar-header
 				#calendar
 				
 				div.modal.modal-hide.fade#events-modal
@@ -25,15 +33,7 @@ block index_content
 					div.modal-footer
 						a.btn(href="#" data-dismiss="modal") Close
 
-				h2.grades-header Grades
-				#grades
-					.table-responsive
-						table.table.table-striped(id="grade_table")
-							thead
-								tr
-									th Assignment Name
-									th Marks
-							tbody
+				h2.grades-header#grades
 			.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.content
 				h3.test
 		

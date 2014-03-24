@@ -2,35 +2,49 @@
 var hostUrl = window.location.host;
 var socket = io.connect(hostUrl);
 
+var isProf = false;
 
 window.onload = function () {
 	console.log("entered on assignmens.js"); 
-	getAssignmentsForCourse();
+	socket.emit('getUserType');
+	socket.on('returnUserType', function(data) {
+		if (data.userType === 1) {
+			isProf = true;
+		}
+
+		getAssignmentsForCourse('1');
+	});
 };
 
-function getAssignmentsForCourse() {
-	socket.emit('getAssignmentsForCourse');
+function getAssignmentsForCourse(CourseID) {
+	socket.emit('getAssignmentsForCourse', {course_id: CourseID});
 	socket.on('foundAssignments', function(assignments) {
 		displayAssignments(assignments);
 	});
 };
 
 function displayAssignments(assignment) {
-	console.log("displayAssignments has called.")
+
+
+	console.log("displayAssignments has called.");
 	
 	btnGroupTag = "<div class='btn-group'>";
 	_btnGroupTag = "</div>";
 	// homeBtn = "<button id='homeBtn' type='button' class='btn btn-default btn-lg'> <span title='Course Home' class='glyphicon glyphicon-home' /> </button>";
 	//editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span title='Edit' class='glyphicon glyphicon-pencil' /> </button>";
-	downloadBtn = "<button id='downloadBtn' type='button' class='btn btn-default btn-lg'> <span title='Downlad' class='glyphicon glyphicon-download' /> </button>";
+	downloadBtn = "<button id='downloadBtn' type='button' class='btn btn-default btn-lg'> <span title='Download' class='glyphicon glyphicon-download' /> </button>";
 	submitBtn = "<button id='submitBtn' type='button' class='btn btn-default btn-lg'> <span title='Submit' class='glyphicon glyphicon-inbox' /> </button>";
+
+	if(isProf){
+		submitBtn = "<button id='markBtn' type='button' class='btn btn-default btn-lg markBtn'> <span title='Mark Assignments' class='glyphicon glyphicon-inbox' /> </button>";
+	}
 
 	btnGroup = btnGroupTag + downloadBtn + submitBtn + _btnGroupTag;
 
 	for (var i = 0; i < assignment.length; i++) {
 		var tableElements = "		<tr>" +
 						 	"		<td>" + assignment[i].course_number + "</td>" +
-						 	"		<td>" + assignment[i].rank + "</td>" +
+						 	"		<td id='assignmentUID'>" + assignment[i].assignment_id + "</td>" +
 							"		<td>" + assignment[i].assignment_name + "</td>" +
 						 	"		<td>" + assignment[i].viewable_date + "</td>" +
 						 	"		<td>" + assignment[i].due_date + "</td>" +
@@ -41,27 +55,41 @@ function displayAssignments(assignment) {
 		 */
 		$('#assignment_table tbody').append(tableElements);
 	}
+	addTableBtnFuncs();
 };
 
 function addTableBtnFuncs() {
 	$('td #downloadBtn').click(function () {
-		// Go to Course HomePage
+		// Download the assignment
 		downloadAssignment( $(this).parent().parent().parent() );
 	});
-	$('td #submitBtn').click(function () { 
-		submitAnswer( $(this).parent().parent().parent() ); 
-	});
+		// Go to the submitAnswer HomePage
+	if(isProf){
+		$('.markBtn').on("click", function () { 
+			gotoMark( $(this).parent().parent().parent() ); 
+		});
+	} else {
+		$('td #submitBtn').click(function () { 
+			submitAnswer( $(this).parent().parent().parent() ); 
+		});
+	}
 };
 
 function downloadAssignment(tr) {
-	var assignmentId = $("td.assignment_id", tr).text();
-	socket.emit("setSessionVariable", {assignment_id: assignmentId});
+	var assignmentId = tr.children("#assignmentUID").text();
+	socket.emit("setSessionVariable", {varName: 'assignmentId', varValue: assignmentId});
 	//document.location.href = "/Course";
 };
+
+function gotoMark(tr){	
+	var assignmentId = tr.children("#assignmentUID").text();
+	socket.emit("setSessionVariable", {varName: 'assignmentId', varValue: assignmentId});
+	document.location.href = "/MarkAssignments";
+}
 
 function submitAnswer(tr) {
 	var assignmentId = $("td.courseId", tr).text();
 	socket.emit("setSessionVariable", {varName: 'courseId', varValue: cId});
 
-	document.location.href = "/Course";
+	document.location.href = "/SubmitAssignmentAnswer";
 };

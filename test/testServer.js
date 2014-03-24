@@ -260,8 +260,7 @@ describe('addUpdateDeleteCourse', function(){
 	
 	
 	describe('calendarTests', function() {
-		
-		//TODO: Need to ensure that deleting a course will delete all dependant data entries, like assignments and enrolled
+		var cId;
 		it('add course then add one assignment and then get list of assignments for course', function(done) {
 			var client = io.connect(socketUrl, options);
 			
@@ -274,14 +273,33 @@ describe('addUpdateDeleteCourse', function(){
 				
 				client.on('courseAdded', function(data) {
 					data.should.be.ok;
-					var cId = data.rows[0].addcourse;
+					cId = data.rows[0].addcourse;
 					cId.should.be.ok;
 					
-					//must then delete course
-					client.emit('deleteCourse', {isTest: true, courseId: cId});
-					client.on('courseDeleted', function(data) {
-						client.disconnect();
-						done();
+					client.emit('profAddAssignment', {assignmentTitle: "a1",
+														course: "TEST 1001",
+														dueDate: "03/26/2014 06:30 PM",
+														file: "readme contents",
+														name: "Readme.txt",
+														releaseDate: "03/25/2014 06:30 PM",
+														size: 16,
+														type: "text/plain"});
+					client.on('ProfAssignmentSubmitted', function(data) {
+						data.should.be.ok;
+						
+						client.emit('getAssignmentsForCourse', {course_id: cId});
+						client.on('foundAssignments', function(data) {
+							data.should.be.ok;
+							
+							data[0].course_number.should.equal('TEST 1001');
+							data[0].assignment_name.should.equal('a1');
+							data[0].viewable_date.should.equal("03/25/2014 06:30 PM");
+							data[0].due_date.should.equal("03/26/2014 06:30 PM");							
+							
+							//leave course for next test
+							client.disconnect();
+							done();
+						});
 					});
 				});
 			});
@@ -291,22 +309,39 @@ describe('addUpdateDeleteCourse', function(){
 			var client = io.connect(socketUrl, options);
 			
 			client.on('connect', function(data) {
-				client.emit('addCourse', {isTest: true, userId: '1', isProf: true,
-											courseName: 'Test Course',
-											courseNum: 'TEST 1001',
-											section: 'A01',
-											times: 'Online'});
+				cId.should.be.ok;
 				
-				client.on('courseAdded', function(data) {
+				client.emit('profAddAssignment', {assignmentTitle: "a2",
+													course: "TEST 1001",
+													dueDate: "03/28/2014 06:30 PM",
+													file: "readme contents",
+													name: "Readme.txt",
+													releaseDate: "03/27/2014 06:30 PM",
+													size: 16,
+													type: "text/plain"});
+				client.on('ProfAssignmentSubmitted', function(data) {
 					data.should.be.ok;
-					var cId = data.rows[0].addcourse;
-					cId.should.be.ok;
 					
-					//must then delete course
-					client.emit('deleteCourse', {isTest: true, courseId: cId});
-					client.on('courseDeleted', function(data) {
-						client.disconnect();
-						done();
+					client.emit('getAssignmentsForCourse', {course_id: cId});
+					client.on('foundAssignments', function(data) {
+						data.should.be.ok;
+						
+						data[0].course_number.should.equal('TEST 1001');
+						data[0].assignment_name.should.equal('a1');
+						data[0].viewable_date.should.equal("03/25/2014 06:30 PM");
+						data[0].due_date.should.equal("03/26/2014 06:30 PM");
+						
+						data[1].course_number.should.equal('TEST 1001');
+						data[1].assignment_name.should.equal('a2');
+						data[1].viewable_date.should.equal("03/27/2014 06:30 PM");
+						data[1].due_date.should.equal("03/28/2014 06:30 PM");							
+						
+						//must then delete course
+						client.emit('deleteCourse', {isTest: true, courseId: cId});
+						client.on('courseDeleted', function(data) {
+							client.disconnect();
+							done();
+						});
 					});
 				});
 			});

@@ -2,6 +2,8 @@
 var hostUrl = window.location.host;
 var socket = io.connect(hostUrl);
 
+
+
 $(function() {
 	socket.emit('getCourseInfo');
 	socket.on('returnCourseInfo', function(course) {
@@ -18,8 +20,7 @@ $(function() {
 	$('#gradeBtn').click(function() {
 		setActive($(this));
 		loadGrades();
-		// passed in enrolledID by now, need to change it dynamically
-		loadGradesDetails("1");
+		loadGradesDetails();
 	});	
 });
 
@@ -96,7 +97,17 @@ function loadCalendar(course) {
 		
 		events = createEventsForAssignments(data, events);
 		
-		var calendar = $('#calendar').calendar({ modal: "#events-modal", events_source: events});
+		var calendar = $('#calendar').calendar({ modal: "#events-modal", events_source: events, onAfterViewLoad: function(view) {
+			$('.calendar-header').text(this.getTitle());
+			}
+		});
+		
+		$('.btn-group button[data-calendar-nav]').each(function() {
+			var $this = $(this);
+			$this.click(function() {
+			calendar.navigate($this.data('calendar-nav'));
+		});
+	});
 	});	
 }
 
@@ -123,81 +134,178 @@ function createEventsForAssignments(data, events) {
 	return events;
 }
 
-function loadGradesDetails(enrolledID) {
+function loadGradesDetails() {
+	// Before start append new elements to #grades, clean it first
+	$("#grades").html("");
 
-	socket.emit('getSubmittedAssignment', enrolledID);
-	socket.on('foundSubmittedAssignment', function(data) {
-		var assignmentLabel = [];
-		var assignmentGrade = [];
+	socket.emit('getUserType');
+	socket.on('returnUserType', function(data) {
+		if (data.userType === 0) {
+			/* Student View */
+			socket.emit('getCourseInfo');
+			socket.on('returnCourseInfo', function(course) {
+				// I would like to get enrolled_id with student_id = 1 & course_id = course.course_id
+				socket.emit('getEnrolledID', { student_id: 1,
+											   course_id: course.course_id });
+				socket.on('foundEnrolledID', function(data) {
+					// Now, I can emit getCompletedTests and getSubmittedAssignment
+					socket.emit('getCompletedTests', data.enrolled_id);
+					socket.on('foundCompletedTests', function(data) {
+						var table = 
+							"<div class=\"table-responsive\">" +
+							"	<table class=\"table table-striped\">" +
+							"		<thead>" +
+							"			<tr>" +
+							"				<td>Test Name</td>" +
+							"				<td>Test Marks</td>" +
+							"			</tr>" +
+							"		</thead>" +
+							"		<tbody>";
+            
 
-		for (var i = 0; i < data.length; i++) {
-			assignmentLabel.push(data[i].assignment_name);
-			assignmentGrade.push(data[i].grade);
+						for (var i = 0; i < data.length; i++) {
+							table += "<tr>" +
+									"	<td>Test " + data[i].test_id + "</td>" + 
+									"	<td>" + data[i].grade + "</td>" +
+									"</tr>";
+						}
+
+						table += 
+							"		</tbody>" +
+							"	</table>" +
+							"</div>";
+
+						$("#grades").append(table);
+					});
+
+					socket.emit('getSubmittedAssignment', data.enrolled_id);
+					socket.on('foundSubmittedAssignment', function(data) {
+						var table = 
+							"<div class=\"table-responsive\">" +
+							"	<table class=\"table table-striped\">" +
+							"		<thead>" +
+							"			<tr>" +
+							"				<td>Assignment Name</td>" +
+							"				<td>Assignment Grade</td>" +
+							"			</tr>" +
+							"		</thead>" +
+							"		<tbody>";
+            
+
+						for (var i = 0; i < data.length; i++) {
+							table += "<tr>" +
+									"	<td>Assignment " + data[i].assignment_id + "</td>" + 
+									"	<td>" + data[i].grade + "</td>" +
+									"</tr>";
+						}
+
+						table += 
+							"		</tbody>" +
+							"	</table>" +
+							"</div>";
+
+						$("#grades").append(table);
+					});
+				});
+			});
+			
+		} else {
+			/* Professor View */
+			socket.emit('getCourseInfo');
+			socket.on('returnCourseInfo', function(course) {
+				var testTable = 
+							"<div class=\"table-responsive\">" +
+							"	<table class=\"table table-striped\">" +
+							"		<thead>" +
+							"			<tr>" +
+							"				<td>Student ID</td>" +
+							"				<td>First Name</td>" +
+							"				<td>Last Name</td>" +
+							"				<td>Test Name</td>" +
+							"				<td>Test Marks</td>" +
+							"			</tr>" +
+							"		</thead>" +
+							"		<tbody id=\"testTable\">" +
+							"		</tbody>" +
+							"	</table>" +
+							"</div>";
+				$("#grades").append(testTable);
+
+				var assignmentTable =
+							"<div class=\"table-responsive\">" +
+							"	<table class=\"table table-striped\">" +
+							"		<thead>" +
+							"			<tr>" +
+							"				<td>Student ID</td>" +
+							"				<td>First Name</td>" +
+							"				<td>Last Name</td>" +
+							"				<td>Assignment Name</td>" +
+							"				<td>Assignment Marks</td>" +
+							"			</tr>" +
+							"		</thead>" +
+							"		<tbody id=\"assignmentTable\">" +
+							"		</tbody>" +
+							"	</table>" +
+							"</div>";
+				$("#grades").append(assignmentTable);
+
+				// After we get the courseInfo, we need to get list of students who registered this course
+				socket.emit('getStudInCourse', {course: course.course_id});
+				socket.on('foundStudInCourse', function(student) {
+					for (var i = 0; i < student.rows.length; i++) {
+						// For each student in courses, we would
+						// like to find it's enrolled_id
+						var studentID = student.rows[i].student_id;
+						var studentFirstName = student.rows[i].first_name;
+						var studentLastName = student.rows[i].last_name;
+
+						socket.emit('getEnrolledID', { student_id: student.rows[i].student_id,
+													   course_id: course.course_id });
+
+						socket.on('foundEnrolledID', function(enrolled) {
+							// After I found the enrolled_id, then we can use it
+							// for getCompletedTests & getSubmittedAssignment
+
+							socket.emit('getCompletedTests', enrolled.enrolled_id);
+							socket.on('foundCompletedTests', function(data) {
+								for (var j = 0; j < data.length; j++) {
+									var records = 	"<tr>" +
+													"	<td>" + studentID + "</td>" +
+													"	<td>" + studentFirstName + "</td>" +
+													"	<td>" + studentLastName + "</td>" +
+													"	<td>Test " + data[j].test_id + "</td>" + 
+													"	<td>" + data[j].grade + "</td>" +
+													"</tr>";
+									$('#testTable').append(records);
+								}
+							});
+
+							socket.emit('getSubmittedAssignment', enrolled.enrolled_id);
+							socket.on('foundSubmittedAssignment', function(data) {
+								// for student with student_id = student.rows[i].student_id
+								for (var j = 0; j < data.length; j++) {
+									var records = 	"<tr>" +
+													"	<td>" + studentID + "</td>" + 
+													"	<td>" + studentFirstName + "</td>" +
+													"	<td>" + studentLastName + "</td>" +
+													"	<td>Assignment" + data[j].assignment_id + "</td>" + 
+													"	<td>" + data[j].grade + "</td>" +
+													"</tr>";
+									$('#assignmentTable').append(records);
+								}
+							});
+						});
+					}
+				});
+			});
 		}
-
-		var data = {
-			labels : assignmentLabel,
-			datasets : [
-				{
-					fillColor : "rgba(220,220,220,0.5)",
-					strokeColor : "rgba(220,220,200,1)",
-					data : assignmentGrade
-				}
-			]
-		}
-
-		var assignmentChart = new Chart($("#assignmentChart").get(0).getContext("2d")).Bar(data);
-	});
-
-	socket.emit('getCompletedTests', enrolledID);
-	socket.on('foundCompletedTests', function(data) {
-		var t = $('#grade_table > tbody');
-		var table =
-					"<tr>" +
-					"	<td>Test Name</td>" + 
-					"	<td>Test Score</td>" +
-					"</tr>";
-
-		for (var i = 0; i < data.length; i++) {
-			table += "<tr>" +
-					"	<td>Test " + data[i].test_id + "</td>" + 
-					"	<td>" + data[i].grade + "</td>" +
-					"</tr>";
-		}
-		t.html(table);
-
-
-
-		/* Failed to update the 2nd bar chart */
-		/* Add <canvas id="testChart" width="400" height="400"></canvas> after another canvas in courseHomepage.jade to fix this problem */
-		/*
-		var testLabel = [];
-		var testGrade = [];
-
-		for (var i = 0; i < data.length; i++) {
-			testLabel.push("Test " + data[i].test_id);
-			testGrade.push(data[i].grade);
-		}
-
-		var testData = {
-			labels : testLabel,
-			datasets : [
-				{
-					fillColor : "rgba(220,220,220,0.5)",
-					strokeColor : "rgba(220,220,220,1)",
-					data : testGrade
-				}
-			]
-		}
-
-		new Chart($("#testChart").get(0).getContext("2d")).Line(testData);
-		*/
 	});
 }
 
 function loadHome(){
 	$('.calendar-header').removeClass('displayNone');
 	$('#calendar').removeClass('displayNone');
+	$('.pull-right.form-inline').removeClass('displayNone');
 	$('.grades-header').addClass('displayNone');
 	$('#grades').addClass('displayNone');
 
@@ -207,6 +315,7 @@ function loadHome(){
 function loadGrades(){
 	$('.calendar-header').addClass('displayNone');
 	$('#calendar').addClass('displayNone');
+	$('.pull-right.form-inline').addClass('displayNone');
 	$('.grades-header').removeClass('displayNone');
 	$('#grades').removeClass('displayNone');
 
