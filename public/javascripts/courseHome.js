@@ -2,8 +2,6 @@
 var hostUrl = window.location.host;
 var socket = io.connect(hostUrl);
 
-
-
 $(function() {
 	socket.emit('getCourseInfo');
 	socket.on('returnCourseInfo', function(course) {
@@ -248,6 +246,8 @@ function loadGradesDetails() {
 							"	</table>" +
 							"</div>";
 				$("#grades").append(assignmentTable);
+
+
 
 				// After we get the courseInfo, we need to get list of students who registered this course
 				socket.emit('getStudInCourse', {course: course.course_id});
