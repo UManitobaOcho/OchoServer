@@ -135,11 +135,12 @@ function createEventsForAssignments(data, events) {
 }
 
 function loadGradesDetails() {
+	// Before start append new elements to #grades, clean it first
+	$("#grades").html("");
 
 	socket.emit('getUserType');
 	socket.on('returnUserType', function(data) {
 		if (data.userType === 0) {
-			console.log('Student');
 			/* Student View */
 			socket.emit('getCourseInfo');
 			socket.on('returnCourseInfo', function(course) {
@@ -147,7 +148,7 @@ function loadGradesDetails() {
 				socket.emit('getEnrolledID', { student_id: 1,
 											   course_id: course.course_id });
 				socket.on('foundEnrolledID', function(data) {
-					// Now, I can emit getCompletedTests and submittedTest
+					// Now, I can emit getCompletedTests and getSubmittedAssignment
 					socket.emit('getCompletedTests', data.enrolled_id);
 					socket.on('foundCompletedTests', function(data) {
 						var table = 
@@ -193,7 +194,7 @@ function loadGradesDetails() {
 
 						for (var i = 0; i < data.length; i++) {
 							table += "<tr>" +
-									"	<td>Test " + data[i].assignment_id + "</td>" + 
+									"	<td>Assignment " + data[i].assignment_id + "</td>" + 
 									"	<td>" + data[i].grade + "</td>" +
 									"</tr>";
 						}
@@ -210,6 +211,93 @@ function loadGradesDetails() {
 			
 		} else {
 			/* Professor View */
+			socket.emit('getCourseInfo');
+			socket.on('returnCourseInfo', function(course) {
+				var testTable = 
+							"<div class=\"table-responsive\">" +
+							"	<table class=\"table table-striped\">" +
+							"		<thead>" +
+							"			<tr>" +
+							"				<td>Student ID</td>" +
+							"				<td>First Name</td>" +
+							"				<td>Last Name</td>" +
+							"				<td>Test Name</td>" +
+							"				<td>Test Marks</td>" +
+							"			</tr>" +
+							"		</thead>" +
+							"		<tbody id=\"testTable\">" +
+							"		</tbody>" +
+							"	</table>" +
+							"</div>";
+				$("#grades").append(testTable);
+
+				var assignmentTable =
+							"<div class=\"table-responsive\">" +
+							"	<table class=\"table table-striped\">" +
+							"		<thead>" +
+							"			<tr>" +
+							"				<td>Student ID</td>" +
+							"				<td>First Name</td>" +
+							"				<td>Last Name</td>" +
+							"				<td>Assignment Name</td>" +
+							"				<td>Assignment Marks</td>" +
+							"			</tr>" +
+							"		</thead>" +
+							"		<tbody id=\"assignmentTable\">" +
+							"		</tbody>" +
+							"	</table>" +
+							"</div>";
+				$("#grades").append(assignmentTable);
+
+				// After we get the courseInfo, we need to get list of students who registered this course
+				socket.emit('getStudInCourse', {course: course.course_id});
+				socket.on('foundStudInCourse', function(student) {
+					for (var i = 0; i < student.rows.length; i++) {
+						// For each student in courses, we would
+						// like to find it's enrolled_id
+						var studentID = student.rows[i].student_id;
+						var studentFirstName = student.rows[i].first_name;
+						var studentLastName = student.rows[i].last_name;
+
+						socket.emit('getEnrolledID', { student_id: student.rows[i].student_id,
+													   course_id: course.course_id });
+
+						socket.on('foundEnrolledID', function(enrolled) {
+							// After I found the enrolled_id, then we can use it
+							// for getCompletedTests & getSubmittedAssignment
+
+							socket.emit('getCompletedTests', enrolled.enrolled_id);
+							socket.on('foundCompletedTests', function(data) {
+								for (var j = 0; j < data.length; j++) {
+									var records = 	"<tr>" +
+													"	<td>" + studentID + "</td>" +
+													"	<td>" + studentFirstName + "</td>" +
+													"	<td>" + studentLastName + "</td>" +
+													"	<td>Test " + data[j].test_id + "</td>" + 
+													"	<td>" + data[j].grade + "</td>" +
+													"</tr>";
+									$('#testTable').append(records);
+								}
+							});
+
+							socket.emit('getSubmittedAssignment', enrolled.enrolled_id);
+							socket.on('foundSubmittedAssignment', function(data) {
+								// for student with student_id = student.rows[i].student_id
+								for (var j = 0; j < data.length; j++) {
+									var records = 	"<tr>" +
+													"	<td>" + studentID + "</td>" + 
+													"	<td>" + studentFirstName + "</td>" +
+													"	<td>" + studentLastName + "</td>" +
+													"	<td>Assignment" + data[j].assignment_id + "</td>" + 
+													"	<td>" + data[j].grade + "</td>" +
+													"</tr>";
+									$('#assignmentTable').append(records);
+								}
+							});
+						});
+					}
+				});
+			});
 		}
 	});
 }
