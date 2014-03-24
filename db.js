@@ -452,3 +452,21 @@ exports.getCompletedTests = function(socket, enrolledID, res) {
         });
     });
 };
+
+exports.deleteProfAssignment = function(socket, data, res) {
+        return pg.connect(pgHost, function(err, client, done) {
+
+                if (err) {
+                        return console.error('error fetching client from pool', err);
+                }
+
+                client.query( ("SELECT * FROM deleteProfAssignment(" + data.assignmentId + ")") , function(err, result) {
+                        done();
+
+                        if (err) {
+                                return console.error('error running query', err);
+                        }
+                        res("success");
+                });
+        });
+};

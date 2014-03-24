@@ -178,7 +178,10 @@ io.sockets.on('connection', function(socket) {
 	function foundCompletedTests(data) {
 		socket.emit('foundCompletedTests', data);
 	}
-
+	function deleteProfAssignment(data) {
+		socket.emit('profAssignmentDeleted', data);
+	}
+	
 	socket.on('setSessionVariable', function(variable) {
 		session.reload(function() {
 			eval('session.' + variable.varName + ' = ' + variable.varValue);
@@ -262,6 +265,9 @@ io.sockets.on('connection', function(socket) {
 
 	socket.on('getCompletedTests', function(enrolledID) {
 		db.getCompletedTests(socket, enrolledID, foundCompletedTests);
+	});
+	socket.on('deleteProfAssignment', function(data) {
+		db.deleteProfAssignment(socket, data, deleteProfAssignment);
 	});
 	
 	socket.on('logout', function() {

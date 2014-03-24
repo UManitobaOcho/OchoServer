@@ -312,5 +312,27 @@ describe('addUpdateDeleteCourse', function(){
 			});
 		});
 	});
-	
 });
+
+describe('ProfessorAssignmentTests', function() {
+	it('add an assignment', function(done) {
+		var client = io.connect(socketUrl, options);
+		
+		client.on('connect', function(data) {
+			client.emit('profAddAssignment', {isTest: true, assignmentTitle: "Assignment Test", 
+					course: "COMP 4350", name: "test.txt", type: "text", size: "10", 
+					file: "123456789\n", releaseDate: "09/09/2014 02:56 PM", 
+					dueDate: "09/09/2014 10:59 PM"});
+			client.on('ProfAssignmentSubmitted', function(data) {
+				data.should.be.ok;
+				client.disconnect();
+				done();
+			});
+		});
+	});
+});
+
+
+
+
+

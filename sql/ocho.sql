@@ -310,6 +310,13 @@ begin
 end;
 $deleted$ language plpgsql;
 
+CREATE OR REPLACE FUNCTION deleteAssignment(aId BIGINT)
+        RETURNS BOOLEAN as $deleted$
+begin
+        delete from assignments where assignment_id = aId;
+        return true;
+end;
+$deleted$ language plpgsql;
 
 CREATE OR REPLACE FUNCTION deleteEnrolled(eId BIGINT)
 	RETURNS BOOLEAN as $deleted$
