@@ -251,7 +251,6 @@ io.sockets.on('connection', function(socket) {
     });
 	
 	socket.on('getAssignmentsForCourse', function(data) {
-		console.log(session);
 		db.getAssignmentsForCourse(socket, (data ? data.course_id : session.course_id), foundAssignments);
 	});
 
