@@ -12,6 +12,7 @@ var about = require('./controllers/about');
 var courseHomepage = require('./controllers/courseHomepage');
 var checkGrade = require('./controllers/checkGrade');
 var viewAssignments = require('./controllers/viewAssignments');
+var markAssignments = require('./controllers/markAssignments');
 var submitAnswer = require('./controllers/submitAnswer');
 
 //need to change the max number of sockets so we can run our mocha tests
@@ -69,6 +70,7 @@ app.get('/AddStudent', addStudent.addStudent);
 app.get('/CheckGrade', checkGrade.checkGrade);
 app.get('/Course', courseHomepage.courseHomepage);
 app.get('/ViewAssignments',viewAssignments.viewAssignments);
+app.get('/MarkAssignments',markAssignments.markAssignments);
 app.get('/RemoveStudent', removeStudent.removeStudent);
 app.get('/SubmitAssignmentAnswer', submitAnswer.submitAnswer);
 
