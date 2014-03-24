@@ -208,6 +208,7 @@ function loadGradesDetails(enrolledID) {
 function loadHome(){
 	$('.calendar-header').removeClass('displayNone');
 	$('#calendar').removeClass('displayNone');
+	$('#calendar-btn-group').removeClass('displayNone');
 	$('.grades-header').addClass('displayNone');
 	$('#grades').addClass('displayNone');
 
@@ -217,6 +218,7 @@ function loadHome(){
 function loadGrades(){
 	$('.calendar-header').addClass('displayNone');
 	$('#calendar').addClass('displayNone');
+	$('#calendar-btn-group').addClass('displayNone');
 	$('.grades-header').removeClass('displayNone');
 	$('#grades').removeClass('displayNone');
 
