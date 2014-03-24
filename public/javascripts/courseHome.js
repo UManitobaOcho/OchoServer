@@ -2,6 +2,8 @@
 var hostUrl = window.location.host;
 var socket = io.connect(hostUrl);
 
+
+
 $(function() {
 	socket.emit('getCourseInfo');
 	socket.on('returnCourseInfo', function(course) {
@@ -18,8 +20,7 @@ $(function() {
 	$('#gradeBtn').click(function() {
 		setActive($(this));
 		loadGrades();
-		// passed in enrolledID by now, need to change it dynamically
-		loadGradesDetails("1");
+		loadGradesDetails();
 	});	
 });
 
@@ -133,81 +134,61 @@ function createEventsForAssignments(data, events) {
 	return events;
 }
 
-function loadGradesDetails(enrolledID) {
+function loadGradesDetails() {
 
-	socket.emit('getSubmittedAssignment', enrolledID);
-	socket.on('foundSubmittedAssignment', function(data) {
-		var assignmentLabel = [];
-		var assignmentGrade = [];
+	socket.emit('getUserType');
+	socket.on('returnUserType', function(data) {
+		if (data.userType === 0) {
+			console.log('Student');
+			/* Student View */
+			socket.emit('getCourseInfo');
+			socket.on('returnCourseInfo', function(course) {
+				// I would like to get enrolled_id with student_id = 1 & course_id = course.course_id
+				socket.emit('getEnrolledID', { student_id: 1,
+											   course_id: course.course_id });
+				socket.on('foundEnrolledID', function(data) {
+					// Now, I can emit getCompletedTests and submittedTest
+					socket.emit('getCompletedTests', data.enrolled_id);
+					socket.on('foundCompletedTests', function(data) {
+						var table = 
+							"<div class=\"table-responsive\">" +
+							"	<table class=\"table table-striped\">" +
+							"		<thead>" +
+							"			<tr>" +
+							"				<td>Test Name</td>" +
+							"				<td>Test Marks</td>" +
+							"			</tr>" +
+							"		</thead>" +
+							"		<tbody>";
+            
 
-		for (var i = 0; i < data.length; i++) {
-			assignmentLabel.push(data[i].assignment_name);
-			assignmentGrade.push(data[i].grade);
+						for (var i = 0; i < data.length; i++) {
+							table += "<tr>" +
+									"	<td>Test " + data[i].test_id + "</td>" + 
+									"	<td>" + data[i].grade + "</td>" +
+									"</tr>";
+						}
+
+						table += 
+							"		</tbody>" +
+							"	</table>" +
+							"</div>";
+
+						$("#grades").append(table);
+					});
+				});
+			});
+			
+		} else {
+			/* Professor View */
 		}
-
-		var data = {
-			labels : assignmentLabel,
-			datasets : [
-				{
-					fillColor : "rgba(220,220,220,0.5)",
-					strokeColor : "rgba(220,220,200,1)",
-					data : assignmentGrade
-				}
-			]
-		}
-
-		var assignmentChart = new Chart($("#assignmentChart").get(0).getContext("2d")).Bar(data);
-	});
-
-	socket.emit('getCompletedTests', enrolledID);
-	socket.on('foundCompletedTests', function(data) {
-		var t = $('#grade_table > tbody');
-		var table =
-					"<tr>" +
-					"	<td>Test Name</td>" + 
-					"	<td>Test Score</td>" +
-					"</tr>";
-
-		for (var i = 0; i < data.length; i++) {
-			table += "<tr>" +
-					"	<td>Test " + data[i].test_id + "</td>" + 
-					"	<td>" + data[i].grade + "</td>" +
-					"</tr>";
-		}
-		t.html(table);
-
-
-
-		/* Failed to update the 2nd bar chart */
-		/* Add <canvas id="testChart" width="400" height="400"></canvas> after another canvas in courseHomepage.jade to fix this problem */
-		/*
-		var testLabel = [];
-		var testGrade = [];
-
-		for (var i = 0; i < data.length; i++) {
-			testLabel.push("Test " + data[i].test_id);
-			testGrade.push(data[i].grade);
-		}
-
-		var testData = {
-			labels : testLabel,
-			datasets : [
-				{
-					fillColor : "rgba(220,220,220,0.5)",
-					strokeColor : "rgba(220,220,220,1)",
-					data : testGrade
-				}
-			]
-		}
-
-		new Chart($("#testChart").get(0).getContext("2d")).Line(testData);
-		*/
 	});
 }
 
 function loadHome(){
 	$('.calendar-header').removeClass('displayNone');
 	$('#calendar').removeClass('displayNone');
+	$('.pull-right.form-inline').removeClass('displayNone');
 	$('.grades-header').addClass('displayNone');
 	$('#grades').addClass('displayNone');
 
@@ -217,6 +198,7 @@ function loadHome(){
 function loadGrades(){
 	$('.calendar-header').addClass('displayNone');
 	$('#calendar').addClass('displayNone');
+	$('.pull-right.form-inline').addClass('displayNone');
 	$('.grades-header').removeClass('displayNone');
 	$('#grades').removeClass('displayNone');
 

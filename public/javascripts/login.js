@@ -21,6 +21,12 @@ function getStudent() {
 		$('#add_assignment-btn').hide();
 		$('#add_student-btn').hide();
 		$('#rm_student-btn').hide();
+
+		/************************/
+		/* Set session variable */
+		/************************/
+		socket.emit("setSessionVariable", {varName: 'userType', varValue: 0 });
+
 		isProf = false;
 		logIn(student);
 	});
@@ -30,6 +36,11 @@ function getProf() {
 	console.log("Getting Professor");
 	socket.emit('getProf', {username: 'cszapp'});
 	socket.on('foundProf', function(prof) {
+		/************************/
+		/* Set session variable */
+		/************************/
+		socket.emit("setSessionVariable", {varName: 'userType', varValue: 1 });
+
 		logIn(prof);
 		$('#grade-btn').hide();
                 $('#add_course-btn').show();

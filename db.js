@@ -435,6 +435,7 @@ exports.getStudentEnrolledInfo = function(socket, studentID, res) {
 };
 
 
+
 exports.getSubmittedAssignment = function(socket, enrolledID, res) {
     return pg.connect(pgHost, function(err, client, done) {
 
@@ -471,6 +472,26 @@ exports.getCompletedTests = function(socket, enrolledID, res) {
             }
 
             res(result.rows);
+        });
+    });
+};
+
+exports.getEnrolledID = function(socket, data, res) {
+    return pg.connect(pgHost, function(err, client, done) {
+
+        if (err) {
+            return console.error('error fetching client from pool', err);
+        }
+
+        var querystring = "SELECT enrolled_id FROM ENROLLED where student_id =" + data.student_id + " AND course_id=" + data.course_id +";";
+        client.query(querystring, function(err, result) {
+            done();
+
+            if (err) {
+                return console.error('error running query', err);
+            }
+
+            res(result.rows[0]);
         });
     });
 };

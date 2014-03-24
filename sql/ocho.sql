@@ -377,23 +377,29 @@ insert into ASSIGNMENTS values(
 
 insert into SUBMITTED_ASSIGNMENTS values(
 	1,
-	9,
+	1,
 	current_date,
-	80
+	'no comments',
+	80,
+	(E'\\320\\170'::bytea)
 );
 
 insert into SUBMITTED_ASSIGNMENTS values(
 	1,
-	10,
+	2,
 	current_date,
-	65
+	'no comments',
+	65,
+	(E'\\320\\170'::bytea)
 );
 
 insert into SUBMITTED_ASSIGNMENTS values(
 	1,
-	11,
+	3,
 	current_date,
-	73
+	'no comments',
+	73,
+	(E'\\320\\170'::bytea)
 );
 
 insert into TESTS values(
@@ -424,19 +430,19 @@ insert into TESTS values(
 
 insert into COMPLETED_TESTS values(
 	1,
-	4,
+	1,
 	100
 );
 
 insert into COMPLETED_TESTS values(
 	1,
-	5,
+	2,
 	50
 );
 
 insert into COMPLETED_TESTS values(
 	1,
-	6,
+	3,
 	60
 );
 */

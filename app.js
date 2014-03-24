@@ -174,12 +174,17 @@ io.sockets.on('connection', function(socket) {
 	function foundAssignments(data) {
 		socket.emit('foundAssignments', data);
 	}
+	/*********************************************************/
 	function foundSubmittedAssignment(data) {
 		socket.emit('foundSubmittedAssignment', data);
 	}
 	function foundCompletedTests(data) {
 		socket.emit('foundCompletedTests', data);
 	}
+	function foundEnrolledID(data) {
+		socket.emit('foundEnrolledID', data);
+	}
+	/*********************************************************/
 
 	socket.on('setSessionVariable', function(variable) {
 		session.reload(function() {
@@ -245,10 +250,6 @@ io.sockets.on('connection', function(socket) {
     socket.on('studentSubmitAssignment', function(data){
     	db.studentSubmitAssignment(socket, data, AssignmentSubmitted)
     });
-
-    socket.on('getEnrolledInfo', function(data) {
-    	db.getStudentEnrolledInfo(socket, data.student_id, foundEnrolledInfo);
-    });
 	
 	socket.on('getAssignmentsForCourse', function(data) {
 		db.getAssignmentsForCourse(socket, (data ? data.course_id : session.course_id), foundAssignments);
@@ -258,6 +259,19 @@ io.sockets.on('connection', function(socket) {
 		db.downloadAssignment(socket, data.assignment_id, downloadedAssignment);
 	});
 
+	/****************************************************************************/
+	socket.on('getUserType', function() {
+		socket.emit('returnUserType', {'userType' : session.userType });
+	});
+
+	socket.on('getEnrolledInfo', function(data) {
+    	db.getStudentEnrolledInfo(socket, data.student_id, foundEnrolledInfo);
+    });
+
+    socket.on('getEnrolledID', function(data) {
+    	db.getEnrolledID(socket, data, foundEnrolledID);
+    });
+
 	socket.on('getSubmittedAssignment', function(enrolledID) {
 		db.getSubmittedAssignment(socket, enrolledID, foundSubmittedAssignment);
 	});
@@ -265,6 +279,7 @@ io.sockets.on('connection', function(socket) {
 	socket.on('getCompletedTests', function(enrolledID) {
 		db.getCompletedTests(socket, enrolledID, foundCompletedTests);
 	});
+	/*****************************************************************************/
 	
 	socket.on('logout', function() {
 		session.reload(function() {
