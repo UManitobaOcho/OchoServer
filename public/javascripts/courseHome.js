@@ -176,6 +176,35 @@ function loadGradesDetails() {
 
 						$("#grades").append(table);
 					});
+
+					socket.emit('getSubmittedAssignment', data.enrolled_id);
+					socket.on('foundSubmittedAssignment', function(data) {
+						var table = 
+							"<div class=\"table-responsive\">" +
+							"	<table class=\"table table-striped\">" +
+							"		<thead>" +
+							"			<tr>" +
+							"				<td>Assignment Name</td>" +
+							"				<td>Assignment Grade</td>" +
+							"			</tr>" +
+							"		</thead>" +
+							"		<tbody>";
+            
+
+						for (var i = 0; i < data.length; i++) {
+							table += "<tr>" +
+									"	<td>Test " + data[i].assignment_id + "</td>" + 
+									"	<td>" + data[i].grade + "</td>" +
+									"</tr>";
+						}
+
+						table += 
+							"		</tbody>" +
+							"	</table>" +
+							"</div>";
+
+						$("#grades").append(table);
+					});
 				});
 			});
 			

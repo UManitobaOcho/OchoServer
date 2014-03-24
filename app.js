@@ -285,6 +285,7 @@ io.sockets.on('connection', function(socket) {
 		session.reload(function() {
 			session.userId = null;
 			session.isProf = null;
+			session.userType = null;
 			session.save();
 		});
 	});
