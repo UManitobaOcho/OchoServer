@@ -96,7 +96,17 @@ function loadCalendar(course) {
 		
 		events = createEventsForAssignments(data, events);
 		
-		var calendar = $('#calendar').calendar({ modal: "#events-modal", events_source: events});
+		var calendar = $('#calendar').calendar({ modal: "#events-modal", events_source: events, onAfterViewLoad: function(view) {
+			$('.calendar-header').text(this.getTitle());
+			}
+		});
+		
+		$('.btn-group button[data-calendar-nav]').each(function() {
+			var $this = $(this);
+			$this.click(function() {
+			calendar.navigate($this.data('calendar-nav'));
+		});
+	});
 	});	
 }
 

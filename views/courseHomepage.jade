@@ -12,9 +12,16 @@ block index_content
 				ul.nav.nav-sidebar
 					| <li class='active' id='homeBtn'><a href="#">Overview</a></li>
 					| <li id='gradeBtn'><a href="#">Grades</a></li>
-			.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+			.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main		
 				h1.page-header
-				h2.calendar-header Course Calendar
+				
+				.pull-right.form-inline
+					.btn-group
+						button.btn.btn-primary(data-calendar-nav="prev") Prev
+						button.btn(data-calendar-nav="today") Today
+						button.btn.btn-primary(data-calendar-nav="next") Next
+				
+				h2.calendar-header
 				#calendar
 				
 				div.modal.modal-hide.fade#events-modal
