@@ -11,6 +11,10 @@
 <tr><td><a href="selEditCourse.html">selEditCourse</a></td></tr>
 <tr><td><a href="selAddCourse.html">selAddCourse</a></td></tr>
 <tr><td><a href="selViewCourseCalendar.html">selViewCourseCalendar</a></td></tr>
+<tr><td><a href="AddStudentToCourse.html">AddStudentToCourse</a></td></tr>
+<tr><td><a href="RemoveStudentToCourse.html">RemoveStudentToCourse</a></td></tr>
+<tr><td><a href="RemoveMoreStudents.html">RemoveMoreStudents</a></td></tr>
+<tr><td><a href="AddMoreStudent.html">AddMoreStudent</a></td></tr>
 </tbody></table>
 </body>
 </html>
