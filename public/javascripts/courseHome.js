@@ -20,13 +20,17 @@ $(function() {
 	loadHome();
 
 	$('#homeBtn').click(function() {
-		setActive($(this));
-		loadHome();
+		if(! $(this).hasClass('active')){
+			setActive($(this));
+			loadHome();
+		}	
 	});
 	$('#gradeBtn').click(function() {
-		setActive($(this));
-		loadGrades();
-		loadGradesDetails();
+		if(! $(this).hasClass('active')){
+			setActive($(this));
+			loadGrades();
+			//loadGradesDetails();
+		}
 	});	
 });
 
