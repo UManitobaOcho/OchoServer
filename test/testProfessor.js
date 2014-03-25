@@ -7,7 +7,7 @@ var assert = require("assert");
 describe('ProfessorAssignmentTests', function() {
         it('add an assignment', function(done) {
                 var client = io.connect(socketUrl, options);
-		
+
                 client.on('connect', function(data) {
                         client.emit('addCourse', {isTest: true, userId: '1', isProf: true,
                                                                 courseName: 'Test Course',
@@ -18,8 +18,9 @@ describe('ProfessorAssignmentTests', function() {
                         client.on('courseAdded', function(data) {
                                 data.should.be.ok;
                                 data.rowCount.should.equal(1);
-                                data.rows[0].addcourse.should.be.ok;
- 
+                                var cId = data.rows[0].addcourse; 
+				cId.should.be.ok;
+				
                         	client.emit('profAddAssignment', {isTest: true, assignmentTitle: "Assignment Test",
                                         	course: "TEST 1001", name: "test.txt", type: "text", size: "10",
                                         	file: "123456789\n", releaseDate: "09/09/2014 02:56 PM",
@@ -27,15 +28,14 @@ describe('ProfessorAssignmentTests', function() {
 				
                         	client.on('ProfAssignmentSubmitted', function(data) {
                                 	data.should.be.ok;
-                                	client.disconnect();
-                                	done();
-					
-					//must then delete course
-                                	client.emit('deleteCourse', {isTest: true, courseId: data.rows[0].addcourse});
-                                	client.on('courseDeleted', function(data) {
-                                        	client.disconnect();
-                                        	done();
-                        		});
+
+                               		//must then delete course
+                               		client.emit('deleteCourse', {isTest: true, courseId: cId});
+                        	        client.on('courseDeleted', function(data) {
+                	                        client.disconnect();
+        	                                done();
+	                                });
+
 				});
 			});
                 });
@@ -54,7 +54,9 @@ describe('ProfessorAssignmentTests', function() {
                         client.on('courseAdded', function(data) {
                                 data.should.be.ok;
                                 data.rowCount.should.equal(1);
-                                data.rows[0].addcourse.should.be.ok;
+
+				var cId = data.rows[0].addcourse;				
+				cId.should.be.ok;
 
                                 client.emit('profAddAssignment', {isTest: true, assignmentTitle: "Assignment Test",
                                                 course: "TEST 1001", name: "test.txt", type: "text", size: "10",
@@ -63,11 +65,9 @@ describe('ProfessorAssignmentTests', function() {
 
                                 client.on('ProfAssignmentSubmitted', function(data) {
                                         data.should.be.ok;
-                                        client.disconnect();
-                                        done();
 
                                         //must then delete course
-                                        client.emit('deleteCourse', {isTest: true, courseId: data.rows[0].addcourse});
+                                        client.emit('deleteCourse', {isTest: true, courseId: cId});
                                         client.on('courseDeleted', function(data) {
                                                 client.disconnect();
                                                 done();

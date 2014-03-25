@@ -132,6 +132,9 @@ exports.deleteCourse = function(socket, courseId,res) {
 			if (err) {
 				return console.error('error running query', err);
 			}
+
+			console.log("Course " + courseId.courseId + " Deleted!");
+
 			res("success");
 		});
 	});
