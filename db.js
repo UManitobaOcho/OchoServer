@@ -389,6 +389,10 @@ exports.studentSubmitAssignment = function(socket, assignmentID, studentID, res)
         if (err) {
             return console.error('error fetching client from pool', err);
         }
+        console.log(session)
+        var queryVars = data.submission_time + "\', \'" + data.assignmentTitle + "\', \'" + data.name  + "\', \'" + data.type + "\', \'" + data.size + "\', \'" + data.file + "\'";
+                      
+        console.log(queryVars + " ");
         
     });
 };

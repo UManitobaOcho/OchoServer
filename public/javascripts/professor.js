@@ -21,8 +21,11 @@ window.onload = function() {
 	$('.endDate span').click( function() { $('#dueDate').datepicker('show'); }); //Show calendar on icon click
 
 	$('#submitBtn').click( function() {
-		addAssignment()
+        addAssignment();
 	});
+    $('#studentSubmitBtn').click( function() {
+        studentSubmitAssignment();
+    });
 	$('#selectCourse').click(function() {
 		getStudNotInCourse();
 	});
@@ -181,6 +184,40 @@ function removeStudentToCourse() {
 	});
 }
 
+function studentSubmitAssignment() {
+    console.log("Submitting Student Assignment");
+    
+    var input,file;
+    var fread = new FileReader();
+    var contents;
+    var name;
+    var type;
+    var size;
+    
+    input = document.getElementById('assignment');
+    
+    if(!input){
+        document.getElementById("errorbox").innerHTML = "Error Loading File";
+    } else {
+        file = input.files[0];
+        name = file.name;
+        type = file.type;
+        size = file.size;
+        
+        fread.onload = function(e) {
+            contents = e.target.result;
+			
+            console.log("File:" + contents);
+            console.log("Submitting Assignment");
+            socket.emit('studentSubmitAssignment', {assignmentTitle: assignTitle, name: name, type: type, size: size, file: contents, submission_time: new Date[]});
+            socket.on('AssignmentSubmitted', function(courses) {
+                console.log("Assignment Submitted Successfully");
+                document.location.href = "/";
+            });
+        }
+        fread.readAsText(file);
+    }
+}
 
 function addAssignment(){
 	console.log("Verifing Assignment");

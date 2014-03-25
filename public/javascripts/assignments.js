@@ -3,6 +3,7 @@ var hostUrl = window.location.host;
 var socket = io.connect(hostUrl);
 
 var isProf = false;
+var course = 0;
 
 window.onload = function () {
 	console.log("entered on assignmens.js"); 
@@ -11,8 +12,10 @@ window.onload = function () {
 		if (data.userType === 1) {
 			isProf = true;
 		}
-
-		getAssignmentsForCourse('1');
+		socket.emit('getCourseInfo');
+		socket.on('returnCourseInfo', function(course) {
+			getAssignmentsForCourse(course.course_id);
+		});
 	});
 };
 

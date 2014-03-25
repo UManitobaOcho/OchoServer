@@ -117,7 +117,10 @@ create table SUBMITTED_ASSIGNMENTS(
 	submission_time DATE NOT NULL,
 	comments		VARCHAR(1000),
 	grade 			NUMERIC(3) NOT NULL,
-	assignment_file BYTEA
+    file_name	VARCHAR(200),
+    file_type	VARCHAR(200),
+    file_size	VARCHAR(200),
+	assignment_file TEXT
 );
 
 create table TESTS(
@@ -260,7 +263,7 @@ begin
 end;
 $val$ language plpgsql;
 
-CREATE OR REPLACE FUNCTION answerAssignment(cId VARCHAR, sect VARCHAR, cName VARCHAR, pId BIGINT, cTimes VARCHAR)
+CREATE OR REPLACE FUNCTION answerAssignment(enrolledId BIGINT, assignmentId BIGINT, submitTime VARCHAR, assignmentname VARCHAR, name VARCHAR, type VARCHAR, size VARCHAR, assignmentfile TEXT)
 	RETURNS integer AS $val$
 declare
 	val BIGINT;
