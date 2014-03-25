@@ -390,8 +390,8 @@ exports.studentSubmitAssignment = function(socket, data, session, res) {
             return console.error('error fetching client from pool', err);
         }
         console.log(session)
-                      
-        var queryVars = "\'" + session.courseId + "\', \'" + session.student_id + "\', \'" + data.submission_time + "\', \'" + data.assignmentTitle + "\', \'" + data.name  + "\', \'" + data.type + "\', \'" + data.size + "\', \'" + data.file + "\'";
+                  
+        var queryVars = "\'" + session.courseId + "\', \'" + session.student_id + "\', \'" + session.assignmentId + "\', \'" + data.submission_time + "\', \'" + data.assignmentTitle + "\', \'" + data.name  + "\', \'" + data.type + "\', \'" + data.size + "\', \'" + data.file + "\'";
                       
         console.log(queryVars + " ");
                       
