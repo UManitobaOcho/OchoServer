@@ -89,48 +89,85 @@ function getProfCourses(){
 		console.log("Set Prof Courses");
 	});
 }
+function verifyList(e) {
+	var result = true;
+	if(e.options.length == 0)
+	{
+		result = false;
+	}
+	return result;
+}
+
+function verifyStudent(stud){
+	var result = false;
+	if(stud != null)
+	{
+		if(stud.rows != null)
+		{
+			if(stud.rows[0] != null)
+			{
+				return true;
+			}
+		}
+
+	}
+	return result;
+}
 
 function getStudNotInCourse(){
 	console.log("Getting students not in this course");
 	var e = document.getElementById("class-picker");
-	var strClass = e.options[e.selectedIndex].val;
-	socket.emit('getStudNotInCourse', {course: strClass});
-	socket.on('foundStudNotInCourse', function(student) {
-		
-		var selector = document.getElementById("student-picker");
-		selector.innerHTML= "";
-		for(var i=0; i<student.rows.length; i++){
-			option = document.createElement("option");
-			console.log(student.rows[i].username);
-			option.text = "Username: " + student.rows[i].username + "  First Name: " + student.rows[i].first_name + "  Last Name: " + student.rows[i].last_name;
-			option.val = student.rows[i].student_id;
-			selector.add(option);
-		}
+	var res = verifyList(e);
+	if(res)
+	{
+		var strClass = e.options[e.selectedIndex].val;
+		socket.emit('getStudNotInCourse', {course: strClass});
+		socket.on('foundStudNotInCourse', function(student) {
+			var result = verifyStudent(student);
+			if(result)
+			{
+				var selector = document.getElementById("student-picker");
+				selector.innerHTML= "";
+				for(var i=0; i<student.rows.length; i++){
+					option = document.createElement("option");
+					console.log(student.rows[i].username);
+					option.text = "Username: " + student.rows[i].username + "  First Name: " + student.rows[i].first_name + "  Last Name: " + student.rows[i].last_name;
+					option.val = student.rows[i].student_id;
+					selector.add(option);
+				}
 
-		$('.select-student').show();
-		$('.select-button').show();
-	});
+				$('.select-student').show();
+				$('.select-button').show();
+			}
+		});
+	}
 }
 
 function getStudInCourse(){
 	console.log("Getting students in this course");
 	var e = document.getElementById("class-picker");
-	var strClass = e.options[e.selectedIndex].val;
-	socket.emit('getStudInCourse', {course: strClass});
-	socket.on('foundStudInCourse', function(student) {
-		
-		var selector = document.getElementById("student-picker");
-		selector.innerHTML= "";
-		for(var i=0; i<student.rows.length; i++){
-			option = document.createElement("option");
-			console.log(student.rows[i].username);
-			option.text = "Username: " + student.rows[i].username + "  First Name: " + student.rows[i].first_name + "  Last Name: " + student.rows[i].last_name;
-			option.val = student.rows[i].student_id;
-			selector.add(option);
-		}
-		$('.select-student').show();
-		$('.select-button').show();
-	});
+	var res = verifyList(e);
+	if(res)
+	{
+		var strClass = e.options[e.selectedIndex].val;
+		socket.emit('getStudInCourse', {course: strClass});
+		socket.on('foundStudInCourse', function(student) {
+			result = verifyStudent(student);
+			if(result) {
+				var selector = document.getElementById("student-picker");
+				selector.innerHTML= "";
+				for(var i=0; i<student.rows.length; i++){
+					option = document.createElement("option");
+					console.log(student.rows[i].username);
+					option.text = "Username: " + student.rows[i].username + "  First Name: " + student.rows[i].first_name + "  Last Name: " + student.rows[i].last_name;
+					option.val = student.rows[i].student_id;
+					selector.add(option);
+				}
+				$('.select-student').show();
+				$('.select-button').show();
+			}
+		});
+	}
 }
 
 function addStudentToCourse() {
@@ -146,8 +183,6 @@ function addStudentToCourse() {
 		if(students[i].selected)
 		{
 			strStud = strStud + students[i].val + ",";
-			//alert(students[i].text);
-			//alert(students[i].val);
 		}
 	}
 
