@@ -7,3 +7,5 @@
 #selectStudents, #selectCourse{margin-left: 10px;}
 #removeStudent, #addStudent{margin-top: 10px;}
 .user_details{margin-bottom: 20px;}
+.progress{ margin:20px auto; width:40%;}
+.table-responsive{margin: 0px auto; width: 70%;}
