@@ -383,7 +383,7 @@ exports.getAssignment = function(socket, assignmentID, res) {
     });
 };
 
-exports.studentSubmitAssignment = function(socket, assignmentID, studentID, res) {
+exports.studentSubmitAssignment = function(socket, assignmentID, session, res) {
     return pg.connect(pgHost, function(err, client, done) {
 
         if (err) {

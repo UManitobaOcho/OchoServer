@@ -255,7 +255,7 @@ io.sockets.on('connection', function(socket) {
 		
     });
     socket.on('studentSubmitAssignment', function(data){
-    	db.studentSubmitAssignment(socket, data, AssignmentSubmitted)
+    	db.studentSubmitAssignment(socket, data, session, AssignmentSubmitted)
     });
 	
 	socket.on('getAssignmentsForCourse', function(data) {
