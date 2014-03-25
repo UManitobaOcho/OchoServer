@@ -383,17 +383,27 @@ exports.getAssignment = function(socket, assignmentID, res) {
     });
 };
 
-exports.studentSubmitAssignment = function(socket, assignmentID, session, res) {
+exports.studentSubmitAssignment = function(socket, data, session, res) {
     return pg.connect(pgHost, function(err, client, done) {
-
+                      
         if (err) {
             return console.error('error fetching client from pool', err);
         }
         console.log(session)
-        var queryVars = data.submission_time + "\', \'" + data.assignmentTitle + "\', \'" + data.name  + "\', \'" + data.type + "\', \'" + data.size + "\', \'" + data.file + "\'";
+                      
+        var queryVars = "\'" + session.courseId + "\', \'" + session.student_id + "\', \'" data.submission_time + "\', \'" + data.assignmentTitle + "\', \'" + data.name  + "\', \'" + data.type + "\', \'" + data.size + "\', \'" + data.file + "\'";
                       
         console.log(queryVars + " ");
-        
+                      
+        client.query( ("SELECT * FROM answerAssignment(" + queryVars + ");") , function(err, result) {
+            done();
+                                   
+            if(err){
+                return console.error('error running second query', err);
+            }
+                                   
+            res(result);
+        });
     });
 };
 

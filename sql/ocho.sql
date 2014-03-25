@@ -263,19 +263,22 @@ begin
 end;
 $val$ language plpgsql;
 
-CREATE OR REPLACE FUNCTION answerAssignment(enrolledId BIGINT, assignmentId BIGINT, submitTime VARCHAR, assignmentname VARCHAR, name VARCHAR, type VARCHAR, size VARCHAR, assignmentfile TEXT)
+CREATE OR REPLACE FUNCTION answerAssignment(courseId BIGINT, studentId BIGINT, assignmentId BIGINT, submitTime VARCHAR, name VARCHAR, type VARCHAR, size VARCHAR, assignmentfile TEXT)
 	RETURNS integer AS $val$
 declare
 	val BIGINT;
 begin
 	val = nextval('COURSE_SEQ');
-	insert into COURSES values(
-		val,
-		cNum,
-		sect,
-		cName,
-		pId,
-		cTimes
+	insert into SUBMITTED_ASSIGNMENTS values(
+		(SELECT enrolled_id from ENROLLED where course_id = courseID and student_id = studentId),
+		assignmentId,
+        submitTime,
+        " ",
+        99,
+        name,
+        type,
+        size,
+        assignmentfile
 	);
 	return val;
 end;
