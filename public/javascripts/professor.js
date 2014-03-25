@@ -41,7 +41,7 @@ window.onload = function() {
 $(function() {
 	$('#assignment').change(function(){
 		var input,file;
-		var maxsize = 1000;
+		var maxsize = 20000;
 		
 		input = document.getElementById('assignment');
 		
@@ -54,6 +54,11 @@ $(function() {
 				document.getElementById("errorbox").innerHTML = "Error: To Large By " + Math.round((file.size-maxsize)/1024) + " Kilobytes.";
 				$('#assignmentbox').val(" ");
 				input.files[0] = null;
+			}else if((file.type).substring(0, "text/".length) != "text/") {
+                                document.getElementById("errorbox").innerHTML = "Only text file uploads supported.";
+                                $('#assignmentbox').val(" ");
+                                input.files[0] = null;
+				console.log(file.type);
 			}else{
 				document.getElementById("errorbox").innerHTML = "";
 				$('#assignmentbox').val(file.name);
@@ -217,7 +222,7 @@ function addAssignment(){
             		file = input.files[0];
 			name = file.name;
 			type = file.type;
-			size = file.size
+			size = file.size;
 
 			fread.onload = function(e) {
 				contents = e.target.result;
