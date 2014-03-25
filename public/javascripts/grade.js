@@ -65,8 +65,8 @@ function displayEnrolledInfo(enrolled) {
 		$('#grade_table tbody').append(tableElements);
 	}
 
-    var n = gradeTotal.toFixed(1);
-    var percentage = ((n / 5.0)*100).toFixed(0); 
+    var n = (gradeTotal / enrolled.length).toFixed(1);
+    var percentage = ((n / 5.0) * 100.0).toFixed(0); 
     var gradeProgress = 
                         "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"" + n + "\" aria-valuemin=\"0\" aria-valuemax=\"5\" style=\"width:" + percentage + "%;\">" +
                         "" + n + "" +
