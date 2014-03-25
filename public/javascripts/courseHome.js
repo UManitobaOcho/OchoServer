@@ -2,7 +2,13 @@
 var hostUrl = window.location.host;
 var socket = io.connect(hostUrl);
 
-
+/*
+<div class="progress">
+  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+    60%
+  </div>
+</div>
+*/
 
 $(function() {
 	socket.emit('getCourseInfo');
@@ -151,7 +157,10 @@ function loadGradesDetails() {
 					// Now, I can emit getCompletedTests and getSubmittedAssignment
 					socket.emit('getCompletedTests', data.enrolled_id);
 					socket.on('foundCompletedTests', function(data) {
+						var totalGrade = 0;
 						var table = 
+							"<div class=\"progress\" id=\"testProgress\">" +
+							"</div>" +
 							"<div class=\"table-responsive\">" +
 							"	<table class=\"table table-striped\">" +
 							"		<thead>" +
@@ -168,6 +177,7 @@ function loadGradesDetails() {
 									"	<td>Test " + data[i].test_id + "</td>" + 
 									"	<td>" + data[i].grade + "</td>" +
 									"</tr>";
+							totalGrade += parseFloat(data[i].grade);
 						}
 
 						table += 
@@ -176,11 +186,21 @@ function loadGradesDetails() {
 							"</div>";
 
 						$("#grades").append(table);
+						
+						var averageGrade = (totalGrade / data.length).toFixed(0);
+						var gradeProgress = 
+	                        "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"" + averageGrade + "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:" + averageGrade + "%;\">" +
+	                        "" + averageGrade + "" +
+	                        "</div>";
+    					$("#testProgress").append(gradeProgress); 
 					});
 
 					socket.emit('getSubmittedAssignment', data.enrolled_id);
 					socket.on('foundSubmittedAssignment', function(data) {
+						var totalGrade = 0;
 						var table = 
+							"<div class=\"progress\" id=\"assignmentProgress\">" +
+							"</div>" +
 							"<div class=\"table-responsive\">" +
 							"	<table class=\"table table-striped\">" +
 							"		<thead>" +
@@ -197,6 +217,7 @@ function loadGradesDetails() {
 									"	<td>Assignment " + data[i].assignment_id + "</td>" + 
 									"	<td>" + data[i].grade + "</td>" +
 									"</tr>";
+							totalGrade += parseFloat(data[i].grade);
 						}
 
 						table += 
@@ -205,6 +226,13 @@ function loadGradesDetails() {
 							"</div>";
 
 						$("#grades").append(table);
+
+						var averageGrade = (totalGrade / data.length).toFixed(0);
+						var gradeProgress = 
+	                        "<div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"" + averageGrade + "\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:" + averageGrade + "%;\">" +
+	                        "" + averageGrade + "" +
+	                        "</div>";
+    					$("#assignmentProgress").append(gradeProgress); 
 					});
 				});
 			});
@@ -249,6 +277,8 @@ function loadGradesDetails() {
 							"</div>";
 				$("#grades").append(assignmentTable);
 
+
+
 				// After we get the courseInfo, we need to get list of students who registered this course
 				socket.emit('getStudInCourse', {course: course.course_id});
 				socket.on('foundStudInCourse', function(student) {
@@ -288,7 +318,7 @@ function loadGradesDetails() {
 													"	<td>" + studentID + "</td>" + 
 													"	<td>" + studentFirstName + "</td>" +
 													"	<td>" + studentLastName + "</td>" +
-													"	<td>Assignment" + data[j].assignment_id + "</td>" + 
+													"	<td>Assignment " + data[j].assignment_id + "</td>" + 
 													"	<td>" + data[j].grade + "</td>" +
 													"</tr>";
 									$('#assignmentTable').append(records);

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://ec2-54-201-56-122.us-west-2.compute.amazonaws.com:8080/" />
+<title>attemptNoFile</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">attemptNoFile</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=professor-btn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=add_assignment-btn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=assignment-title</td>
+	<td>Assignment Test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=releaseDate</td>
+	<td>03/06/2020</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=dueDate</td>
+	<td>04/07/2020</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=submitBtn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=assignment-title-error</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=errorbox</td>
+	<td>*No File Selected</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=startTime-error</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=endTime-error</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Y2K</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

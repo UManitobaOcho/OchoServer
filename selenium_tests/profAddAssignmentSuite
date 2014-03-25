@@ -8,9 +8,9 @@
 <body>
 <table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
 <tr><td><b>Test Suite</b></td></tr>
-<tr><td><a href="selEditCourse.html">selEditCourse</a></td></tr>
-<tr><td><a href="selAddCourse.html">selAddCourse</a></td></tr>
-<tr><td><a href="selViewCourseCalendar.html">selViewCourseCalendar</a></td></tr>
+<tr><td><a href="attemptEmptyAssignment.html">attemptEmptyAssignment</a></td></tr>
+<tr><td><a href="attemptNoFile.html">attemptNoFile</a></td></tr>
+<tr><td><a href="verifyEverythingLoadedCorrectly.html">verifyEverythingLoadedCorrectly</a></td></tr>
 </tbody></table>
 </body>
 </html>
