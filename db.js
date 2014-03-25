@@ -492,6 +492,7 @@ exports.deleteProfAssignment = function(socket, data, res) {
                         res("success");
                 });
         });
+};
 
 exports.getEnrolledID = function(socket, data, res) {
     return pg.connect(pgHost, function(err, client, done) {
