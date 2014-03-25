@@ -209,7 +209,7 @@ function studentSubmitAssignment() {
 			
             console.log("File:" + contents);
             console.log("Submitting Assignment");
-            socket.emit('studentSubmitAssignment', {assignmentTitle: assignTitle, name: name, type: type, size: size, file: contents, submission_time: new Date[]});
+            socket.emit('studentSubmitAssignment', {name: name, type: type, size: size, file: contents, submission_time: null});
             socket.on('AssignmentSubmitted', function(courses) {
                 console.log("Assignment Submitted Successfully");
                 document.location.href = "/";
