@@ -42,13 +42,20 @@ function displayAssignments(assignment) {
 	btnGroup = btnGroupTag + downloadBtn + submitBtn + _btnGroupTag;
 
 	for (var i = 0; i < assignment.length; i++) {
-		var tableElements = "		<tr>" +
+		var show = true;
+		var tableElements = "";
+		if(!isProf && !isPastDate(assignment[i].viewable_date))
+			show = false;		
+
+		if(show){
+					tableElements = "		<tr>" +
 						 	"		<td>" + assignment[i].course_number + "</td>" +
 						 	"		<td id='assignmentUID'>" + assignment[i].assignment_id + "</td>" +
 							"		<td>" + assignment[i].assignment_name + "</td>" +
 						 	"		<td>" + assignment[i].viewable_date + "</td>" +
 						 	"		<td>" + assignment[i].due_date + "</td>" +
 						 	"		<td>" + btnGroup + "</td>";
+		}
 
 		/* Can I conver percentage grade into letter grade?
 		 * parseInt(enrolled.grade,10) >= 90) gives me an error
@@ -57,6 +64,12 @@ function displayAssignments(assignment) {
 	}
 	addTableBtnFuncs();
 };
+
+function isPastDate(date){
+	var split = date.split();
+	var d = Date.parse(split[0]);
+	return ((new Date) - d) > 0;
+}
 
 function addTableBtnFuncs() {
 	$('td #downloadBtn').click(function () {
