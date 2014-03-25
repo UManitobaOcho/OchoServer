@@ -88,8 +88,8 @@ function gotoMark(tr){
 }
 
 function submitAnswer(tr) {
-	var assignmentId = $("td.courseId", tr).text();
-	socket.emit("setSessionVariable", {varName: 'courseId', varValue: cId});
+	var assignmentId = tr.children("#assignmentUID").text();
+	socket.emit("setSessionVariable", {varName: 'assignmentId', varValue: assignmentId});
 
 	document.location.href = "/SubmitAssignmentAnswer";
 };
