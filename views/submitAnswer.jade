@@ -1,0 +1,20 @@
+extends index
+
+block jumbotron
+    link(rel='stylesheet', href='/public/stylesheets/addCourse.css')
+	a.logout(href="#" onclick="logout()") Logout
+
+	.container
+		include includes/navbar
+
+	h1.page-header.centerfy Submit Assignments
+
+	div.file-upload.well
+		input#assignment(type="file" name="assignment" style="visibility:hidden;")
+		div.input-append
+			h3 Select File
+			input#assignmentbox(type="text" name="assignmentbox" readonly)
+			a.btn.btn-small(id="browse-btn") Browse
+		p#errorbox(style="color:red;")
+        
+    script(src="/public/javascripts/professor.js")
