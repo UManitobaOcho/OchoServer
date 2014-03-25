@@ -114,7 +114,7 @@ create table ASSIGNMENTS(
 create table SUBMITTED_ASSIGNMENTS(
 	enrolled_id 	BIGINT references ENROLLED(enrolled_id),
 	assignment_id 	BIGINT references ASSIGNMENTS(assignment_id),
-	submission_time DATE NOT NULL,
+	submission_time VARCHAR(30) NOT NULL,
 	comments		VARCHAR(1000),
 	grade 			NUMERIC(3) NOT NULL,
     file_name	VARCHAR(200),
