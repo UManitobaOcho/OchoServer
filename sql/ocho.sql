@@ -114,7 +114,7 @@ create table ASSIGNMENTS(
 create table SUBMITTED_ASSIGNMENTS(
 	enrolled_id 	BIGINT references ENROLLED(enrolled_id),
 	assignment_id 	BIGINT references ASSIGNMENTS(assignment_id),
-	submission_time DATE NOT NULL,
+	submission_time VARCHAR(30) NOT NULL,
 	comments		VARCHAR(1000),
 	grade 			NUMERIC(3) NOT NULL,
     file_name	VARCHAR(200),
@@ -270,10 +270,10 @@ declare
 begin
 	val = nextval('COURSE_SEQ');
 	insert into SUBMITTED_ASSIGNMENTS values(
-		(SELECT enrolled_id from ENROLLED where course_id = courseID and student_id = studentId),
+		(SELECT enrolled_id from ENROLLED where course_id = courseId and student_id = studentId),
 		assignmentId,
         submitTime,
-        " ",
+        NULL,
         99,
         name,
         type,
@@ -308,7 +308,7 @@ begin
 		where course_id = cId
 		loop
 			if i.course_id = cId then
-				PERFORM deleteEnrolled(enrolled_id);
+				PERFORM deleteEnrolled(i.enrolled_id);
 			end if;
 	end loop;
 	
