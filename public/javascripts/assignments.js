@@ -3,6 +3,7 @@ var hostUrl = window.location.host;
 var socket = io.connect(hostUrl);
 
 var isProf = false;
+var course = 0;
 
 window.onload = function () {
 	console.log("entered on assignmens.js"); 
@@ -11,8 +12,10 @@ window.onload = function () {
 		if (data.userType === 1) {
 			isProf = true;
 		}
-
-		getAssignmentsForCourse('1');
+		socket.emit('getCourseInfo');
+		socket.on('returnCourseInfo', function(course) {
+			getAssignmentsForCourse(course.course_id);
+		});
 	});
 };
 
@@ -32,23 +35,30 @@ function displayAssignments(assignment) {
 	_btnGroupTag = "</div>";
 	// homeBtn = "<button id='homeBtn' type='button' class='btn btn-default btn-lg'> <span title='Course Home' class='glyphicon glyphicon-home' /> </button>";
 	//editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span title='Edit' class='glyphicon glyphicon-pencil' /> </button>";
-	downloadBtn = "<button id='downloadBtn' type='button' class='btn btn-default btn-lg'> <span title='Download' class='glyphicon glyphicon-download' /> </button>";
-	submitBtn = "<button id='submitBtn' type='button' class='btn btn-default btn-lg'> <span title='Submit' class='glyphicon glyphicon-inbox' /> </button>";
+	//downloadBtn = "<button id='downloadBtn' type='button' class='btn btn-default btn-lg'> <span title='Download' class='glyphicon glyphicon-download' /> </button>";
+	submitBtn = "<button id='submitBtn' type='button' class='btn btn-default btn-lg'> <span title='Submit' class='glyphicon glyphicon-cloud-upload' /> </button>";
 
 	if(isProf){
-		submitBtn = "<button id='markBtn' type='button' class='btn btn-default btn-lg markBtn'> <span title='Mark Assignments' class='glyphicon glyphicon-inbox' /> </button>";
+		submitBtn = "<button id='markBtn' type='button' class='btn btn-default btn-lg markBtn'> <span title='Mark Assignments' class='glyphicon glyphicon-floppy-saved' /> </button>";
 	}
 
-	btnGroup = btnGroupTag + downloadBtn + submitBtn + _btnGroupTag;
+	btnGroup = btnGroupTag + submitBtn + _btnGroupTag;
 
 	for (var i = 0; i < assignment.length; i++) {
-		var tableElements = "		<tr>" +
+		var show = true;
+		var tableElements = "";
+		if(!isProf && !isPastDate(assignment[i].viewable_date))
+			show = false;		
+
+		if(show){
+					tableElements = "		<tr>" +
 						 	"		<td>" + assignment[i].course_number + "</td>" +
 						 	"		<td id='assignmentUID'>" + assignment[i].assignment_id + "</td>" +
 							"		<td>" + assignment[i].assignment_name + "</td>" +
 						 	"		<td>" + assignment[i].viewable_date + "</td>" +
 						 	"		<td>" + assignment[i].due_date + "</td>" +
 						 	"		<td>" + btnGroup + "</td>";
+		}
 
 		/* Can I conver percentage grade into letter grade?
 		 * parseInt(enrolled.grade,10) >= 90) gives me an error
@@ -57,6 +67,12 @@ function displayAssignments(assignment) {
 	}
 	addTableBtnFuncs();
 };
+
+function isPastDate(date){
+	var split = date.split();
+	var d = Date.parse(split[0]);
+	return ((new Date) - d) > 0;
+}
 
 function addTableBtnFuncs() {
 	$('td #downloadBtn').click(function () {
@@ -88,8 +104,8 @@ function gotoMark(tr){
 }
 
 function submitAnswer(tr) {
-	var assignmentId = $("td.courseId", tr).text();
-	socket.emit("setSessionVariable", {varName: 'courseId', varValue: cId});
+	var assignmentId = tr.children("#assignmentUID").text();
+	socket.emit("setSessionVariable", {varName: 'assignmentId', varValue: assignmentId});
 
 	document.location.href = "/SubmitAssignmentAnswer";
 };

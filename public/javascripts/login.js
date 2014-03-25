@@ -25,6 +25,7 @@ function getStudent() {
 		/************************/
 		/* Set session variable */
 		/************************/
+        socket.emit("setSessionVariable", {varName: 'student_id', varValue: student.student_id});
 		socket.emit("setSessionVariable", {varName: 'userType', varValue: 0 });
 
 		isProf = false;
