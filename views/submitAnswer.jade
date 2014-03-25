@@ -7,7 +7,7 @@ block jumbotron
     .container
         include includes/navbar
 
-    h1.page-header.centerfy Submit Assignments
+    h1.page-header.centerfy Submit Assignment
 
     div.file-upload.well
         input#assignment(type="file" name="assignment" style="visibility:hidden;")
@@ -16,5 +16,9 @@ block jumbotron
             input#assignmentbox(type="text" name="assignmentbox" readonly)
             a.btn.btn-small(id="browse-btn") Browse
         p#errorbox(style="color:red;")
+        
+    div.submitButton.well
+		a#studentSubmitBtn.btn.btn-lg.btn-success.cl Create Assignment
+		p#submit-error(style="color:red;")
 
     script(src="/public/javascripts/professor.js")
