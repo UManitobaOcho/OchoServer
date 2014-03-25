@@ -270,10 +270,10 @@ declare
 begin
 	val = nextval('COURSE_SEQ');
 	insert into SUBMITTED_ASSIGNMENTS values(
-		(SELECT enrolled_id from ENROLLED where course_id = courseID and student_id = studentId),
+		(SELECT enrolled_id from ENROLLED where course_id = courseId and student_id = studentId),
 		assignmentId,
         submitTime,
-        " ",
+        NULL,
         99,
         name,
         type,
