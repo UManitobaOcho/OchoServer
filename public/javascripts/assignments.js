@@ -37,12 +37,12 @@ function displayAssignments(assignment) {
 	//editBtn = "<button id='editBtn' type='button' class='btn btn-default btn-lg'> <span title='Edit' class='glyphicon glyphicon-pencil' /> </button>";
 	//downloadBtn = "<button id='downloadBtn' type='button' class='btn btn-default btn-lg'> <span title='Download' class='glyphicon glyphicon-download' /> </button>";
 	submitBtn = "<button id='submitBtn' type='button' class='btn btn-default btn-lg'> <span title='Submit' class='glyphicon glyphicon-cloud-upload' /> </button>";
+	
+	btnGroup = btnGroupTag + submitBtn + _btnGroupTag;
 
 	if(isProf){
-		submitBtn = "<button id='markBtn' type='button' class='btn btn-default btn-lg markBtn'> <span title='Mark Assignments' class='glyphicon glyphicon-floppy-saved' /> </button>";
+		btnGroup = btnGroupTag + _btnGroupTag;
 	}
-
-	btnGroup = btnGroupTag + submitBtn + _btnGroupTag;
 
 	for (var i = 0; i < assignment.length; i++) {
 		var show = true;
