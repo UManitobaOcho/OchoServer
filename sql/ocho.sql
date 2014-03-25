@@ -273,7 +273,7 @@ begin
 		(SELECT enrolled_id from ENROLLED where course_id = courseID and student_id = studentId),
 		assignmentId,
         submitTime,
-        " ",
+        "comment",
         99,
         name,
         type,
@@ -308,7 +308,7 @@ begin
 		where course_id = cId
 		loop
 			if i.course_id = cId then
-				PERFORM deleteEnrolled(enrolled_id);
+				PERFORM deleteEnrolled(i.enrolled_id);
 			end if;
 	end loop;
 	
