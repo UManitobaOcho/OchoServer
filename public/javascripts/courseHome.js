@@ -2,14 +2,6 @@
 var hostUrl = window.location.host;
 var socket = io.connect(hostUrl);
 
-/*
-<div class="progress">
-  <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-    60%
-  </div>
-</div>
-*/
-
 $(function() {
 	socket.emit('getCourseInfo');
 	socket.on('returnCourseInfo', function(course) {
@@ -228,6 +220,8 @@ function loadGradesDetails() {
 							"		</tbody>" +
 							"	</table>" +
 							"</div>";
+						
+						console.log(table);
 
 						$("#grades").append(table);
 
@@ -302,6 +296,7 @@ function loadGradesDetails() {
 
 							socket.emit('getCompletedTests', enrolled.enrolled_id);
 							socket.on('foundCompletedTests', function(data) {
+								console.log('Called');
 								for (var j = 0; j < data.length; j++) {
 									var records = 	"<tr>" +
 													"	<td>" + studentID + "</td>" +

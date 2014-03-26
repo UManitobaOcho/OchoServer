@@ -361,58 +361,87 @@ $deleted$ language plpgsql;
 /* COMPLETED_TEST) accordingly.											    */
 /****************************************************************************/
 /*
+
 insert into ASSIGNMENTS values(
 	nextval('ASSIGNMENT_SEQ'),
 	1,
-	current_date,
-	current_date,
+	'03/25/2014 07:15 PM',
+	'03/22/2014 07:15 PM',
 	'Assignment 1',
-	(E'\\320\\170'::bytea)
+	'Assignment 1.txt',
+	'text/plain',
+	'22',
+	'This is assignment 1.'
 );
 
 insert into ASSIGNMENTS values(
 	nextval('ASSIGNMENT_SEQ'),
 	1,
-	current_date,
-	current_date,
+	'03/25/2014 07:15 PM',
+	'03/22/2014 07:15 PM',
 	'Assignment 2',
-	(E'\\320\\170'::bytea)
+	'Assignment 2.txt',
+	'text/plain',
+	'22',
+	'This is assignment 2.'
 );
 
 insert into ASSIGNMENTS values(
 	nextval('ASSIGNMENT_SEQ'),
 	1,
-	current_date,
-	current_date,
+	'03/25/2014 07:15 PM',
+	'03/22/2014 07:15 PM',
 	'Assignment 3',
-	(E'\\320\\170'::bytea)
+	'Assignment 3.txt',
+	'text/plain',
+	'22',
+	'This is assignment 3.'
 );
+
+	enrolled_id 	BIGINT references ENROLLED(enrolled_id),
+	assignment_id 	BIGINT references ASSIGNMENTS(assignment_id),
+	submission_time VARCHAR(30) NOT NULL,
+	comments		VARCHAR(1000),
+	grade 			NUMERIC(3) NOT NULL,
+    file_name	VARCHAR(200),
+    file_type	VARCHAR(200),
+    file_size	VARCHAR(200),
+	assignment_file TEXT
 
 insert into SUBMITTED_ASSIGNMENTS values(
 	1,
 	1,
-	current_date,
+	'03/24/2014 07:15 PM',
 	'no comments',
 	80,
-	(E'\\320\\170'::bytea)
+	'Assignment 1.txt',
+	'text/plain',
+	'22',
+	'This is assignment 1.'
 );
 
 insert into SUBMITTED_ASSIGNMENTS values(
 	1,
 	2,
-	current_date,
+	'03/24/2014 07:15 PM',
 	'no comments',
-	65,
-	(E'\\320\\170'::bytea)
+	80,
+	'Assignment 2.txt',
+	'text/plain',
+	'22',
+	'This is assignment 2.'
 );
 
 insert into SUBMITTED_ASSIGNMENTS values(
 	1,
 	3,
-	current_date,
+	'03/24/2014 07:15 PM',
 	'no comments',
-	73,
-	(E'\\320\\170'::bytea)
+	80,
+	'Assignment 3.txt',
+	'text/plain',
+	'22',
+	'This is assignment 3.'
 );
 
 insert into TESTS values(
