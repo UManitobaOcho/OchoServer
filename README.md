@@ -1,9 +1,7 @@
-OchoServer
-==========
-
 Server List
 ===========
 The server for our application http://ec2-54-201-56-122.us-west-2.compute.amazonaws.com:8080
+
 The server for course homepage grades view (mock data stored in database): http://107.170.215.119:8080
 
 Database Model
