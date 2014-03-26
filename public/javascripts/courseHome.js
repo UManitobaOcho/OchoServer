@@ -276,6 +276,40 @@ function loadGradesDetails() {
 				$("#grades").append(assignmentTable);
 
 
+				socket.on('foundCompletedTests', function(data) {
+					console.log(data);
+					for (var j = 0; j < data.length; j++) {
+						var records = 	"<tr>" +
+										"	<td>" + data[j].student_id + "</td>" +
+										"	<td>" + data[j].first_name + "</td>" +
+										"	<td>" + data[j].last_name + "</td>" +
+										"	<td>Test " + data[j].test_id + "</td>" + 
+										"	<td>" + data[j].grade + "</td>" +
+										"</tr>";
+						$('#testTable').append(records);
+					}
+				});
+
+				socket.on('foundSubmittedAssignment', function(data) {
+					// for student with student_id = student.rows[i].student_id
+					for (var j = 0; j < data.length; j++) {
+						var records = 	"<tr>" +
+							"	<td>" + data[j].student_id + "</td>" + 
+							"	<td>" + data[j].first_name + "</td>" +
+							"	<td>" + data[j].last_name + "</td>" +
+							"	<td>Assignment " + data[j].assignment_id + "</td>" + 
+							"	<td>" + data[j].grade + "</td>" +
+							"</tr>";
+						$('#assignmentTable').append(records);
+					}
+				});
+
+				socket.on('foundEnrolledID', function(enrolled) {
+					// After I found the enrolled_id, then we can use it
+					// for getCompletedTests & getSubmittedAssignment
+					socket.emit('getCompletedTests', enrolled.enrolled_id);
+					socket.emit('getSubmittedAssignment', enrolled.enrolled_id);
+				});
 
 				// After we get the courseInfo, we need to get list of students who registered this course
 				socket.emit('getStudInCourse', {course: course.course_id});
@@ -289,41 +323,6 @@ function loadGradesDetails() {
 
 						socket.emit('getEnrolledID', { student_id: student.rows[i].student_id,
 													   course_id: course.course_id });
-
-						socket.on('foundEnrolledID', function(enrolled) {
-							// After I found the enrolled_id, then we can use it
-							// for getCompletedTests & getSubmittedAssignment
-
-							socket.emit('getCompletedTests', enrolled.enrolled_id);
-							socket.on('foundCompletedTests', function(data) {
-								console.log('Called');
-								for (var j = 0; j < data.length; j++) {
-									var records = 	"<tr>" +
-													"	<td>" + studentID + "</td>" +
-													"	<td>" + studentFirstName + "</td>" +
-													"	<td>" + studentLastName + "</td>" +
-													"	<td>Test " + data[j].test_id + "</td>" + 
-													"	<td>" + data[j].grade + "</td>" +
-													"</tr>";
-									$('#testTable').append(records);
-								}
-							});
-
-							socket.emit('getSubmittedAssignment', enrolled.enrolled_id);
-							socket.on('foundSubmittedAssignment', function(data) {
-								// for student with student_id = student.rows[i].student_id
-								for (var j = 0; j < data.length; j++) {
-									var records = 	"<tr>" +
-													"	<td>" + studentID + "</td>" + 
-													"	<td>" + studentFirstName + "</td>" +
-													"	<td>" + studentLastName + "</td>" +
-													"	<td>Assignment " + data[j].assignment_id + "</td>" + 
-													"	<td>" + data[j].grade + "</td>" +
-													"</tr>";
-									$('#assignmentTable').append(records);
-								}
-							});
-						});
 					}
 				});
 			});

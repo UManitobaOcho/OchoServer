@@ -460,7 +460,7 @@ exports.getSubmittedAssignment = function(socket, enrolledID, res) {
             return console.error('error fetching client from pool', err);
         }
 
-        var querystring = "SELECT * FROM ASSIGNMENTS A, SUBMITTED_ASSIGNMENTS S WHERE S.enrolled_id = " + enrolledID + " AND A.assignment_id = S.assignment_id";
+        var querystring = "SELECT * FROM ASSIGNMENTS A, SUBMITTED_ASSIGNMENTS S, ENROLLED E, STUDENTS STU WHERE S.enrolled_id = " + enrolledID + " AND A.assignment_id = S.assignment_id AND E.enrolled_id = S.enrolled_id AND E.student_id = STU.student_id";
         client.query(querystring, function(err, result) {
             done();
 
@@ -480,7 +480,7 @@ exports.getCompletedTests = function(socket, enrolledID, res) {
             return console.error('error fetching client from pool', err);
         }
 
-        var querystring = "SELECT * FROM TESTS T, COMPLETED_TESTS C WHERE C.enrolled_id = " + enrolledID + " AND C.test_id = T.test_id"; 
+        var querystring = "SELECT * FROM TESTS T, COMPLETED_TESTS C, ENROLLED E, STUDENTS S WHERE C.enrolled_id = " + enrolledID + " AND C.test_id = T.test_id AND C.enrolled_id = E.enrolled_id AND E.student_id = S.student_id"; 
         client.query(querystring, function(err, result) {
             done();
 

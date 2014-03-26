@@ -473,19 +473,19 @@ insert into TESTS values(
 insert into COMPLETED_TESTS values(
 	1,
 	1,
-	100
+	80
 );
 
 insert into COMPLETED_TESTS values(
 	1,
 	2,
-	50
+	80
 );
 
 insert into COMPLETED_TESTS values(
 	1,
 	3,
-	60
+	80
 );
 */
 /***************************** Test Only!!!!!!! *****************************/
