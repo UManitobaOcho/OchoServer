@@ -99,7 +99,7 @@ function loadCalendar(course) {
 		
 		events = createEventsForAssignments(data, events);
 		
-		var calendar = $('#calendar').calendar({ modal: "#events-modal", events_source: events, onAfterViewLoad: function(view) {
+		var calendar = $('#calendar').calendar({ modal: "#events-modal", modal_type : "template", events_source: events, onAfterViewLoad: function(view) {
 			$('.calendar-header').text(this.getTitle());
 			}
 		});
